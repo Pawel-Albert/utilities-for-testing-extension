@@ -1,7 +1,7 @@
 chrome.runtime.onInstalled.addListener((_) => {
   chrome.contextMenus.create({
-    title: "Remove disabled attribute",
-    id: "Remove disabled attribute",
+    title: "Remove all 'disabled' attributes",
+    id: "Remove all 'disabled' attributes",
     contexts: ["page", "selection", "editable"],
   });
 
@@ -60,7 +60,7 @@ chrome.runtime.onInstalled.addListener((_) => {
 });
 
 chrome.contextMenus.onClicked.addListener((event, tab) => {
-  if (event.menuItemId === "Remove disabled attribute") {
+  if (event.menuItemId === "Remove all 'disabled' attributes") {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["unlock_disabled.js"],
