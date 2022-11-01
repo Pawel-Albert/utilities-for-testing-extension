@@ -36,6 +36,11 @@ chrome.runtime.onInstalled.addListener((_) => {
   });
 
   chrome.contextMenus.create({
+    title: "Timestamp to date via console",
+    id: "Timestamp to date via console",
+    contexts: ["page", "selection", "editable"],
+  });
+  chrome.contextMenus.create({
     title: "Pesel_Adult",
     id: "Pesel_Adult",
     contexts: ["page", "selection", "editable"],
@@ -110,6 +115,12 @@ chrome.contextMenus.onClicked.addListener((event, tab) => {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["clear_all_input_restrictions.js"],
+    });
+  }
+  if (event.menuItemId === "Timestamp to date via console") {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["timestamp_to_date.js"],
     });
   }
 });
