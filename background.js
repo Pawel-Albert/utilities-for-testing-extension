@@ -40,6 +40,18 @@ chrome.runtime.onInstalled.addListener((_) => {
     id: "Timestamp to date via console",
     contexts: ["page", "selection", "editable"],
   });
+
+  chrome.contextMenus.create({
+    title: "Base64 decode and print to console",
+    id: "Base64 decode and print to console",
+    contexts: ["page", "selection", "editable"],
+  });
+
+  chrome.contextMenus.create({
+    title: "Base64 encode and print to console",
+    id: "Base64 encode and print to console",
+    contexts: ["page", "selection", "editable"],
+  });
   chrome.contextMenus.create({
     title: "Pesel_Adult",
     id: "Pesel_Adult",
@@ -121,6 +133,20 @@ chrome.contextMenus.onClicked.addListener((event, tab) => {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["timestamp_to_date.js"],
+    });
+  }
+
+  if (event.menuItemId === "Base64 decode and print to console") {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["base64_decode.js"],
+    });
+  }
+
+  if (event.menuItemId === "Base64 encode and print to console") {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["base64_encode.js"],
     });
   }
 });
