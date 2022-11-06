@@ -53,20 +53,20 @@ chrome.runtime.onInstalled.addListener((_) => {
     contexts: ["page", "selection", "editable"],
   });
   chrome.contextMenus.create({
-    title: "Pesel_Adult",
-    id: "Pesel_Adult",
+    title: "Generate PESEL (18+)",
+    id: "Generate PESEL (18+)",
     contexts: ["page", "selection", "editable"],
   });
 
   chrome.contextMenus.create({
-    title: "Iban",
-    id: "Iban",
+    title: "Generate IBAN",
+    id: "Generate IBAN",
     contexts: ["page", "selection", "editable"],
   });
 
   chrome.contextMenus.create({
-    title: "IdNumber",
-    id: "IdNumber",
+    title: "Generate ID number",
+    id: "Generate ID number",
     contexts: ["page", "selection", "editable"],
   });
 });
@@ -78,19 +78,19 @@ chrome.contextMenus.onClicked.addListener((event, tab) => {
       files: ["unlock_disabled.js"],
     });
   }
-  if (event.menuItemId === "Pesel_Adult") {
+  if (event.menuItemId === "Generate PESEL (18+)") {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["pesel.js"],
     });
   }
-  if (event.menuItemId === "Iban") {
+  if (event.menuItemId === "Generate IBAN") {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["iban.js"],
     });
   }
-  if (event.menuItemId === "IdNumber") {
+  if (event.menuItemId === "Generate ID number") {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["idnumber.js"],
