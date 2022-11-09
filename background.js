@@ -69,6 +69,12 @@ chrome.runtime.onInstalled.addListener((_) => {
     id: "Generate ID number",
     contexts: ["page", "selection", "editable"],
   });
+
+  chrome.contextMenus.create({
+    title: "Generate PASSPORT number",
+    id: "Generate PASSPORT number",
+    contexts: ["page", "selection", "editable"],
+  });
 });
 
 chrome.contextMenus.onClicked.addListener((event, tab) => {
@@ -147,6 +153,13 @@ chrome.contextMenus.onClicked.addListener((event, tab) => {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["base64_encode.js"],
+    });
+  }
+
+  if (event.menuItemId === "Generate PASSPORT number") {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["passport_number.js"],
     });
   }
 });
