@@ -2,15 +2,39 @@
   "manifest_version": 3,
   "name": "TesterUtilities",
   "description": "TesterUtilities",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "icons": {
     "16": "gen.png",
     "48": "gen.png",
     "128": "gen.png"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
+
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "json_prettier_to_console.js",
+        "base64_decode.js",
+        "base64_encode.js",
+        "clear_all_input_restrictions.js",
+        "display_all_none.js",
+        "display_one_none.js",
+        "iban.js",
+        "idnumber.js",
+        "passport_number.js",
+        "pesel.js",
+        "helpers.js",
+        "same_id.js",
+        "timestamp_to_date.js",
+        "unlock_disabled.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
   "permissions": ["contextMenus", "tabs", "scripting", "activeTab"],
 
   "host_permissions": ["*://*/*"]
