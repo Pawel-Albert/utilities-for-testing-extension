@@ -1,0 +1,23 @@
+{
+  "name": "utilities-for-testing-extension",
+  "version": "0.0.3",
+  "description": "Google chrome extension with couple of small functionalities (mostly niche and current company specific) for testers in form of context menu",
+  "scripts": {
+    "start": "parcel watch manifest.json --host localhost --config @parcel/config-webextension",
+    "build": "parcel build manifest.json --config @parcel/config-webextension"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pawel-Albert/utilities-for-testing-extension.git"
+  },
+  "author": "Paweł Wojciechowski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Pawel-Albert/utilities-for-testing-extension/issues"
+  },
+  "homepage": "https://github.com/Pawel-Albert/utilities-for-testing-extension#readme",
+  "devDependencies": {
+    "@parcel/config-webextension": "^2.8.0",
+    "parcel": "^2.8.0"
+  }
+}

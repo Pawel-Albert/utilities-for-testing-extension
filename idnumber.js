@@ -1,25 +1,6 @@
+import { generateRandomInt, addLeadingZeros, getRandomKey } from "./helpers";
+
 function idNumber() {
-  //HELPERS
-  const generateRandomInt = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  const addLeadingZeros = (intiger, numberOfZeros) =>
-    (intiger + "").padStart(numberOfZeros, "0");
-
-  const randomArrayElement = (array) => {
-    return array[Math.floor(Math.random() * array.length)];
-  };
-
-  const genDataOnElement = (fnName, el) => {
-    el.innerHTML = typeof fnName === "string" ? fnName : fnName();
-  };
-
-  const getRandomKey = (object) => {
-    const keys = Object.keys(object);
-    return keys[Math.floor(Math.random() * keys.length)];
-  };
-
   ////////////////////////////////////////////////////////////////////////////////////////
   //ID_NUMBER_CONFIG
   ////////////////////////////////////////////////////////////////////////////////////////

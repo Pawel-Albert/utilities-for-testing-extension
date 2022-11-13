@@ -1,33 +1,14 @@
+import { generateRandomInt, addLeadingZeros } from "./helpers";
+
 function pesel() {
-  //HELPERS
-  const generateRandomInt = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  const addLeadingZeros = (intiger, numberOfZeros) =>
-    (intiger + "").padStart(numberOfZeros, "0");
-
-  const randomArrayElement = (array) => {
-    return array[Math.floor(Math.random() * array.length)];
-  };
-
-  const genDataOnElement = (fnName, el) => {
-    el.innerHTML = typeof fnName === "string" ? fnName : fnName();
-  };
-
-  const getRandomKey = (object) => {
-    const keys = Object.keys(object);
-    return keys[Math.floor(Math.random() * keys.length)];
-  };
-
   ////////////////////////////////////////////////////////////////////////////////////////
-
-  const sex = "both"; // Hardcoded - later when UI will be changed this will not be static value
+  //PESEL_CONFIG
+  ////////////////////////////////////////////////////////////////////////////////////////
+  const sex = "both"; // Hardcoded - later(if) when UI will be changed this will not be static value
   const leadingZeros = 3;
-  // TODO : For learning purposes later implement few options on UI to let user pick age, exact date sex etc.
 
   const randomTimeStamp = () =>
-    new Date() - generateRandomInt(568036800000, 3155760000000); // Placeholder - hardcoded value for age beetwen 18 and 100 years
+    new Date() - generateRandomInt(568036800000, 3155760000000); // Placeholder - hardcoded value for age beetwen 18 and 100 years - changes not needed for current purpose
 
   const timeStampToLocaleDate = (timeStamp) => {
     return new Date(timeStamp).toLocaleDateString("pl-PL", {
@@ -73,7 +54,9 @@ function pesel() {
     return controlDigitValue == 10 ? "0" : controlDigitValue;
   };
 
-  /////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////
+  //PESEL
+  ////////////////////////////////////////////////////////////////////////////////////////
   const generatePesel = (sex) => {
     const timeStamp = randomTimeStamp();
     const datePart = getDatePartPesel(timeStampToLocaleDate(timeStamp));
