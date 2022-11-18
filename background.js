@@ -24,8 +24,14 @@ chrome.runtime.onInstalled.addListener((_) => {
   });
 
   chrome.contextMenus.create({
-    title: "Clear_all_input_restrictions",
-    id: "Clear_all_input_restrictions",
+    title: "Clear all input restrictions",
+    id: "Clear all input restrictions",
+    contexts: ["page", "selection", "editable"],
+  });
+
+  chrome.contextMenus.create({
+    title: "Change all inputs type from password to text",
+    id: "Change all inputs type from password to text",
     contexts: ["page", "selection", "editable"],
   });
 
@@ -129,7 +135,7 @@ chrome.contextMenus.onClicked.addListener((event, tab) => {
       files: ["json_prettier_to_console.js"],
     });
   }
-  if (event.menuItemId === "Clear_all_input_restrictions") {
+  if (event.menuItemId === "Clear all input restrictions") {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["clear_all_input_restrictions.js"],
@@ -160,6 +166,13 @@ chrome.contextMenus.onClicked.addListener((event, tab) => {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["passport_number.js"],
+    });
+  }
+
+  if (event.menuItemId === "Change all inputs type from password to text") {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["password_input_to_text.js"],
     });
   }
 });

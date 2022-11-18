@@ -1,6 +1,6 @@
 {
   "name": "utilities-for-testing-extension",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Google chrome extension with couple of small functionalities (mostly niche and current company specific) for testers in form of context menu",
   "scripts": {
     "start": "parcel watch manifest.json --host localhost --config @parcel/config-webextension",
