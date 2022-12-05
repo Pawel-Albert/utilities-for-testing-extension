@@ -8,11 +8,11 @@
   
 > Project is a chrome extension in form of context menu (avaliable via rmb)- mostly niche and current company specific functionalities
 
-> Project was written in vanilla Javascript and bundled with Parcel
+> Project was written in vanilla Javascript and bundled with Parcel - in future faker.js (or something more lightweight) could be added
 
 > This project heavly uses already writen code in my other project https://github.com/Pawel-Albert/test-data-generators
 
-> Purpose of the project is to provide some actual utility tool for personal and team usage and in the same time to practice building own chrome extension.
+> Purpose of the project is to provide some actual utility tool for personal and team usage and in the same time to practice building own chrome extension and just have fun while coding small scripts.
 ## Installation
 ### Clone
 
@@ -44,6 +44,7 @@ After using right mouse button you can hover on TesterUtilities and click on des
 * "Highlight  and show all 'display none' elements"
 * "Highlight  and show one 'display none' element"
 * "Clear_all_input_restrictions"
+* "Change all inputs type from password to text"
 * "JSON prettier via console"
 * "Timestamp to date via console"
 * "Base64 decode and print to console"
@@ -56,5 +57,5 @@ After using right mouse button you can hover on TesterUtilities and click on des
 ## Todo
 
 - [ ] Form auto filler with random data
-- [ ] Fix Generate functions, as currently they are not registered by browser as user actions
+- [X] Fix Generate functions, as currently they are not registered by browser as user actions
 
