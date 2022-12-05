@@ -2,6 +2,7 @@ import {
   generateRandomInt,
   addLeadingZeros,
   getRandomKey,
+  setNativeValue,
 } from "../utylis/helpers";
 
 function idNumber() {
@@ -49,9 +50,12 @@ function idNumber() {
       controlSumDevider;
     return randomThreeLeters.join("") + controlDigit + idNumberRandomPart + "";
   };
+  let idNumber = generateIdNumber();
+  console.log(`Id num: ${idNumber}`);
+  const indicatedElement = document.activeElement;
 
-  console.log(`Idnumber : ${generateIdNumber()}`);
-  document.activeElement.value = generateIdNumber();
+  setNativeValue(indicatedElement, idNumber);
+  indicatedElement.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
 idNumber();

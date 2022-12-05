@@ -1,4 +1,8 @@
-import { generateRandomInt, addLeadingZeros } from "../utylis/helpers";
+import {
+  generateRandomInt,
+  addLeadingZeros,
+  setNativeValue,
+} from "../utylis/helpers";
 
 function iban() {
   ////////////////////////////////////////////////////////////////////////////////////////
@@ -3098,8 +3102,12 @@ function iban() {
 
     return "" + controlNumber + bankAndRandomPart;
   };
-  console.log(`iban ${generateIban()}`);
-  document.activeElement.value = generateIban();
+  let iban = generateIban();
+  console.log(`Iban ${iban}`);
+  const indicatedElement = document.activeElement;
+
+  setNativeValue(indicatedElement, iban);
+  indicatedElement.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
 iban();

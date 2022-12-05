@@ -2,6 +2,7 @@ import {
   generateRandomInt,
   addLeadingZeros,
   getRandomKey,
+  setNativeValue,
 } from "../utylis/helpers";
 
 function passport() {
@@ -51,8 +52,11 @@ function passport() {
       randomTwoLeters.join("") + controlDigit + passportNumberRandomPart + ""
     );
   };
+  let passportNumber = generatePassportNumber();
+  console.log(`Passport num: ${passportNumber}`);
+  const indicatedElement = document.activeElement;
 
-  console.log(`passport_number : ${generatePassportNumber()}`);
-  document.activeElement.value = generatePassportNumber();
+  setNativeValue(indicatedElement, passportNumber);
+  indicatedElement.dispatchEvent(new Event("input", { bubbles: true }));
 }
 passport();
