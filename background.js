@@ -58,6 +58,13 @@ chrome.runtime.onInstalled.addListener((_) => {
     id: "Base64 encode and print to console",
     contexts: ["page", "selection", "editable"],
   });
+
+  chrome.contextMenus.create({
+    title: "Simple form filler",
+    id: "Simple form filler",
+    contexts: ["page", "selection", "editable"],
+  });
+
   chrome.contextMenus.create({
     title: "Generate PESEL (18+)",
     id: "Generate PESEL (18+)",
@@ -173,6 +180,13 @@ chrome.contextMenus.onClicked.addListener((event, tab) => {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["content_scripts/password_input_to_text.js"],
+    });
+  }
+
+  if (event.menuItemId === "Simple for filler") {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["content_scripts/simple_form_filler.js"],
     });
   }
 });

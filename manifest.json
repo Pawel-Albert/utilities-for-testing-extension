@@ -23,6 +23,7 @@
         "content_scripts/display_all_none.js",
         "content_scripts/display_one_none.js",
         "content_scripts/password_input_to_text.js",
+        "content_scripts/simple_form_filler.js",
         "content_scripts/iban.js",
         "content_scripts/idnumber.js",
         "content_scripts/passport_number.js",

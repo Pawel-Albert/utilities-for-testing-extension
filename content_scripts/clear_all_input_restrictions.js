@@ -17,12 +17,6 @@
       element.removeAttribute("minlength");
     });
 
-  Array.prototype.slice
-    .call(document.querySelectorAll("input, select"))
-    .map(function (element) {
-      element.removeAttribute("required");
-    });
-
   let inputs = document.querySelectorAll("input");
   for (let i = 0; i < inputs.length; i++) {
     if (typeof inputs[i].onpaste === "function") {

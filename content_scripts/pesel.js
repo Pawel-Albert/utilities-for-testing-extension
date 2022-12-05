@@ -84,5 +84,5 @@ function pesel() {
   setNativeValue(indicatedElement, pesel);
   indicatedElement.dispatchEvent(new Event("input", { bubbles: true })); // In placess(sites) that this functionality is used, allows user to trigger events recognized by front to treat  this as valid user action
 }
-console.log(`object`);
+
 pesel();
