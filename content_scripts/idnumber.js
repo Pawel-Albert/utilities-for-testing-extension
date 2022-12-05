@@ -2,7 +2,7 @@ import {
   generateRandomInt,
   addLeadingZeros,
   getRandomKey,
-} from "./utylis/helpers";
+} from "../utylis/helpers";
 
 function idNumber() {
   ////////////////////////////////////////////////////////////////////////////////////////
