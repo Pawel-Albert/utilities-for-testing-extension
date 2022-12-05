@@ -1,4 +1,8 @@
-import { generateRandomInt, addLeadingZeros } from "./helpers";
+import {
+  generateRandomInt,
+  addLeadingZeros,
+  setNativeValue,
+} from "../utylis/helpers.js";
 
 function pesel() {
   ////////////////////////////////////////////////////////////////////////////////////////
@@ -73,8 +77,11 @@ function pesel() {
     );
     return datePart + randomPart + sexFieldPart + controlDigitValue;
   };
-  console.log(`Pesel ${generatePesel(sex)}`);
-  document.activeElement.value = generatePesel(sex);
-}
+  let pesel = generatePesel(sex);
+  console.log(`Pesel ${pesel}`);
+  const indicatedElement = document.activeElement;
 
-pesel();
+  setNativeValue(indicatedElement, pesel);
+  indicatedElement.dispatchEvent(new Event("input", { bubbles: true })); // In placess(sites) that this functionality is used, allows user to trigger events recognized by front to treat  this as valid user action
+}
+console.log(`object`);

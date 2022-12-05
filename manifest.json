@@ -26,7 +26,7 @@
         "iban.js",
         "idnumber.js",
         "passport_number.js",
-        "pesel.js",
+        "content_scripts/pesel.js",
         "helpers.js",
         "same_id.js",
         "timestamp_to_date.js",

@@ -18,3 +18,20 @@ export const getRandomKey = (object) => {
   const keys = Object.keys(object);
   return keys[Math.floor(Math.random() * keys.length)];
 };
+
+//
+export const setNativeValue = (el, insertedValue) => {
+  const { set: valueSetter } =
+    Object.getOwnPropertyDescriptor(el, "value") || {};
+  const prototype = Object.getPrototypeOf(el);
+  const { set: prototypeValueSetter } =
+    Object.getOwnPropertyDescriptor(prototype, "value") || {};
+
+  if (prototypeValueSetter && valueSetter !== prototypeValueSetter) {
+    prototypeValueSetter.call(el, insertedValue);
+  } else if (valueSetter) {
+    valueSetter.call(el, insertedValue);
+  } else {
+    throw new Error("Provided element doesn't have a value setter");
+  }
+};
