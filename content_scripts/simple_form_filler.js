@@ -1,4 +1,5 @@
 import { setNativeValue } from "../utylis/helpers";
+import { generatePesel, sex } from "./generators_logic/pesel_core.js";
 
 const formInputs = {
   ...(document.querySelector("input[name*=mail]") && {
@@ -22,36 +23,53 @@ const formInputs = {
   ...(document.querySelector("input[name*=lastName]") && {
     lastName: document.querySelector("input[name*=lastName]"),
   }),
+  ...(document.querySelector("input[name*=personal]") && {
+    pesel: document.querySelector("input[name*=personal]"),
+  }),
 };
 
 (function fillForm() {
   try {
-    console.log(`dsfdsf`);
     if (formInputs.email) {
       setNativeValue(formInputs.email, "jakismail@wp.pl");
       formInputs.email.dispatchEvent(new Event("input", { bubbles: true }));
-      console.log(`sfsdfsdfdsfsd`);
     }
-    // if (formInputs.password) {
-    //   formInputs.password.value = "Poland1234";
-    // }
-    // if (formInputs.repeatPassword) {
-    //   formInputs.repeatPassword.value = "Poland1234";
-    // }
-    // if (formInputs.mobile) {
-    //   formInputs.mobile.value = "254158958";
-    // }
-    // if (formInputs.promoCode) {
-    //   formInputs.promoCode.value = "promoCodeTest";
-    // }
-    // if (formInputs.firstName) {
-    //   formInputs.firstName.value = "PiPI";
-    // }
-    // if (formInputs.lastName) {
-    //   formInputs.lastName.value = "PiPi";
-    // }
+    if (formInputs.password) {
+      setNativeValue(formInputs.password, "Poland1234");
+      formInputs.password.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    if (formInputs.repeatPassword) {
+      setNativeValue(formInputs.repeatPassword, "Poland1234");
+      formInputs.repeatPassword.dispatchEvent(
+        new Event("input", { bubbles: true })
+      );
+    }
+    if (formInputs.mobile) {
+      setNativeValue(formInputs.mobile, "254158958");
+      formInputs.mobile.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    if (formInputs.promoCode) {
+      setNativeValue(formInputs.promoCode, "promoCodeTest");
+      formInputs.promoCode.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    if (formInputs.firstName) {
+      setNativeValue(formInputs.firstName, "Stefan");
+      formInputs.firstName.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    if (formInputs.lastName) {
+      setNativeValue(formInputs.lastName, "Frankowski");
+      formInputs.lastName.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    if (formInputs.pesel) {
+      setNativeValue(formInputs.pesel, generatePesel(sex));
+      formInputs.pesel.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    console.log(
+      `%c Filled something for sure...but what?`,
+      "font-family:monospace; color:pink;font-size:20px"
+    );
   } catch (error) {
     console.log(error);
   }
 })();
-console.log(`sdfdsfdsfsd`);

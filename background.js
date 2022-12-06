@@ -2,67 +2,67 @@ chrome.runtime.onInstalled.addListener((_) => {
   chrome.contextMenus.create({
     title: "Remove all 'disabled' attributes",
     id: "Remove all 'disabled' attributes",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
     title: "Highlight elements with same ID",
     id: "Highlight elements with same ID",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
     title: "Highlight  and show all 'display none' elements",
     id: "Highlight  and show all 'display none' elements",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
     title: "Highlight  and show one 'display none' element",
     id: "Highlight  and show one 'display none' element",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
     title: "Clear all input restrictions",
     id: "Clear all input restrictions",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
     title: "Change all inputs type from password to text",
     id: "Change all inputs type from password to text",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
     title: "JSON prettier via console",
     id: "JSON prettier via console",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
     title: "Timestamp to date via console",
     id: "Timestamp to date via console",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
     title: "Base64 decode and print to console",
     id: "Base64 decode and print to console",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
     title: "Base64 encode and print to console",
     id: "Base64 encode and print to console",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
     title: "Simple form filler",
     id: "Simple form filler",
-    contexts: ["page", "selection", "editable"],
+    contexts: ["all"],
   });
 
   chrome.contextMenus.create({
@@ -106,7 +106,7 @@ chrome.contextMenus.onClicked.addListener((event, tab) => {
   if (event.menuItemId === "Generate IBAN") {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      files: ["content_scripts/content_scripts/iban.js"],
+      files: ["content_scripts/iban.js"],
     });
   }
   if (event.menuItemId === "Generate ID number") {
@@ -176,17 +176,16 @@ chrome.contextMenus.onClicked.addListener((event, tab) => {
     });
   }
 
+  if (event.menuItemId === "Simple form filler") {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ["content_scripts/simple_form_filler.js"],
+    });
+  }
   if (event.menuItemId === "Change all inputs type from password to text") {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ["content_scripts/password_input_to_text.js"],
-    });
-  }
-
-  if (event.menuItemId === "Simple for filler") {
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      files: ["content_scripts/simple_form_filler.js"],
     });
   }
 });
