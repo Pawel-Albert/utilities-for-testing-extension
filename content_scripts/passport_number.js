@@ -53,7 +53,10 @@ function passport() {
     );
   };
   let passportNumber = generatePassportNumber();
-  console.log(`Passport num: ${passportNumber}`);
+  console.log(
+    `%c Passport num: ${passportNumber}`,
+    "font-family:monospace; color:DarkGreen;font-size:25px"
+  );
   const indicatedElement = document.activeElement;
 
   setNativeValue(indicatedElement, passportNumber);

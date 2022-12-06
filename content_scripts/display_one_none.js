@@ -16,6 +16,9 @@
     singleTag.style.display = "block";
     singleTag.style = singleTag.style + "; border:7px dashed #ae0000;";
   } else {
-    console.log("No more hidden elements");
+    console.log(
+      `%c No more hidden elements`,
+      "font-family:monospace; color:DarkGreen;font-size:25px"
+    );
   }
 })();

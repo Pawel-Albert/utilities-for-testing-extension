@@ -78,7 +78,10 @@ function pesel() {
     return datePart + randomPart + sexFieldPart + controlDigitValue;
   };
   let pesel = generatePesel(sex);
-  console.log(`Pesel ${pesel}`);
+  console.log(
+    `%c Pesel ${pesel}`,
+    "font-family:monospace; color:DarkGreen;font-size:25px"
+  );
   const indicatedElement = document.activeElement;
 
   setNativeValue(indicatedElement, pesel);

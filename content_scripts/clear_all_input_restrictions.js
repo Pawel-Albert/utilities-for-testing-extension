@@ -23,4 +23,9 @@
       inputs[i].onpaste = new (function () {})();
     }
   }
+
+  console.log(
+    `%c removed restrictions: required, maxlength, minlength, onpaste function`,
+    "font-family:monospace; color:DarkGreen;font-size:25px"
+  );
 })();

@@ -3103,7 +3103,10 @@ function iban() {
     return "" + controlNumber + bankAndRandomPart;
   };
   let iban = generateIban();
-  console.log(`Iban ${iban}`);
+  console.log(
+    `%c Iban ${iban}`,
+    "font-family:monospace; color:DarkGreen;font-size:25px"
+  );
   const indicatedElement = document.activeElement;
 
   setNativeValue(indicatedElement, iban);

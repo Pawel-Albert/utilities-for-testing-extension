@@ -8,5 +8,8 @@ try {
   );
 } catch (error) {
   alert("Provided text is not proper JSON - please try again");
-  console.log(error);
+  console.log(
+    `%c ${error}`,
+    "font-family:monospace; color:firebrick;font-size:25px"
+  );
 }

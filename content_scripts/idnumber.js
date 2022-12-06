@@ -51,7 +51,10 @@ function idNumber() {
     return randomThreeLeters.join("") + controlDigit + idNumberRandomPart + "";
   };
   let idNumber = generateIdNumber();
-  console.log(`Id num: ${idNumber}`);
+  console.log(
+    `%c Id num: ${idNumber}`,
+    "font-family:monospace; color:DarkGreen;font-size:25px"
+  );
   const indicatedElement = document.activeElement;
 
   setNativeValue(indicatedElement, idNumber);
