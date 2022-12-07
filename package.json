@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Pawel-Albert/utilities-for-testing-extension#readme",
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@parcel/config-webextension": "^2.8.0",
     "parcel": "^2.8.0"
   }

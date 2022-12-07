@@ -38,5 +38,14 @@
 
   "permissions": ["contextMenus", "tabs", "scripting", "activeTab"],
 
-  "host_permissions": ["*://*/*"]
+  "host_permissions": ["*://*/*"],
+  "commands": {
+    "Simple form filler": {
+      "suggested_key": {
+        "default": "Alt+X",
+        "mac": "Alt+X"
+      },
+      "description": "Simple form filler"
+    }
+  }
 }
