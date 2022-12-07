@@ -1,5 +1,5 @@
 import { setNativeValue } from "../utylis/helpers";
-import { generatePesel, sex } from "./generators_logic/pesel_core.js";
+import { generatePesel, sex } from "./custom_generators_logic/pesel_core.js";
 
 const formInputs = {
   ...(document.querySelector("input[name*=mail]") && {

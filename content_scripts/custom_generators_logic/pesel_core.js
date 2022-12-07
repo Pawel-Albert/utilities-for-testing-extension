@@ -3,7 +3,7 @@ import { generateRandomInt, addLeadingZeros } from "../../utylis/helpers.js";
 ////////////////////////////////////////////////////////////////////////////////////////
 //PESEL_CONFIG
 ////////////////////////////////////////////////////////////////////////////////////////
-export const sex = "both"; // Hardcoded - later(if) when UI will be changed this will not be static value
+export const sex = "both"; // Hardcoded
 const leadingZeros = 3;
 
 const randomTimeStamp = () =>
@@ -72,13 +72,3 @@ export const generatePesel = (sex) => {
   );
   return datePart + randomPart + sexFieldPart + controlDigitValue;
 };
-
-// let pesel = generatePesel(sex);
-// console.log(
-//   `%c Pesel ${pesel}`,
-//   "font-family:monospace; color:DarkGreen;font-size:25px"
-// );
-// const indicatedElement = document.activeElement;
-
-// setNativeValue(indicatedElement, pesel);
-// indicatedElement.dispatchEvent(new Event("input", { bubbles: true })); // In placess(sites) that this functionality is used, allows user to trigger events recognized by front to treat  this as valid user action

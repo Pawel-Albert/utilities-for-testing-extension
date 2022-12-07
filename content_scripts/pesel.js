@@ -1,10 +1,10 @@
-import { generatePesel, sex } from "./generators_logic/pesel_core.js";
+import { generatePesel, sex } from "./custom_generators_logic/pesel_core.js";
 import { setNativeValue } from "../utylis/helpers.js";
 
 (function () {
   let pesel = generatePesel(sex);
   console.log(
-    `%c Pesel ${pesel}`,
+    `%c Pesel: ${pesel}`,
     "font-family:monospace; color:DarkGreen;font-size:25px"
   );
   const indicatedElement = document.activeElement;

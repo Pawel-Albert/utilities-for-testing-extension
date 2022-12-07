@@ -28,7 +28,6 @@
         "content_scripts/idnumber.js",
         "content_scripts/passport_number.js",
         "content_scripts/pesel.js",
-        "content_scripts/helpers.js",
         "content_scripts/same_id.js",
         "content_scripts/timestamp_to_date.js",
         "content_scripts/unlock_disabled.js"

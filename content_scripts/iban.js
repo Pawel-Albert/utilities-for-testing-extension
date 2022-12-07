@@ -1,10 +1,10 @@
 import { setNativeValue } from "../utylis/helpers";
-import { generateIban } from "./generators_logic/iban_core";
+import { generateIban } from "./custom_generators_logic/iban_core";
 
 (function () {
   let iban = generateIban();
   console.log(
-    `%c Iban ${iban}`,
+    `%c Iban: ${iban}`,
     "font-family:monospace; color:DarkGreen;font-size:25px"
   );
   const indicatedElement = document.activeElement;
