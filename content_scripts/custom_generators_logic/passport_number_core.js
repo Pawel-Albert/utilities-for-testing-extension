@@ -1,16 +1,12 @@
-import {
-  generateRandomInt,
-  addLeadingZeros,
-  getRandomKey,
-} from "../../utylis/helpers";
+import {generateRandomInt, addLeadingZeros, getRandomKey} from '../../utylis/helpers';
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //PASSPORT_NUMBER_CONFIG
 ////////////////////////////////////////////////////////////////////////////////////////
-const keys = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+const keys = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 const values = [
-  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
-  29, 30, 31, 32, 33, 34, 35,
+  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+  32, 33, 34, 35
 ];
 const createObjectTwoArrays = (keys, values) => {
   return Object.fromEntries(keys.map((_, i) => [keys[i], values[i]]));
@@ -43,7 +39,5 @@ export const generatePassportNumber = () => {
       7 * passportNumberRandomPart[4] +
       3 * passportNumberRandomPart[5]) %
     controlSumDevider;
-  return (
-    randomTwoLeters.join("") + controlDigit + passportNumberRandomPart + ""
-  );
+  return randomTwoLeters.join('') + controlDigit + passportNumberRandomPart + '';
 };

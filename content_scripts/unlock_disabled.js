@@ -1,10 +1,7 @@
-(function () {
-  const tagi = document.getElementsByTagName("*");
+;(function () {
+  const tagi = document.getElementsByTagName('*')
   for (const tag of tagi) {
-    tag.removeAttribute("disabled");
+    tag.removeAttribute('disabled')
   }
-  console.log(
-    `%c Unlocked`,
-    "font-family:monospace; color:firebrick;font-size:25px"
-  );
-})();
+  console.log(`%c Unlocked`, 'font-family:monospace; color:firebrick;font-size:25px')
+})()

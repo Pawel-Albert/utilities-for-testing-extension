@@ -1,5 +1,5 @@
 import { setNativeValue } from "../utylis/helpers";
-import { generatePassportNumber } from "./custom_generators_logic/idnumber_core";
+import { generatePassportNumber } from "./custom_generators_logic/passport_number_core";
 
 (function () {
   let passportNumber = generatePassportNumber();
