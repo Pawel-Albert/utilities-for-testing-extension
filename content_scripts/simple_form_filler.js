@@ -41,6 +41,12 @@ const formInputs = {
   }),
   ...(document.querySelector('input[name*=city]') && {
     city: document.querySelector('input[name*=city]')
+  }),
+  ...(document.querySelector('input[name*=selectAllFields]') && {
+    allChecboxes: document.querySelector('input[name*=selectAllFields]')
+  }),
+  ...(document.querySelector('input[name*=rodo]') && {
+    rodoClause: document.querySelector('input[name*=rodo]')
   })
 }
 const fakeData = {
@@ -112,8 +118,16 @@ const fakeData = {
       setNativeValue(formInputs.address, fakeData.street)
       formInputs.address.dispatchEvent(new Event('input', {bubbles: true}))
     }
+
+    if (formInputs.allChecboxes) {
+      formInputs.allChecboxes.click() // not good not great but suits the sites its used for
+    }
+
+    if (formInputs.rodoClause && !formInputs.allChecboxes) {
+      formInputs.rodoClause.click() // not good not great but suits the sites its used for
+    }
     console.log(
-      `%c Filled something for sure...but what?`,
+      `%c Filled something for sure...but what? Pieeeczarkaaaaa`,
       'font-family:monospace; color:pink;font-size:20px'
     )
   } catch (error) {
