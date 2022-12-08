@@ -1,6 +1,6 @@
 import {setNativeValue, generateRandomInt, addLeadingZeros} from '../utylis/helpers'
 import {generatePesel, sex} from './custom_generators_logic/pesel_core.js'
-import {faker} from '@faker-js/faker/locale/pl'
+import {faker} from '@faker-js/faker/locale/en_NG'
 
 const fakeData = {
   cityName: faker.address.cityName(),

@@ -197,4 +197,10 @@ chrome.commands.onCommand.addListener((command, tab) => {
       files: ['content_scripts/simple_form_filler.js']
     })
   }
+  if (command === 'Simple form filler EN') {
+    chrome.scripting.executeScript({
+      target: {tabId: tab.id},
+      files: ['content_scripts/simple_form_filler_en.js']
+    })
+  }
 })
