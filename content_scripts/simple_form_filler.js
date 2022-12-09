@@ -67,6 +67,9 @@ const formInputs = {
   }),
   ...(document.querySelectorAll('[data-test*="selectButton"]') && {
     sof: document.querySelectorAll('[data-test*="selectButton"]')
+  }),
+  ...(document.querySelector('[name=formValid]') && {
+    confirmationChbx: document.querySelector('[name=formValid]')
   })
 }
 
@@ -131,9 +134,13 @@ const formInputs = {
     if (formInputs.rodoClause && !formInputs.allChecboxes) {
       formInputs.rodoClause.click() // not good not great but suits the sites its used for
     }
-    if (formInputs.sof) {
+    if (formInputs.sof.length > 4) {
       formInputs.sof[5].click()
       document.querySelectorAll('[data-test="selectOptions"] li span')[1].click()
+    }
+
+    if (formInputs.confirmationChbx) {
+      formInputs.confirmationChbx.click()
     }
     console.log(
       `%c Filled something for sure...but what?`,

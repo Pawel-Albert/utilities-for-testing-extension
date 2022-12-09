@@ -16,7 +16,8 @@ const fakeData = {
     generateRandomInt(0, 99999999),
     8
   )}`, // For mobile lets just stick with 1-3 on the beginning to avoid using real phone numbers in Poland(also Nigeria?) so no matter the env real people don't get msg
-  password: 'Password1234' // Please change password to something you whant to use as this is placeholder
+  password: 'Password1234', // Please change password to something you whant to use as this is placeholder
+  accountNumber: addLeadingZeros(generateRandomInt(0, 9999999999), 10)
 }
 
 // CSS selector mainly used in this extension are not the same on similar sites,
@@ -29,11 +30,11 @@ const formInputs = {
   ...(document.querySelector('input[name*=loginName]') && {
     login: document.querySelector('input[name*=loginName]')
   }),
-  ...(document.querySelector('input[name*=password]') && {
-    password: document.querySelector('input[name*=password]')
+  ...(document.querySelector('input[data-test="account_registerForm_password"]') && {
+    password: document.querySelector('input[data-test="account_registerForm_password"]')
   }),
-  ...(document.querySelector('input[name*=password]') && {
-    repeatPassword: document.querySelector('input[name*=password]')
+  ...(document.querySelector('input[name*=confirm]') && {
+    repeatPassword: document.querySelector('input[name*=confirm]')
   }),
   ...(document.querySelector('input[name*=mobile]') && {
     mobile: document.querySelector('input[name*=mobile]')
@@ -67,6 +68,40 @@ const formInputs = {
   }),
   ...(document.querySelectorAll('[data-test*="selectButton"]') && {
     sof: document.querySelectorAll('[data-test*="selectButton"]')
+  }),
+  ...(document.querySelectorAll('label > div[class]')[0] && {
+    notAnRobotChbx: document.querySelectorAll('label > div[class]')[0]
+  }),
+  ...(document.querySelector('[name=state]') && {
+    state: document.querySelector('[name=state]')
+  }),
+  ...(document.querySelector('[id*=countrySelect]') && {
+    country: document.querySelector('[id*=countrySelect]')
+  }),
+  ...(document.querySelector('[id*=bankSelect]') && {
+    ngBank: document.querySelector('[id*=bankSelect]')
+  }),
+  ...(document.querySelector('[id*=accountTypeSelect]') && {
+    acountType: document.querySelector('[id*=accountTypeSelect]')
+  }),
+  ...(document.querySelector('[data-test="account_registerForm_bankAccount"') && {
+    accountNumber: document.querySelector(
+      '[data-test="account_registerForm_bankAccount"]'
+    )
+  }),
+  ...(document.querySelector('[data-test="account_registerForm_gender"') && {
+    gender: document.querySelector('[data-test="account_registerForm_gender"]')
+  }),
+  ...(document.querySelector('[data-test="account_registerForm_birthDay"') && {
+    datePickerDay: document.querySelector('[data-test="account_registerForm_birthDay"]')
+  }),
+  ...(document.querySelector('[data-test="account_registerForm_birthMonth"') && {
+    datePickerMonth: document.querySelector(
+      '[data-test="account_registerForm_birthMonth"]'
+    )
+  }),
+  ...(document.querySelector('[data-test="account_registerForm_birthYear"') && {
+    datePickerYear: document.querySelector('[data-test="account_registerForm_birthYear"]')
   })
 }
 
@@ -131,9 +166,48 @@ const formInputs = {
     if (formInputs.rodoClause && !formInputs.allChecboxes) {
       formInputs.rodoClause.click() // not good not great but suits the sites its used for
     }
-    if (formInputs.sof) {
+    if (formInputs.sof.length > 4) {
       formInputs.sof[5].click()
       document.querySelectorAll('[data-test="selectOptions"] li span')[1].click()
+    }
+    if (formInputs.notAnRobotChbx) {
+      formInputs.notAnRobotChbx.click()
+    }
+    if (formInputs.state) {
+      formInputs.state.selectedIndex = 2
+      formInputs.state.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    if (formInputs.country) {
+      formInputs.country.selectedIndex = 1
+      formInputs.country.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    if (formInputs.ngBank) {
+      formInputs.ngBank.selectedIndex = 3
+      formInputs.ngBank.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    if (formInputs.acountType) {
+      formInputs.acountType.selectedIndex = 1
+      formInputs.acountType.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    if (formInputs.accountNumber) {
+      setNativeValue(formInputs.accountNumber, fakeData.accountNumber)
+      formInputs.accountNumber.dispatchEvent(new Event('input', {bubbles: true}))
+    }
+    if (formInputs.gender) {
+      formInputs.gender.selectedIndex = 1
+      formInputs.gender.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    if (formInputs.datePickerDay) {
+      formInputs.datePickerDay.selectedIndex = generateRandomInt(1, 30)
+      formInputs.datePickerDay.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    if (formInputs.datePickerMonth) {
+      formInputs.datePickerMonth.selectedIndex = generateRandomInt(1, 11)
+      formInputs.datePickerMonth.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    if (formInputs.datePickerYear) {
+      formInputs.datePickerYear.selectedIndex = generateRandomInt(1, 100)
+      formInputs.datePickerYear.dispatchEvent(new Event('change', {bubbles: true}))
     }
     console.log(
       `%c Filled something for sure...but what?`,
