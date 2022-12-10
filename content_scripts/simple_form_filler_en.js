@@ -174,7 +174,7 @@ const formInputs = {
       formInputs.notAnRobotChbx.click()
     }
     if (formInputs.state) {
-      formInputs.state.selectedIndex = 2
+      formInputs.state.selectedIndex = generateRandomInt(2, 7)
       formInputs.state.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.country) {
@@ -182,11 +182,11 @@ const formInputs = {
       formInputs.country.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.ngBank) {
-      formInputs.ngBank.selectedIndex = 3
+      formInputs.ngBank.selectedIndex = generateRandomInt(2, 5)
       formInputs.ngBank.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.acountType) {
-      formInputs.acountType.selectedIndex = 1
+      formInputs.acountType.selectedIndex = generateRandomInt(1, 2)
       formInputs.acountType.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.accountNumber) {
@@ -194,19 +194,19 @@ const formInputs = {
       formInputs.accountNumber.dispatchEvent(new Event('input', {bubbles: true}))
     }
     if (formInputs.gender) {
-      formInputs.gender.selectedIndex = 1
+      formInputs.gender.selectedIndex = generateRandomInt(0, 1)
       formInputs.gender.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.datePickerDay) {
-      formInputs.datePickerDay.selectedIndex = generateRandomInt(1, 30)
+      formInputs.datePickerDay.selectedIndex = generateRandomInt(0, 30)
       formInputs.datePickerDay.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.datePickerMonth) {
-      formInputs.datePickerMonth.selectedIndex = generateRandomInt(1, 11)
+      formInputs.datePickerMonth.selectedIndex = generateRandomInt(0, 11)
       formInputs.datePickerMonth.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.datePickerYear) {
-      formInputs.datePickerYear.selectedIndex = generateRandomInt(1, 100)
+      formInputs.datePickerYear.selectedIndex = generateRandomInt(0, 100)
       formInputs.datePickerYear.dispatchEvent(new Event('change', {bubbles: true}))
     }
     console.log(
