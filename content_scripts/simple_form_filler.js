@@ -9,7 +9,7 @@ const fakeData = {
   streetFull: faker.address.streetAddress(),
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
-  email: `test_sb${Date.now()}@gmail.com`,
+  email: `testsb${Date.now()}@gmail.com`,
   login: `testSB${Date.now()}`, // logins have some character restrictions that emails dont
   promoCode: `${faker.word.adjective({strategy: 'shortest'})}_PromoTest`,
   procmoCodeHard: 'PromoTest',
@@ -22,7 +22,8 @@ const fakeData = {
 
 // CSS selector mainly used in this extension are not the same on similar sites,
 // That's why there will be some code repetition as I don't see point on even trying to keep it DRY
-// There will be at least 2 form inputs objects for sites sharing most similarities
+// Below css strategy contains some hacky solutions to avoid case-sensitive parts
+// This is a fun project so it designed to work with sites that are currently tested (around 8 different projects)
 const formInputs = {
   ...(document.querySelector('input[name*=mail]') && {
     email: document.querySelector('input[name*=mail]')
@@ -30,11 +31,11 @@ const formInputs = {
   ...(document.querySelector('input[name*=loginName]') && {
     login: document.querySelector('input[name*=loginName]')
   }),
-  ...(document.querySelector('input[name*=password]') && {
-    password: document.querySelector('input[name*=password]')
+  ...(document.querySelector('input[name*=assword]') && {
+    password: document.querySelector('input[name*=assword]')
   }),
-  ...(document.querySelector('input[name*=password]') && {
-    repeatPassword: document.querySelector('input[name*=confirmP]')
+  ...(document.querySelector('input[name*=onfirmP]') && {
+    repeatPassword: document.querySelector('input[name*=onfirmP]')
   }),
   ...(document.querySelector('input[name*=mobile]') && {
     mobile: document.querySelector('input[name*=mobile]')
@@ -54,14 +55,21 @@ const formInputs = {
       'input[data-test="account_registerForm_registrationOffers"]'
     )
   }),
-  ...(document.querySelector('input[name*=firstName]') && {
-    firstName: document.querySelector('input[name*=firstName]')
+  ...(document.querySelector('input[name*=irstName]') && {
+    firstName: document.querySelector('input[name*=irstName]')
   }),
-  ...(document.querySelector('input[name*=lastName]') && {
-    lastName: document.querySelector('input[name*=lastName]')
+  ...(document.querySelector('input[name*=astName]') && {
+    lastName: document.querySelector('input[name*=astName]')
   }),
   ...(document.querySelector('input[name*=personal]') && {
     pesel: document.querySelector('input[name*=personal]')
+  }),
+  ...(document.querySelector(
+    'input[data-test="account_registerForm_personalIdentyficationNumber"]'
+  ) && {
+    peselV2: document.querySelector(
+      'input[data-test="account_registerForm_personalIdentyficationNumber"]'
+    )
   }),
   ...(document.querySelector('input[name*=postalCode]') && {
     postalCode: document.querySelector('input[name*=postalCode]')
@@ -173,7 +181,7 @@ const formInputs = {
     }
     if (formInputs.flatNumber) {
       setNativeValue(formInputs.flatNumber, generateRandomInt(1, 20))
-      formInputs.flatNumber.dispatchEvent(new Event('change', {bubbles: true}))
+      formInputs.flatNumber.dispatchEvent(new Event('input', {bubbles: true}))
     }
     if (formInputs.postalCode) {
       setNativeValue(formInputs.postalCode, fakeData.postalCode)
@@ -183,27 +191,31 @@ const formInputs = {
       setNativeValue(formInputs.pesel, generatePesel(sex))
       formInputs.pesel.dispatchEvent(new Event('input', {bubbles: true}))
     }
+    if (formInputs.peselV2) {
+      setNativeValue(formInputs.peselV2, generatePesel(sex))
+      formInputs.peselV2.dispatchEvent(new Event('input', {bubbles: true}))
+    }
     if (formInputs.address) {
       setNativeValue(formInputs.address, fakeData.street)
       formInputs.address.dispatchEvent(new Event('input', {bubbles: true}))
     }
     if (formInputs.allChecboxes) {
-      formInputs.allChecboxes.click() // not good not great but suits the sites its used for
+      formInputs.allChecboxes.click()
     }
     if (formInputs.allChecboxesV2) {
-      formInputs.allChecboxesV2.click() // not good not great but suits the sites its used for
+      formInputs.allChecboxesV2.dispatchEvent(new Event('click', {bubbles: true}))
     }
     if (formInputs.rodoClause && !formInputs.allChecboxes) {
       formInputs.rodoClause.click() // not good not great but suits the sites its used for
     }
     if (formInputs.rodoClauseV2) {
-      formInputs.rodoClauseV2.click() // not good not great but suits the sites its used for
+      formInputs.rodoClauseV2.dispatchEvent(new Event('click', {bubbles: true}))
     }
     if (formInputs.pepNotAccepted) {
-      formInputs.pepNotAccepted.click() // not good not great but suits the sites its used for
+      formInputs.pepNotAccepted.dispatchEvent(new Event('click', {bubbles: true}))
     }
     if (formInputs.consentRules) {
-      formInputs.consentRules.click() // not good not great but suits the sites its used for
+      formInputs.consentRules.dispatchEvent(new Event('click', {bubbles: true}))
     }
     if (formInputs.sof.length > 4) {
       formInputs.sof[5].click()

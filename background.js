@@ -90,117 +90,127 @@ chrome.runtime.onInstalled.addListener(_ => {
   })
 })
 
-chrome.contextMenus.onClicked.addListener((event, tab) => {
-  if (event.menuItemId === "Remove all 'disabled' attributes") {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/unlock_disabled.js']
-    })
-  }
-  if (event.menuItemId === 'Generate PESEL (18+)') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/pesel.js']
-    })
-  }
-  if (event.menuItemId === 'Generate IBAN') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/iban.js']
-    })
-  }
-  if (event.menuItemId === 'Generate ID number') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/idnumber.js']
-    })
-  }
-  if (event.menuItemId === 'Highlight elements with same ID') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/same_id.js']
-    })
-  }
+try {
+  chrome.contextMenus.onClicked.addListener((event, tab) => {
+    if (tab.id === -1 || tab.url.match('chrome://')) return
+    if (event.menuItemId === "Remove all 'disabled' attributes") {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/unlock_disabled.js']
+      })
+    }
+    if (event.menuItemId === 'Generate PESEL (18+)') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/pesel.js']
+      })
+    }
+    if (event.menuItemId === 'Generate IBAN') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/iban.js']
+      })
+    }
+    if (event.menuItemId === 'Generate ID number') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/idnumber.js']
+      })
+    }
+    if (event.menuItemId === 'Highlight elements with same ID') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/same_id.js']
+      })
+    }
 
-  if (event.menuItemId === "Highlight  and show all 'display none' elements") {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/display_all_none.js']
-    })
-  }
+    if (event.menuItemId === "Highlight  and show all 'display none' elements") {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/display_all_none.js']
+      })
+    }
 
-  if (event.menuItemId === "Highlight  and show one 'display none' element") {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/display_one_none.js']
-    })
-  }
+    if (event.menuItemId === "Highlight  and show one 'display none' element") {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/display_one_none.js']
+      })
+    }
 
-  if (event.menuItemId === 'JSON prettier via console') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/json_prettier_to_console.js']
-    })
-  }
-  if (event.menuItemId === 'Clear all input restrictions') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/clear_all_input_restrictions.js']
-    })
-  }
-  if (event.menuItemId === 'Timestamp to date via console') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/timestamp_to_date.js']
-    })
-  }
+    if (event.menuItemId === 'JSON prettier via console') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/json_prettier_to_console.js']
+      })
+    }
+    if (event.menuItemId === 'Clear all input restrictions') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/clear_all_input_restrictions.js']
+      })
+    }
+    if (event.menuItemId === 'Timestamp to date via console') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/timestamp_to_date.js']
+      })
+    }
 
-  if (event.menuItemId === 'Base64 decode and print to console') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/base64_decode.js']
-    })
-  }
+    if (event.menuItemId === 'Base64 decode and print to console') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/base64_decode.js']
+      })
+    }
 
-  if (event.menuItemId === 'Base64 encode and print to console') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/base64_encode.js']
-    })
-  }
+    if (event.menuItemId === 'Base64 encode and print to console') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/base64_encode.js']
+      })
+    }
 
-  if (event.menuItemId === 'Generate PASSPORT number') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/passport_number.js']
-    })
-  }
+    if (event.menuItemId === 'Generate PASSPORT number') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/passport_number.js']
+      })
+    }
 
-  if (event.menuItemId === 'Simple form filler') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/simple_form_filler.js']
-    })
-  }
-  if (event.menuItemId === 'Change all inputs type from password to text') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/password_input_to_text.js']
-    })
-  }
-})
+    if (event.menuItemId === 'Simple form filler') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/simple_form_filler.js']
+      })
+    }
+    if (event.menuItemId === 'Change all inputs type from password to text') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/password_input_to_text.js']
+      })
+    }
+  })
+} catch (err) {
+  console.log(err)
+}
 
-chrome.commands.onCommand.addListener((command, tab) => {
-  if (command === 'Simple form filler') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/simple_form_filler.js']
-    })
-  }
-  if (command === 'Simple form filler EN') {
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: ['content_scripts/simple_form_filler_en.js']
-    })
-  }
-})
+try {
+  chrome.commands.onCommand.addListener((command, tab) => {
+    if (tab.id === -1 || tab.url.match('chrome://')) return
+    if (command === 'Simple form filler') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/simple_form_filler.js']
+      })
+    }
+    if (command === 'Simple form filler EN') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/simple_form_filler_en.js']
+      })
+    }
+  })
+} catch (error) {
+  console.log(error)
+}
