@@ -210,6 +210,13 @@ try {
         files: ['content_scripts/simple_form_filler_en.js']
       })
     }
+    if (command === 'Remove all disabled attributes') {
+      console.log(`testes`)
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/unlock_disabled.js']
+      })
+    }
   })
 } catch (error) {
   console.log(error)

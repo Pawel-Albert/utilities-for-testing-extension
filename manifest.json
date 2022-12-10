@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "TesterUtilities",
   "description": "TesterUtilities",
-  "version": "0.0.9",
+  "version": "0.1",
   "icons": {
     "16": "gen.png",
     "48": "gen.png",
@@ -43,17 +43,24 @@
   "commands": {
     "Simple form filler": {
       "suggested_key": {
-        "default": "Alt+X",
-        "mac": "Alt+X"
+        "default": "Alt+2",
+        "mac": "Alt+2"
       },
       "description": "Simple form filler"
     },
     "Simple form filler EN": {
       "suggested_key": {
-        "default": "Alt+W",
-        "mac": "Alt+W"
+        "default": "Alt+3",
+        "mac": "Alt+3"
       },
       "description": "Simple form filler EN"
+    },
+    "Remove all disabled attributes": {
+      "suggested_key": {
+        "default": "Alt+1",
+        "mac": "Alt+1"
+      },
+      "description": "Remove all 'disabled' attributes"
     }
   }
 }
