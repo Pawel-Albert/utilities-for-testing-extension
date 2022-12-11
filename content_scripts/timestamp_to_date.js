@@ -23,6 +23,6 @@
       )
     )
   } catch (err) {
-    alert(`Input proper timestamp ast this was and: ${err}`)
+    alert(`Input proper timestamp as this was an: ${err}`)
   }
 })()

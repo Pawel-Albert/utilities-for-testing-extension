@@ -27,26 +27,38 @@ const formInputs = {
   ...(document.querySelector('input[name*=mail]') && {
     email: document.querySelector('input[name*=mail]')
   }),
-  ...(document.querySelector('input[name*=loginName]') && {
-    login: document.querySelector('input[name*=loginName]')
+  ...(document.querySelector('input[name*="registerConfirmEmail"]') && {
+    confirmEmail: document.querySelector('input[name*="registerConfirmEmail"]')
+  }),
+  ...(document.querySelector('input[data-test="account_registerForm_userName"]') && {
+    login: document.querySelector('input[data-test="account_registerForm_userName"]')
+  }),
+  ...(document.querySelector('input[name*=registerLogin]') && {
+    loginV2: document.querySelector('input[name*=registerLogin]')
   }),
   ...(document.querySelector('input[data-test="account_registerForm_password"]') && {
     password: document.querySelector('input[data-test="account_registerForm_password"]')
   }),
-  ...(document.querySelector('input[name*=confirm]') && {
-    repeatPassword: document.querySelector('input[name*=confirm]')
+  ...(document.querySelector('input[name*="registerPassword"]') && {
+    passwordV2: document.querySelector('input[name*="registerPassword"]')
+  }),
+  ...(document.querySelector('input[name*=onfirm]') && {
+    repeatPassword: document.querySelector('input[name*=onfirm]')
   }),
   ...(document.querySelector('input[name*=mobile]') && {
     mobile: document.querySelector('input[name*=mobile]')
   }),
+  ...(document.querySelector('input[name*="registerPhoneNumber"]') && {
+    mobileV2: document.querySelector('input[name*="registerPhoneNumber"]')
+  }),
   ...(document.querySelector('input[name*=promoCode]') && {
     promoCode: document.querySelector('input[name*=promoCode]')
   }),
-  ...(document.querySelector('input[name*=firstName]') && {
-    firstName: document.querySelector('input[name*=firstName]')
+  ...(document.querySelector('input[name*=irstName]') && {
+    firstName: document.querySelector('input[name*=irstName]')
   }),
-  ...(document.querySelector('input[name*=lastName]') && {
-    lastName: document.querySelector('input[name*=lastName]')
+  ...(document.querySelector('input[name*=astName]') && {
+    lastName: document.querySelector('input[name*=astName]')
   }),
   ...(document.querySelector('input[name*=personal]') && {
     pesel: document.querySelector('input[name*=personal]')
@@ -54,11 +66,11 @@ const formInputs = {
   ...(document.querySelector('input[name*=postalCode]') && {
     postalCode: document.querySelector('input[name*=postalCode]')
   }),
-  ...(document.querySelector('input[name*=address]') && {
-    address: document.querySelector('input[name*=address]')
+  ...(document.querySelector('input[name*=ddress]') && {
+    address: document.querySelector('input[name*=ddress]')
   }),
-  ...(document.querySelector('input[name*=city]') && {
-    city: document.querySelector('input[name*=city]')
+  ...(document.querySelector('input[name*=ity]') && {
+    city: document.querySelector('input[name*=ity]')
   }),
   ...(document.querySelector('input[name*=selectAllFields]') && {
     allChecboxes: document.querySelector('input[name*=selectAllFields]')
@@ -72,25 +84,35 @@ const formInputs = {
   ...(document.querySelectorAll('label > div[class]')[0] && {
     notAnRobotChbx: document.querySelectorAll('label > div[class]')[0]
   }),
-  ...(document.querySelector('[name=state]') && {
-    state: document.querySelector('[name=state]')
+  ...(document.querySelector('[name*="registerRules"]') && {
+    registerRule: document.querySelector('[name*="registerRules"]')
   }),
-  ...(document.querySelector('[id*=countrySelect]') && {
-    country: document.querySelector('[id*=countrySelect]')
+  ...(document.querySelector('[name*=tate]') && {
+    state: document.querySelector('[name*=tate]')
   }),
-  ...(document.querySelector('[id*=bankSelect]') && {
-    ngBank: document.querySelector('[id*=bankSelect]')
+  ...(document.querySelector('[name*="ountry"]') && {
+    country: document.querySelector('[name*="ountry"]')
   }),
-  ...(document.querySelector('[id*=accountTypeSelect]') && {
-    acountType: document.querySelector('[id*=accountTypeSelect]')
+  ...(document.querySelector('[name=bank]') && {
+    ngBank: document.querySelector('[name=bank]')
   }),
-  ...(document.querySelector('[data-test="account_registerForm_bankAccount"') && {
-    accountNumber: document.querySelector(
-      '[data-test="account_registerForm_bankAccount"]'
-    )
+  ...(document.querySelector('[id*=accountType]') && {
+    acountType: document.querySelector('[id*=accountType]')
   }),
-  ...(document.querySelector('[data-test="account_registerForm_gender"') && {
+  ...(document.querySelector('[name="accountNumber"]') && {
+    accountNumber: document.querySelector('[name="accountNumber"]')
+  }),
+  ...(document.querySelector('[name="registerCurrency"]') && {
+    currency: document.querySelector('[name="registerCurrency"]')
+  }),
+  ...(document.querySelector('[data-test="account_registerForm_gender"]') && {
     gender: document.querySelector('[data-test="account_registerForm_gender"]')
+  }),
+  ...(document.querySelector('[name*="registerGender"]') && {
+    genderV2: document.querySelector('[name*="registerGender"]')
+  }),
+  ...(document.querySelector('[id*="registerReferenceId"]') && {
+    reference: document.querySelector('[id*="registerReferenceId"]')
   }),
   ...(document.querySelector('[data-test="account_registerForm_birthDay"') && {
     datePickerDay: document.querySelector('[data-test="account_registerForm_birthDay"]')
@@ -111,14 +133,25 @@ const formInputs = {
       setNativeValue(formInputs.email, fakeData.email)
       formInputs.email.dispatchEvent(new Event('input', {bubbles: true}))
     }
+    if (formInputs.confirmEmail) {
+      setNativeValue(formInputs.confirmEmail, fakeData.email)
+      formInputs.confirmEmail.dispatchEvent(new Event('input', {bubbles: true}))
+    }
     if (formInputs.login) {
       setNativeValue(formInputs.login, fakeData.login)
       formInputs.login.dispatchEvent(new Event('input', {bubbles: true}))
     }
-
+    if (formInputs.loginV2) {
+      setNativeValue(formInputs.loginV2, fakeData.login)
+      formInputs.loginV2.dispatchEvent(new Event('input', {bubbles: true}))
+    }
     if (formInputs.password) {
       setNativeValue(formInputs.password, fakeData.password)
       formInputs.password.dispatchEvent(new Event('input', {bubbles: true}))
+    }
+    if (formInputs.passwordV2) {
+      setNativeValue(formInputs.passwordV2, fakeData.password)
+      formInputs.passwordV2.dispatchEvent(new Event('input', {bubbles: true}))
     }
     if (formInputs.repeatPassword) {
       setNativeValue(formInputs.repeatPassword, fakeData.password)
@@ -128,6 +161,10 @@ const formInputs = {
     if (formInputs.mobile) {
       setNativeValue(formInputs.mobile, fakeData.mobile)
       formInputs.mobile.dispatchEvent(new Event('input', {bubbles: true}))
+    }
+    if (formInputs.mobileV2) {
+      setNativeValue(formInputs.mobileV2, fakeData.mobile)
+      formInputs.mobileV2.dispatchEvent(new Event('input', {bubbles: true}))
     }
     if (formInputs.promoCode) {
       setNativeValue(formInputs.promoCode, fakeData.promoCode)
@@ -173,6 +210,9 @@ const formInputs = {
     if (formInputs.notAnRobotChbx) {
       formInputs.notAnRobotChbx.click()
     }
+    if (formInputs.registerRule) {
+      formInputs.registerRule.click()
+    }
     if (formInputs.state) {
       formInputs.state.selectedIndex = generateRandomInt(2, 7)
       formInputs.state.dispatchEvent(new Event('change', {bubbles: true}))
@@ -182,8 +222,16 @@ const formInputs = {
       formInputs.country.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.ngBank) {
-      formInputs.ngBank.selectedIndex = generateRandomInt(2, 5)
+      formInputs.ngBank.selectedIndex = generateRandomInt(1, 5)
       formInputs.ngBank.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    if (formInputs.reference) {
+      formInputs.reference.selectedIndex = generateRandomInt(1, 7)
+      formInputs.reference.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    if (formInputs.currency) {
+      formInputs.currency.selectedIndex = 1
+      formInputs.currency.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.acountType) {
       formInputs.acountType.selectedIndex = generateRandomInt(1, 2)
@@ -196,6 +244,10 @@ const formInputs = {
     if (formInputs.gender) {
       formInputs.gender.selectedIndex = generateRandomInt(0, 1)
       formInputs.gender.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    if (formInputs.genderV2) {
+      formInputs.genderV2.selectedIndex = generateRandomInt(1, 2)
+      formInputs.genderV2.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.datePickerDay) {
       formInputs.datePickerDay.selectedIndex = generateRandomInt(0, 30)
