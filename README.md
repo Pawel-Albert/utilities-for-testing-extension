@@ -57,7 +57,7 @@ After using right mouse button you can hover on TesterUtilities and click on des
 - "JSON prettier via console"
   > After clicking it in context menu you will be asked in window prompt to input a valid JSON that will be printed in dev tools console in a formatted way.
 - "Timestamp to date"
-  > After clicking it in context menu you will be asked in window prompt to input a valid timestamp (example: 1669852799000). Result will be displayed in window Alert with pl-PL locale .
+  > After clicking it in context menu you will be asked in window prompt to input locale timezone(default is 'pl') and after that a valid timestamp (example: 1669852799000). Result will be displayed in window Alert in provided locale timezone.
 - "Base64 decode and print to console"
 - "Base64 encode and print to console"
 - "Generate PESEL (18+)"
