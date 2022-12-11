@@ -16,7 +16,7 @@
       timeStampToLocaleDate(
         Number(
           prompt(
-            "Enter timestamp (example: '1669852799') to print date in console - to view it, open dev tools (F12)",
+            "Enter timestamp (example: '1669852799000') to display date Alert modal (timeZone is Europe/Warsaw)",
             ''
           )
         )

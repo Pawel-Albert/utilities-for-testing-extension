@@ -16,13 +16,6 @@ chrome.runtime.onInstalled.addListener(_ => {
     id: "Highlight  and show all 'display none' elements",
     contexts: ['all']
   })
-
-  chrome.contextMenus.create({
-    title: "Highlight  and show one 'display none' element",
-    id: "Highlight  and show one 'display none' element",
-    contexts: ['all']
-  })
-
   chrome.contextMenus.create({
     title: 'Clear all input restrictions',
     id: 'Clear all input restrictions',
@@ -42,8 +35,8 @@ chrome.runtime.onInstalled.addListener(_ => {
   })
 
   chrome.contextMenus.create({
-    title: 'Timestamp to date via console',
-    id: 'Timestamp to date via console',
+    title: 'Timestamp to date',
+    id: 'Timestamp to date',
     contexts: ['all']
   })
 
@@ -131,13 +124,6 @@ try {
       })
     }
 
-    if (event.menuItemId === "Highlight  and show one 'display none' element") {
-      chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        files: ['content_scripts/display_one_none.js']
-      })
-    }
-
     if (event.menuItemId === 'JSON prettier via console') {
       chrome.scripting.executeScript({
         target: {tabId: tab.id},
@@ -150,7 +136,7 @@ try {
         files: ['content_scripts/clear_all_input_restrictions.js']
       })
     }
-    if (event.menuItemId === 'Timestamp to date via console') {
+    if (event.menuItemId === 'Timestamp to date') {
       chrome.scripting.executeScript({
         target: {tabId: tab.id},
         files: ['content_scripts/timestamp_to_date.js']
