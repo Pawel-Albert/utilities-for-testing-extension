@@ -17,7 +17,11 @@ const fakeData = {
     8
   )}`, // For mobile lets just stick with 1-3 on the beginning to avoid using real phone numbers in Poland(also Nigeria?) so no matter the env real people don't get msg
   password: 'Password1234', // Please change password to something you whant to use as this is placeholder
-  accountNumber: addLeadingZeros(generateRandomInt(0, 9999999999), 10)
+  accountNumber: addLeadingZeros(generateRandomInt(0, 9999999999), 10),
+  birthDateFormated: `${generateRandomInt(1901, 2002)}-${addLeadingZeros(
+    generateRandomInt(1, 12),
+    2
+  )}-${addLeadingZeros(generateRandomInt(1, 28), 2)}`
 }
 
 // CSS selector mainly used in this extension are not the same on similar sites,
@@ -114,7 +118,7 @@ const formInputs = {
   ...(document.querySelector('[id*="registerReferenceId"]') && {
     reference: document.querySelector('[id*="registerReferenceId"]')
   }),
-  ...(document.querySelector('[data-test="account_registerForm_birthDay"') && {
+  ...(document.querySelector('[data-test="account_registerForm_birthDay"]') && {
     datePickerDay: document.querySelector('[data-test="account_registerForm_birthDay"]')
   }),
   ...(document.querySelector('[data-test="account_registerForm_birthMonth"') && {
@@ -122,8 +126,11 @@ const formInputs = {
       '[data-test="account_registerForm_birthMonth"]'
     )
   }),
-  ...(document.querySelector('[data-test="account_registerForm_birthYear"') && {
+  ...(document.querySelector('[data-test="account_registerForm_birthYear"]') && {
     datePickerYear: document.querySelector('[data-test="account_registerForm_birthYear"]')
+  }),
+  ...(document.querySelector('[name*="registerBirthDate"]') && {
+    datePickerAll: document.querySelector('[name*="registerBirthDate"]')
   })
 }
 
@@ -135,15 +142,15 @@ const formInputs = {
     }
     if (formInputs.confirmEmail) {
       setNativeValue(formInputs.confirmEmail, fakeData.email)
-      formInputs.confirmEmail.dispatchEvent(new Event('input', {bubbles: true}))
+      formInputs.confirmEmail.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.login) {
       setNativeValue(formInputs.login, fakeData.login)
-      formInputs.login.dispatchEvent(new Event('input', {bubbles: true}))
+      formInputs.login.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.loginV2) {
       setNativeValue(formInputs.loginV2, fakeData.login)
-      formInputs.loginV2.dispatchEvent(new Event('input', {bubbles: true}))
+      formInputs.loginV2.dispatchEvent(new Event('change', {bubbles: true}))
     }
     if (formInputs.password) {
       setNativeValue(formInputs.password, fakeData.password)
@@ -260,6 +267,11 @@ const formInputs = {
     if (formInputs.datePickerYear) {
       formInputs.datePickerYear.selectedIndex = generateRandomInt(0, 100)
       formInputs.datePickerYear.dispatchEvent(new Event('change', {bubbles: true}))
+    }
+    console.log(fakeData.birthDateFormated)
+    if (formInputs.datePickerAll) {
+      setNativeValue(formInputs.datePickerAll, fakeData.birthDateFormated)
+      formInputs.datePickerAll.dispatchEvent(new Event('input', {bubbles: true}))
     }
     console.log(
       `%c Filled something for sure...but what?`,
