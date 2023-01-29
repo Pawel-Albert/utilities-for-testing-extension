@@ -70,7 +70,7 @@ After using right mouse button you can hover on TesterUtilities and click on des
 - "Generate PASSPORT number"
 - "Simple form filler"
   > It will populate all fields(if they exists) in a register form - locale for this data (custom and fakerjs) is "pl".
-  > CSS selectors used where designed to work with company specific sites (around 9 sites with with only moderate variation).
+  > CSS selectors used where designed to work with company specific sites (around 9 sites with only moderate variation).
   > To use it you can choose it from context menu UI, or user provided default shortcut that is 'ALT + 2'.
 - "Simple form filler EN"
   > It will populate all fields(if they exists) in a register form - locale for this data (custom and fakerjs) is "en-NG".
