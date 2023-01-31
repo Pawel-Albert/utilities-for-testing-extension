@@ -61,6 +61,13 @@
         "mac": "Alt+1"
       },
       "description": "Remove all 'disabled' attributes"
+    },
+    "Convert password input to text": {
+      "suggested_key": {
+        "default": "Alt+4",
+        "mac": "Alt+4"
+      },
+      "description": "Convert password input to text"
     }
   }
 }

@@ -184,6 +184,7 @@ try {
 try {
   chrome.commands.onCommand.addListener((command, tab) => {
     if (tab.id === -1 || tab.url.match('chrome://')) return
+    //Comands are set in manifest.json
     if (command === 'Simple form filler') {
       chrome.scripting.executeScript({
         target: {tabId: tab.id},
@@ -197,10 +198,15 @@ try {
       })
     }
     if (command === 'Remove all disabled attributes') {
-      console.log(`testes`)
       chrome.scripting.executeScript({
         target: {tabId: tab.id},
         files: ['content_scripts/unlock_disabled.js']
+      })
+    }
+    if (command === 'Convert password input to text') {
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: ['content_scripts/password_input_to_text.js']
       })
     }
   })

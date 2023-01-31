@@ -54,6 +54,7 @@ After using right mouse button you can hover on TesterUtilities and click on des
 - "Clear_all_input_restrictions"
   > It will remove few typical input restrictions: required, maxlength, minlength, onpaste function.
 - "Change all inputs type from password to text"
+  > To use it you can choose it from context menu UI, or use provided default shortcut that is 'ALT + 4'.
 - "JSON prettier via console"
   > After clicking it in context menu you will be asked in window prompt to input a valid JSON that will be printed in dev tools console in a formatted way.
 - "Timestamp to date"
@@ -71,11 +72,11 @@ After using right mouse button you can hover on TesterUtilities and click on des
 - "Simple form filler"
   > It will populate all fields(if they exists) in a register form - locale for this data (custom and fakerjs) is "pl".
   > CSS selectors used where designed to work with company specific sites (around 9 sites with with only moderate variation).
-  > To use it you can choose it from context menu UI, or user provided default shortcut that is 'ALT + 2'.
+  > To use it you can choose it from context menu UI, or use provided default shortcut that is 'ALT + 2'.
 - "Simple form filler EN"
   > It will populate all fields(if they exists) in a register form - locale for this data (custom and fakerjs) is "en-NG".
   > Fields and css selectors are similar to 'base' version but not to extent to safely use same patterns.
-  > It's not avaliable in context menu UI, to use it user can press default shortcut that was set to 'ALT + 3'.
+  > It's not avaliable in context menu UI, to use it use can press default shortcut that was set to 'ALT + 3'.
 
 ## Todo
 

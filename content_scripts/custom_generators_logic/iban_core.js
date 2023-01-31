@@ -3,7 +3,7 @@ import {generateRandomInt, addLeadingZeros} from '../../utylis/helpers'
 ////////////////////////////////////////////////////////////////////////////////////////
 //IBAN_CONFIG
 ///////////////////////////////////////////////////////////////////////////////////////
-const bankBranchCode = [
+const BANK_BRANCH_CODE = [
   '10100000',
   '10100039',
   '10100055',
@@ -3066,8 +3066,8 @@ const bankBranchCode = [
 ]
 
 const randomBankCode = array => array[generateRandomInt(0, array.length)]
-const leadingZeros = 16
-const ibanCountryPrefixCode = '252100' // Hardcoded as generator is  curently only for PL
+const LEADING_ZEROS = 16
+const IBAN_COUNTRY_PREFIX_CODE = '252100' // Hardcoded as generator is  curently only for PL
 
 // The weird part as the whole IBAN number is really big and there is no elegant way to use modulo on it
 // TODO : This code  can be cleaner but it works as it is - could refactor it later
@@ -3085,11 +3085,14 @@ const calcControlNumber = num => {
 //IBAN
 ////////////////////////////////////////////////////////////////////////
 export const generateIban = () => {
-  const bankCodePart = randomBankCode(bankBranchCode)
-  const randomPart = addLeadingZeros(generateRandomInt(0, 9999999999999999), leadingZeros)
+  const bankCodePart = randomBankCode(BANK_BRANCH_CODE)
+  const randomPart = addLeadingZeros(
+    generateRandomInt(0, 9999999999999999),
+    LEADING_ZEROS
+  )
   //
   const bankAndRandomPart = bankCodePart + randomPart
-  const afterSwitching = bankAndRandomPart + ibanCountryPrefixCode
+  const afterSwitching = bankAndRandomPart + IBAN_COUNTRY_PREFIX_CODE
   const controlNumber = calcControlNumber(afterSwitching)
 
   return '' + controlNumber + bankAndRandomPart
