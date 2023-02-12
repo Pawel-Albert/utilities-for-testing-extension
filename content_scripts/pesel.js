@@ -1,14 +1,14 @@
 import {generatePesel, sex} from './custom_generators_logic/pesel_core.js'
 import {setNativeValue} from '../utylis/helpers.js'
+;(() => {
+  try {
+    const pesel = generatePesel(sex)
+    console.info(`Pesel: ${pesel}`)
 
-;(function () {
-  let pesel = generatePesel(sex)
-  console.log(
-    `%c Pesel: ${pesel}`,
-    'font-family:monospace; color:DarkGreen;font-size:25px'
-  )
-  const indicatedElement = document.activeElement
-
-  setNativeValue(indicatedElement, pesel)
-  indicatedElement.dispatchEvent(new Event('input', {bubbles: true})) // In placess(sites) that this functionality is used, allows user to trigger events recognized by front to treat  this as valid user action
+    const indicatedElement = document.querySelector(':focus')
+    setNativeValue(indicatedElement, pesel)
+    indicatedElement.dispatchEvent(new Event('input', {bubbles: true}))
+  } catch (err) {
+    console.error(`Error: ${err.message}`)
+  }
 })()

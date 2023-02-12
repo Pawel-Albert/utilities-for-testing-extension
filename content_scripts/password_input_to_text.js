@@ -1,8 +1,13 @@
-;(function () {
-  const inputs = document.querySelectorAll('input[type=password]')
+;(() => {
+  try {
+    const inputs = document.querySelectorAll('input[type=password]')
 
-  for (const input of inputs) {
-    input.type = 'text'
+    inputs.forEach(input => {
+      input.type = 'text'
+    })
+
+    console.info('Changed')
+  } catch (err) {
+    console.error(`Error: ${err.message}`)
   }
-  console.log(`%c Changed`, 'font-family:monospace; color:firebrick;font-size:25px')
 })()

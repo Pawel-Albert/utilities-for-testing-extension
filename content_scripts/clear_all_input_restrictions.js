@@ -1,27 +1,22 @@
-;(function () {
-  Array.prototype.slice
-    .call(document.querySelectorAll('input, select'))
-    .map(function (element) {
-      element.removeAttribute('required')
+;(() => {
+  try {
+    const inputs = document.querySelectorAll('input, select')
+    inputs.forEach(input => {
+      input.removeAttribute('required')
+      input.removeAttribute('maxlength')
+      input.removeAttribute('minlength')
+      input.removeAttribute('pattern')
+      input.removeAttribute('autocomplete')
+      if (typeof input.onpaste === 'function') {
+        input.onpaste = () => {}
+      }
     })
 
-  Array.prototype.slice.call(document.querySelectorAll('input')).map(function (element) {
-    element.removeAttribute('maxlength')
-  })
-
-  Array.prototype.slice.call(document.querySelectorAll('input')).map(function (element) {
-    element.removeAttribute('minlength')
-  })
-
-  let inputs = document.querySelectorAll('input')
-  for (let i = 0; i < inputs.length; i++) {
-    if (typeof inputs[i].onpaste === 'function') {
-      inputs[i].onpaste = new (function () {})()
-    }
+    console.info(
+      '%c Removed input restrictions',
+      'font-family: monospace; color: green; font-size: 25px'
+    )
+  } catch (err) {
+    console.error(`Error: ${err.message}`)
   }
-
-  console.log(
-    `%c removed restrictions: required, maxlength, minlength, onpaste function`,
-    'font-family:monospace; color:DarkGreen;font-size:25px'
-  )
 })()

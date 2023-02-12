@@ -5,9 +5,15 @@ import {generateRandomInt, addLeadingZeros} from '../../utylis/helpers.js'
 ////////////////////////////////////////////////////////////////////////////////////////
 export const sex = 'both' // Hardcoded
 const LEADING_ZEROS = 3
+const PESEL_CONTROL_CONSTANTS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
 
-const randomTimeStamp = () => new Date() - generateRandomInt(568036800000, 3155760000000) // Placeholder - hardcoded value for age beetwen 18 and 100 years - changes not needed for current purpose
-
+const randomTimeStamp = () => {
+  const maxBirthDate = new Date(Date.now() - 568036800000) // 18 years ago in milliseconds
+  const minBirthDate = new Date(Date.now() - 3155760000000) // 100 years ago in milliseconds
+  const minTimestamp = minBirthDate.getTime()
+  const maxTimestamp = maxBirthDate.getTime()
+  return new Date(generateRandomInt(minTimestamp, maxTimestamp))
+}
 const timeStampToLocaleDate = timeStamp => {
   return new Date(timeStamp).toLocaleDateString('pl-PL', {
     year: 'numeric',
@@ -37,17 +43,13 @@ const getDatePartPesel = date => {
   )
 }
 
-const PESEL_CONTROL_CONSTANTS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
-
 const controlDigit = (weights, string) => {
-  const stringToArray = [...string]
-  let controlSum = 0
-  for (let i = 0; i < stringToArray.length; i++) {
-    controlSum += stringToArray[i] * weights[i]
-  }
+  const controlSum = [...string].reduce((sum, digit, index) => {
+    return sum + digit * weights[index]
+  }, 0)
   const controlSumDigitValue = controlSum % 10
   const controlDigitValue = 10 - controlSumDigitValue
-  return controlDigitValue == 10 ? '0' : controlDigitValue
+  return controlDigitValue === 10 ? '0' : controlDigitValue.toString()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

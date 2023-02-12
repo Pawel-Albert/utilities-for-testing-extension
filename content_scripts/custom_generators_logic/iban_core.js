@@ -3072,13 +3072,14 @@ const IBAN_COUNTRY_PREFIX_CODE = '252100' // Hardcoded as generator is  curently
 // The weird part as the whole IBAN number is really big and there is no elegant way to use modulo on it
 // TODO : This code  can be cleaner but it works as it is - could refactor it later
 const calcControlNumber = num => {
-  const fisrtPart = num.slice(0, 10)
-  const secondPart = (fisrtPart % 97) + num.slice(10, 20)
-  const thirdPart = (secondPart % 97) + num.slice(20, 30)
-  const moduloValue = thirdPart % 97
-  let result = 98 - moduloValue + ''
-  result = result.length < 2 ? 0 + result : result
-  return result
+  let controlSum = parseInt(num.slice(0, 7))
+  for (let i = 7; i < num.length; i += 7) {
+    const block = num.slice(i, i + 7)
+    controlSum = parseInt((controlSum % 97) + block)
+  }
+  const moduloValue = controlSum % 97
+  const controlNumber = 98 - moduloValue
+  return controlNumber.toString().padStart(2, '0')
 }
 
 ////////////////////////////////////////////////////////////////////////
