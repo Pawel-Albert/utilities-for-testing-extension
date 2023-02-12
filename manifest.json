@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "TesterUtilities",
   "description": "TesterUtilities",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "icons": {
     "16": "gen.png",
     "48": "gen.png",
