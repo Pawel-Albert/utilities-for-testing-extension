@@ -30,7 +30,7 @@ git clone https://github.com/Pawel-Albert/utilities-for-testing-extension.git
 
 ```shell
 $ npm instal
-$ npm build
+$ npm run build
 ```
 
 > After that a folder "dist" should be created
