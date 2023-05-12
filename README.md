@@ -67,14 +67,12 @@ After using right mouse button you can hover on TesterUtilities and click on des
 - "Generate IBAN"
 - "Generate ID number"
 - "Generate PASSPORT number"
-- "Generate ID number"
-- "Generate PASSPORT number"
 - "Simple form filler"
-  > It will populate all fields(if they exists) in a register form - locale for this data (custom and fakerjs) is "pl".
+  > It will populate all fields(if they exists) in a register form (curent company related sites)- locale for this data (custom and fakerjs) is "pl".
   > CSS selectors used where designed to work with company specific sites (around 9 sites with with only moderate variation).
   > To use it you can choose it from context menu UI, or use provided default shortcut that is 'ALT + 2'.
 - "Simple form filler EN"
-  > It will populate all fields(if they exists) in a register form - locale for this data (custom and fakerjs) is "en-NG".
+  > It will populate all fields(if they exists) in a register form (curent company related sites) - locale for this data (custom and fakerjs) is "en-NG".
   > Fields and css selectors are similar to 'base' version but not to extent to safely use same patterns.
   > It's not avaliable in context menu UI, to use it use can press default shortcut that was set to 'ALT + 3'.
 
