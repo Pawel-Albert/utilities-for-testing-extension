@@ -1,4 +1,3 @@
-````markdown
 ![](https://github.com/Pawel-Albert/utilities-for-testing-extension/blob/main/%F0%9F%92%BButylis%E2%9A%99%EF%B8%8F.png)
 
 # Google chrome extension with a couple of small functionalities for testers in the form of context menu
@@ -16,7 +15,6 @@ Clone this repo to your local machine using
 ```shell
 git clone https://github.com/Pawel-Albert/utilities-for-testing-extension.git
 ```
-````
 
 ### Setup
 
