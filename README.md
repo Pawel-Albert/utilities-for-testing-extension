@@ -117,7 +117,3 @@ Please switch to the 'vanila-SB' branch if you wish to continue using these feat
 - [x] Form auto filler with random data
 - [x] Fix Generate functions, as currently they are not registered by browser as user actions
 - [ ] Lot of small "quality of life changes" on user requests
-
-```
-
-```
