@@ -1,50 +1,37 @@
+````markdown
 ![](https://github.com/Pawel-Albert/utilities-for-testing-extension/blob/main/%F0%9F%92%BButylis%E2%9A%99%EF%B8%8F.png)
 
-# Google chrome extension with couple of small functionalities for testers in form of context menu
+# Google chrome extension with a couple of small functionalities for testers in the form of context menu
 
 ## Project Description
 
-> Project is a chrome extension in form of context menu (avaliable via rmb)- mostly niche and current company specific functionalities
-
-> Project was written in vanilla Javascript, bundled with Parcel and for fake data generation to some extent fakerjs was used.
-
-> This project heavly uses already writen code in my other project https://github.com/Pawel-Albert/test-data-generators
-
-> Purpose of the project is to provide some actual utility tool for personal and team usage and in the same time to practice building own chrome extension and just have fun while coding small scripts.
-
-> Disclaimer: This project is by no means a fully fledged commercial lvl extension. But as responsible testers (I try to be one) we should avoid to maximum using online external tools to manipulate our test/production data. Furthemore when it coms form fillers, creating one on your own will always be better than anything available on the market as most solution either dont work or work in way that customizing it is really bad experience.
+The project is a chrome extension in the form of a context menu (available via right mouse button)- mostly niche and current company-specific functionalities. The project was written in vanilla Javascript, bundled with Parcel, and for fake data generation to some extent fakerjs was used. This project heavily uses already written code in my other project https://github.com/Pawel-Albert/test-data-generators. The purpose of the project is to provide some actual utility tool for personal and team usage and at the same time to practice building own chrome extension and just have fun while coding small scripts. Disclaimer: This project is by no means a fully fledged commercial level extension.
 
 ## Installation
 
 ### Clone
 
-- Clone this repo to your local machine using
+Clone this repo to your local machine using
 
 ```shell
 git clone https://github.com/Pawel-Albert/utilities-for-testing-extension.git
 ```
+````
 
 ### Setup
 
-- Type in terminal
+Type in terminal
 
 ```shell
-$ npm instal
+$ npm install
 $ npm run build
 ```
 
-> After that a folder "dist" should be created
->
-> Go to chrome://extensions/
->
-> While in developer mode use "load unpacked" extension option and choose "dist" folder
->
-> Extension now is ready to use (remember to allow for use in incognito mode if needed)
+A folder "dist" should be created. Go to chrome://extensions/. While in developer mode use "load unpacked" extension option and choose "dist" folder. Extension now is ready to use (remember to allow for use in incognito mode if needed).
 
 ## Features
 
-All features are avaliable to use in form of context menu.
-After using right mouse button you can hover on TesterUtilities and click on desired functionality. Current functionality list provided below, with short information what they are doing(if needed) and how to use them in more details:
+All features are available to use in the form of a context menu. After using the right mouse button you can hover on TesterUtilities and click on the desired functionality.
 
 - "Remove all 'disabled' attributes"
   > It will remove all 'disabled' atributes and also css classes with 'disabled' name.
@@ -67,17 +54,72 @@ After using right mouse button you can hover on TesterUtilities and click on des
 - "Generate IBAN"
 - "Generate ID number"
 - "Generate PASSPORT number"
-- "Simple form filler"
-  > It will populate all fields(if they exists) in a register form (curent company related sites)- locale for this data (custom and fakerjs) is "pl".
-  > CSS selectors used where designed to work with company specific sites (around 9 sites with with only moderate variation).
-  > To use it you can choose it from context menu UI, or use provided default shortcut that is 'ALT + 2'.
-- "Simple form filler EN"
-  > It will populate all fields(if they exists) in a register form (curent company related sites) - locale for this data (custom and fakerjs) is "en-NG".
-  > Fields and css selectors are similar to 'base' version but not to extent to safely use same patterns.
-  > It's not avaliable in context menu UI, to use it use can press default shortcut that was set to 'ALT + 3'.
+- "Simple form filler - default site": This new functionality auto-fills forms on the default site. It's available in the context menu UI, to use it you can also press the default shortcut that was set to 'ALT + 2'. The data that fills the form is generated and set directly in the code. For instance, to set up a new site for form filling, you would create an entry in the `siteSelectors` file like the following generic example:
+
+```javascript
+const mySiteData = {
+  default: {
+    username: {
+      selector: 'input[name=username]',
+      type: 'input',
+      data: myFakeData.username
+    },
+    password: {selector: 'input[name=password]', type: 'input', data: myFakeData.password}
+    // ...other selectors
+    // You can add more fields to the form filling process by adding more entries in the site data object. Each entry requires a selector to find the input (also click events are possible) field on the page, the type of data, and the data itself.
+  }
+}
+```
+
+- "Simple form filler - custom sites": This feature auto-fills forms on the custom sites defined in the extension. It's not available in the context menu UI, to use it you can press the default shortcut that was set to 'ALT + 3'. Setting up the data for custom sites is done similarly to the default site, you would create the site and data mapping directly in the `siteSelectors` file.
+
+To configure multiple custom sites for auto-filling forms, you can extend the `siteSelectors` like in this generic example:
+
+```javascript
+const mySiteData = {
+  'mySite1.com': {
+    username: {
+      selector: 'input[name=username]',
+      type: 'input',
+      data: myFakeData.username
+    },
+    password: {selector: 'input[name=password]', type: 'input', data: myFakeData.password}
+    // ...other selectors
+  },
+  'mySite2.com': {
+    email: {selector: 'input[name=email]', type: 'input', data: myFakeData.email},
+    password: {selector: 'input[name=password]', type: 'input', data: myFakeData.password}
+    // ...other selectors
+  },
+  default: {
+    username: {
+      selector: 'input[name=username]',
+      type: 'input',
+      data: myFakeData.username
+    },
+    password: {selector: 'input[name=password]', type: 'input', data: myFakeData.password}
+    // ...other selectors
+  }
+}
+```
+
+### Major Update
+
+The extension has undergone a significant refactoring to improve its flexibility and compatibility. The "Simple form filler" and "Simple form filler EN" functionalities, which were previously available in the main branch, have been moved to a separate branch called 'vanila-SB'. This change was made to enhance the project's maintainability and to better accommodate the specific requirements of these features.
+
+### Deprecated Features
+
+- "Simple form filler" - This feature was previously available in the main branch. It has now been moved to the 'vanila-SB' branch.
+- "Simple form filler EN" - This feature was also moved to the 'vanila-SB' branch. It's not available in context menu UI.
+
+Please switch to the 'vanila-SB' branch if you wish to continue using these features.
 
 ## Todo
 
 - [x] Form auto filler with random data
 - [x] Fix Generate functions, as currently they are not registered by browser as user actions
 - [ ] Lot of small "quality of life changes" on user requests
+
+```
+
+```

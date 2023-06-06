@@ -1,10 +1,6 @@
-import {siteData} from './model/site_selectors'
-import {action} from './model/utylis'
+import {action} from './utylis'
 
-const currentSite = window.location.hostname
-const currentSiteData = siteData[currentSite]
-
-;(function fillForm() {
+export function fillForm(currentSite, currentSiteData) {
   if (!currentSiteData) {
     console.log(
       `%c No site object prepared for ${currentSite}`,
@@ -13,10 +9,7 @@ const currentSiteData = siteData[currentSite]
     return
   }
 
-  console.log(currentSiteData)
-
   try {
-    console.log(currentSite)
     Object.entries(currentSiteData).forEach(([_, fieldData]) => {
       const element = document.querySelector(fieldData.selector)
 
@@ -41,4 +34,4 @@ const currentSiteData = siteData[currentSite]
   } catch (error) {
     console.log(error)
   }
-})()
+}

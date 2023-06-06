@@ -45,9 +45,14 @@ const menuItems = [
     file: 'content_scripts/base64_encode.js'
   },
   {
-    title: 'Simple form filler',
-    id: 'Simple form filler',
-    file: 'content_scripts/simple_form_filler.js'
+    title: 'Simple form filler - default site',
+    id: 'Simple form filler - default site',
+    file: 'content_scripts/simple_form_filler_defaultSite.js'
+  },
+  {
+    title: 'Simple form filler - custom sites',
+    id: 'Simple form filler - custom sites',
+    file: 'content_scripts/simple_form_filler_customSites.js'
   },
   {
     title: 'Generate PESEL (18+)',
@@ -98,8 +103,12 @@ try {
 }
 
 const commandActions = {
-  'Simple form filler': ['content_scripts/simple_form_filler.js'],
-  'Simple form filler EN': ['content_scripts/simple_form_filler_en.js'],
+  'Simple form filler - default site': [
+    'content_scripts/simple_form_filler_defaultSite.js'
+  ],
+  'Simple form filler - custom sites': [
+    'content_scripts/simple_form_filler_customSites.js'
+  ],
   'Remove all disabled attributes': ['content_scripts/unlock_disabled.js'],
   'Convert password input to text': ['content_scripts/password_input_to_text.js']
 }

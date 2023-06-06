@@ -17,4 +17,5 @@ export const action = {
       element.dispatchEvent(new Event('click', {bubbles: true}))
     }
   }
+  // more actions if needed
 }
