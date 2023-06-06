@@ -1,6 +1,6 @@
 import {faker} from '@faker-js/faker/locale/pl'
 
-import {generateRandomInt, addLeadingZeros} from '../../utylis/helpers'
+import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers'
 import {generatePesel, sex} from '../custom_generators_logic/pesel_core'
 
 export const fakeDataPL = {
