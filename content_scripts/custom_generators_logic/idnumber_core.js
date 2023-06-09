@@ -1,4 +1,4 @@
-import {generateRandomInt, addLeadingZeros, getRandomKey} from '../../utylis/helpers'
+import {generateRandomInt, addLeadingZeros, getRandomKey} from '../../utilis/helpers'
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //ID_NUMBER_CONFIG

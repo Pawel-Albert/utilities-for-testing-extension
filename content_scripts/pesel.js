@@ -1,5 +1,5 @@
 import {generatePesel, sex} from './custom_generators_logic/pesel_core.js'
-import {setNativeValue} from '../utylis/helpers.js'
+import {setNativeValue} from '../utilis/helpers.js'
 ;(() => {
   try {
     const pesel = generatePesel(sex)

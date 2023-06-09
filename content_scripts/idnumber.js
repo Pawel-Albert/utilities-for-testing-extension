@@ -1,4 +1,4 @@
-import {setNativeValue} from '../utylis/helpers'
+import {setNativeValue} from '../utilis/helpers'
 import {generateIdNumber} from './custom_generators_logic/idnumber_core'
 ;(() => {
   try {

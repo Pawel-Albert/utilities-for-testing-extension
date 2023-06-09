@@ -1,4 +1,4 @@
-import {generateRandomInt, addLeadingZeros} from '../../utylis/helpers'
+import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers'
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //IBAN_CONFIG
