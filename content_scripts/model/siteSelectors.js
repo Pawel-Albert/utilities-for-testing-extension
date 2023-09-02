@@ -1,32 +1,30 @@
 import {fakeDataPL} from './fakeDataPL'
 
 export const siteData = {
-  'test.totalbet.pl': {
-    email: {selector: 'input[name=email]', type: 'input', data: fakeDataPL.email},
-    password: {
-      selector: 'input[name=password]',
-      type: 'input',
-      data: fakeDataPL.password
-    },
-    mobile: {selector: 'input[name=mobile]', type: 'input', data: fakeDataPL.mobile},
+  'www.qa.lendi.pl|www.lendi.pl': {
     firstName: {
-      selector: 'input[name=firstName]',
-      type: 'input',
+      selector: '[data-cy=lead-card-firstname-input] input',
+      type: 'inputShadow',
       data: fakeDataPL.firstName
     },
     lastName: {
-      selector: 'input[name=lastName]',
-      type: 'input',
+      selector: '[data-cy=lead-card-lastname-input] input',
+      type: 'inputShadow',
       data: fakeDataPL.lastName
     },
-    pesel: {
-      selector: 'input[name=personalIdentifier]',
-      type: 'input',
-      data: fakeDataPL.pesel
+    email: {
+      selector: '[data-cy=lead-card-email-input] input',
+      type: 'inputShadow',
+      data: fakeDataPL.email
     },
-    selectAllcheckbox: {
-      selector: 'input[name=selectAllFields_step1]',
-      type: 'simpleClick'
+    phone: {
+      selector: '[data-cy=lead-card-phone-input] input',
+      type: 'inputShadow',
+      data: fakeDataPL.mobile
+    },
+    consultCheckbox: {
+      selector: '[data-cy="lead-card-data-process-checkbox"] input',
+      type: 'checkCheckbox'
     }
     // ...other selectors
   },

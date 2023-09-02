@@ -13,10 +13,11 @@ export const fakeDataPL = {
   email: `testT${Date.now()}@gmail.com`,
   login: `testT${Date.now()}`,
   promoCode: `${faker.word.adjective({strategy: 'shortest'})}_PromoTest`,
-  mobile: `${generateRandomInt(1, 3)}${addLeadingZeros(
+  mobileFake: `${generateRandomInt(5, 8)}${addLeadingZeros(
     generateRandomInt(0, 99999999),
     8
-  )}`, // For mobile lets just stick with 1-3 on the beginning to avoid using real phone numbers in Poland(also Nigeria?) so no matter the env real people don't get msg
+  )}`,
+  mobile: faker.phone.number('508 ### ###'),
   password: 'Password1234!', // placeholder
   pesel: generatePesel(sex)
 }
