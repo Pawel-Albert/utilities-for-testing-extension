@@ -18,14 +18,58 @@ export const siteData = {
       data: fakeDataPL.email
     },
     phone: {
-      selector: '[data-cy=lead-card-phone-input] input',
+      selector: '[data-cy=lead-card-phone-input] input:not([disabled])',
       type: 'inputShadow',
       data: fakeDataPL.mobile
     },
     consultCheckbox: {
       selector: '[data-cy="lead-card-data-process-checkbox"] input',
       type: 'checkCheckbox'
+    },
+    checkAll: {
+      selectorAll: document.querySelectorAll('[id^=checkbox]')[0],
+      type: 'checkCheckbox'
+    },
+    mortagePeriod: {
+      selector: 'input[pattern="[0-9]*"][min="5"][max="35"]',
+      type: 'input',
+      data: fakeDataPL.mortagePeriod
+    },
+    incomeAmmount: {
+      selectorAll: document.querySelectorAll('input[pattern="[0-9]*"][min="0"]')[1],
+      type: 'input',
+      data: fakeDataPL.incomeAmmount
+    },
+    incomePeriod: {
+      selectorAll: document.querySelectorAll("[draggable='false']")[0],
+      type: 'simpleClick'
+    },
+    anyCreditsFalse: {
+      selectorAll: document.querySelectorAll("[draggable='false']")[3],
+      type: 'simpleClick'
+    },
+    anyCardsFalse: {
+      selectorAll: document.querySelectorAll("[draggable='false']")[5],
+      type: 'simpleClick'
+    },
+    yearOfBearth: {
+      selector: 'input[pattern="[0-9]*"][min="1940"]',
+      type: 'input',
+      data: fakeDataPL.yearOfBearth
+    },
+    householdExpenses: {
+      selectorAll: document.querySelectorAll(
+        'input[pattern="[0-9]*"][data-mask-raw-value]'
+      )[2],
+      type: 'input',
+      data: fakeDataPL.householdExpenses
+    },
+    mobileGeneral: {
+      selector: '[type=tel]:not([disabled])',
+      type: 'input',
+      data: fakeDataPL.mobile
     }
+
     // ...other selectors
   },
   default: {

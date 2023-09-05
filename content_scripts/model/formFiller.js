@@ -12,6 +12,8 @@ export function fillForm(currentSite, currentSiteData) {
   try {
     Object.entries(currentSiteData).forEach(([_, fieldData]) => {
       const element = document.querySelector(fieldData.selector)
+        ? document.querySelector(fieldData.selector)
+        : fieldData.selectorAll
 
       if (element) {
         if (fieldData.type === 'input') {
