@@ -20,9 +20,27 @@ export const action = {
 
   dispatchedClick: function (element) {
     if (element) {
-      element.dispatchEvent(new Event('click', {bubbles: true}))
+      const mouseDownEvent = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+        view: window
+      })
+      const mouseUpEvent = new MouseEvent('mouseup', {
+        bubbles: true,
+        cancelable: true,
+        view: window
+      })
+      const clickEvent = new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        view: window
+      })
+      element.dispatchEvent(mouseDownEvent)
+      element.dispatchEvent(mouseUpEvent)
+      element.dispatchEvent(clickEvent)
     }
   },
+
   checkCheckbox: function (element) {
     if (element && !element.checked) {
       element.click()

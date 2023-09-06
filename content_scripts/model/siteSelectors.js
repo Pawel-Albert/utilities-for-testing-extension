@@ -68,6 +68,16 @@ export const siteData = {
       selector: '[type=tel]:not([disabled])',
       type: 'input',
       data: fakeDataPL.mobile
+    },
+    SOI: {
+      selectorAll: document.querySelectorAll('input[inputmode="none"]')[4],
+      type: 'dispatchedClick'
+    },
+    SOIPicker: {
+      selectorAll: document.querySelectorAll(
+        '[target="[object HTMLDivElement]"] [role="listbox"] [data-no-activator]'
+      )[2],
+      type: 'dispatchedClick'
     }
 
     // ...other selectors
