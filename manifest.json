@@ -31,7 +31,8 @@
         "content_scripts/pesel.js",
         "content_scripts/same_id.js",
         "content_scripts/timestamp_to_date.js",
-        "content_scripts/unlock_disabled.js"
+        "content_scripts/unlock_disabled.js",
+        "content_scripts/phoneNumber.js"
       ],
       "matches": ["<all_urls>"]
     }
