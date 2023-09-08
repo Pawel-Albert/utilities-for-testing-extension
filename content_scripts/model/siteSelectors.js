@@ -1,7 +1,7 @@
 import {fakeDataPL} from './fakeDataPL'
 
 export const siteData = {
-  'www.qa.lendi.pl|www.lendi.pl': {
+  'www.qa.lendi.pl|www.lendi.pl|lendi.pl|qa.lendi.pl': {
     firstName: {
       selector: '[data-cy=lead-card-firstname-input] input',
       type: 'inputShadow',
