@@ -32,7 +32,9 @@
         "content_scripts/same_id.js",
         "content_scripts/timestamp_to_date.js",
         "content_scripts/unlock_disabled.js",
-        "content_scripts/phoneNumber.js"
+        "content_scripts/phoneNumber.js",
+        "content_scripts/nip.js",
+        "content_scripts/regon.js"
       ],
       "matches": ["<all_urls>"]
     }

@@ -79,9 +79,66 @@ export const siteData = {
       )[2],
       type: 'dispatchedClick'
     }
-
-    // ...other selectors
   },
+  'platforma.qa.lendi.pl': {
+    clientFirstName: {
+      selector: '[id="clientFirstName"]',
+      type: 'input',
+      data: fakeDataPL.firstName
+    },
+    clientLastName: {
+      selector: '[id="clientLastName"]',
+      type: 'input',
+      data: fakeDataPL.lastName
+    },
+    clientPesel: {
+      selector: '[id="clientPesel"]',
+      type: 'input',
+      data: fakeDataPL.pesel
+    },
+    clientPhoneNumber: {
+      selector: '[id="clientPhoneNumber"]',
+      type: 'input',
+      data: fakeDataPL.mobile
+    },
+    clientEmail: {
+      selector: '[id="clientEmail"]',
+      type: 'input',
+      data: fakeDataPL.email
+    },
+    acceptsProcessingCheckbox: {
+      selector: '[id="acceptsProcessing"] input',
+      type: 'checkCheckbox'
+    },
+    acceptsProcessingLeadCheckbox: {
+      selector: '[id="acceptsProcessingLead"] input',
+      type: 'checkCheckbox'
+    },
+    acceptsReceivingInfoCheckbox: {
+      selector: '[id="acceptsReceivingInfo"] input',
+      type: 'checkCheckbox'
+    },
+    acceptsReceivingOffersCheckbox: {
+      selector: '[id="acceptsReceivingOffers"] input',
+      type: 'checkCheckbox'
+    },
+    clientCompanyName: {
+      selector: '[id="clientCompanyName"]',
+      type: 'input',
+      data: fakeDataPL.companyName
+    },
+    clientNip: {
+      selector: '[id="clientNip"]',
+      type: 'input',
+      data: fakeDataPL.nip
+    },
+    clientRegon: {
+      selector: '[id="clientRegon"]',
+      type: 'input',
+      data: fakeDataPL.regon
+    }
+  },
+
   default: {
     email: {selector: 'input[name=email]', type: 'input', data: fakeDataPL.email},
     password: {
@@ -109,12 +166,5 @@ export const siteData = {
       selector: 'input[name=selectAllFields_step1]',
       type: 'simpleClick'
     }
-    // ...other selectors
   }
-  //   'www.example.com': {
-  //     username: {selector: 'input[name*=user]', type: 'text'},
-  //     password: {selector: 'input[name*=pass]', type: 'password'}
-  //     // ...other selectors
-  //   }
-  //   // ...other site data
 }

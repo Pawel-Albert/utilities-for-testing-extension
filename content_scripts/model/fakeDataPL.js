@@ -1,6 +1,8 @@
 import {faker} from '@faker-js/faker/locale/pl'
 import {generatePesel, sex} from '../custom_generators_logic/pesel_core'
 import {generatePolishMobile} from '../custom_generators_logic/generatePolishMobile'
+import {generateNip} from '../custom_generators_logic/nip_core'
+import {generateRegon} from '../custom_generators_logic/regon_core'
 
 export const fakeDataPL = {
   cityName: faker.address.cityName(),
@@ -15,6 +17,9 @@ export const fakeDataPL = {
   mobile: generatePolishMobile(),
   password: 'Password1234!', // placeholder
   pesel: generatePesel(sex),
+  nip: generateNip(),
+  regon: generateRegon(),
+  companyName: faker.company.name(),
   mortagePeriod: 30,
   incomeAmmount: 5000,
   yearOfBearth: 1950,
