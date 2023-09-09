@@ -12,10 +12,15 @@ export function fillForm(currentSite, currentSiteData) {
   try {
     Object.entries(currentSiteData).forEach(([_, fieldData]) => {
       const element = document.querySelector(fieldData.selector)
+        ? document.querySelector(fieldData.selector)
+        : fieldData.selectorAll
 
       if (element) {
         if (fieldData.type === 'input') {
           action.inputFiller(element, fieldData.data)
+        }
+        if (fieldData.type === 'inputShadow') {
+          action.inputFillerShadow(element, fieldData.data)
         }
 
         if (fieldData.type === 'simpleClick') {
@@ -24,6 +29,10 @@ export function fillForm(currentSite, currentSiteData) {
 
         if (fieldData.type === 'dispatchedClick') {
           action.dispatchedClick(element)
+        }
+
+        if (fieldData.type === 'checkCheckbox') {
+          action.checkCheckbox(element)
         }
       }
       console.log(

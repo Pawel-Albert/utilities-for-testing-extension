@@ -77,6 +77,24 @@ const menuItems = [
     id: 'Generate PASSPORT number',
     file: 'content_scripts/passport_number.js',
     contexts: ['page', 'selection', 'editable']
+  },
+  {
+    title: 'Generate valid PL mobile phone number',
+    id: 'Generate valid PL mobile phone number',
+    file: 'content_scripts/phoneNumber.js',
+    contexts: ['page', 'selection', 'editable']
+  },
+  {
+    title: 'Generate valid PL NIP',
+    id: 'Generate valid PL NIP',
+    file: 'content_scripts/nip.js',
+    contexts: ['page', 'selection', 'editable']
+  },
+  {
+    title: 'Generate valid PL REGON',
+    id: 'Generate valid PL REGON',
+    file: 'content_scripts/regon.js',
+    contexts: ['page', 'selection', 'editable']
   }
 ]
 

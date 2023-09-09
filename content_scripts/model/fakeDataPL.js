@@ -1,7 +1,8 @@
 import {faker} from '@faker-js/faker/locale/pl'
-
-import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers'
 import {generatePesel, sex} from '../custom_generators_logic/pesel_core'
+import {generatePolishMobile} from '../custom_generators_logic/generatePolishMobile'
+import {generateNip} from '../custom_generators_logic/nip_core'
+import {generateRegon} from '../custom_generators_logic/regon_core'
 
 export const fakeDataPL = {
   cityName: faker.address.cityName(),
@@ -10,13 +11,17 @@ export const fakeDataPL = {
   streetFull: faker.address.streetAddress(),
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
-  email: `testT${Date.now()}@gmail.com`,
-  login: `testT${Date.now()}`,
+  email: `testLendi${Date.now()}@gmail.com`,
+  login: `testLendi${Date.now()}`,
   promoCode: `${faker.word.adjective({strategy: 'shortest'})}_PromoTest`,
-  mobile: `${generateRandomInt(1, 3)}${addLeadingZeros(
-    generateRandomInt(0, 99999999),
-    8
-  )}`, // For mobile lets just stick with 1-3 on the beginning to avoid using real phone numbers in Poland(also Nigeria?) so no matter the env real people don't get msg
+  mobile: generatePolishMobile(),
   password: 'Password1234!', // placeholder
-  pesel: generatePesel(sex)
+  pesel: generatePesel(sex),
+  nip: generateNip(),
+  regon: generateRegon(),
+  companyName: faker.company.name(),
+  mortagePeriod: 30,
+  incomeAmmount: 5000,
+  yearOfBearth: 1950,
+  householdExpenses: 100
 }

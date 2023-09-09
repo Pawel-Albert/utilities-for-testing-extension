@@ -1,35 +1,144 @@
 import {fakeDataPL} from './fakeDataPL'
 
 export const siteData = {
-  'test.totalbet.pl': {
-    email: {selector: 'input[name=email]', type: 'input', data: fakeDataPL.email},
-    password: {
-      selector: 'input[name=password]',
-      type: 'input',
-      data: fakeDataPL.password
-    },
-    mobile: {selector: 'input[name=mobile]', type: 'input', data: fakeDataPL.mobile},
+  'www.qa.lendi.pl|www.lendi.pl|lendi.pl|qa.lendi.pl': {
     firstName: {
-      selector: 'input[name=firstName]',
-      type: 'input',
+      selector: '[data-cy=lead-card-firstname-input] input',
+      type: 'inputShadow',
       data: fakeDataPL.firstName
     },
     lastName: {
-      selector: 'input[name=lastName]',
+      selector: '[data-cy=lead-card-lastname-input] input',
+      type: 'inputShadow',
+      data: fakeDataPL.lastName
+    },
+    email: {
+      selector: '[data-cy=lead-card-email-input] input',
+      type: 'inputShadow',
+      data: fakeDataPL.email
+    },
+    phone: {
+      selector: '[data-cy=lead-card-phone-input] input:not([disabled])',
+      type: 'inputShadow',
+      data: fakeDataPL.mobile
+    },
+    consultCheckbox: {
+      selector: '[data-cy="lead-card-data-process-checkbox"] input',
+      type: 'checkCheckbox'
+    },
+    checkAll: {
+      selectorAll: document.querySelectorAll('[id^=checkbox]')[0],
+      type: 'checkCheckbox'
+    },
+    mortagePeriod: {
+      selector: 'input[pattern="[0-9]*"][min="5"][max="35"]',
+      type: 'input',
+      data: fakeDataPL.mortagePeriod
+    },
+    incomeAmmount: {
+      selectorAll: document.querySelectorAll('input[pattern="[0-9]*"][min="0"]')[1],
+      type: 'input',
+      data: fakeDataPL.incomeAmmount
+    },
+    incomePeriod: {
+      selectorAll: document.querySelectorAll("[draggable='false']")[0],
+      type: 'simpleClick'
+    },
+    anyCreditsFalse: {
+      selectorAll: document.querySelectorAll("[draggable='false']")[3],
+      type: 'simpleClick'
+    },
+    anyCardsFalse: {
+      selectorAll: document.querySelectorAll("[draggable='false']")[5],
+      type: 'simpleClick'
+    },
+    yearOfBearth: {
+      selector: 'input[pattern="[0-9]*"][min="1940"]',
+      type: 'input',
+      data: fakeDataPL.yearOfBearth
+    },
+    householdExpenses: {
+      selectorAll: document.querySelectorAll(
+        'input[pattern="[0-9]*"][data-mask-raw-value]'
+      )[2],
+      type: 'input',
+      data: fakeDataPL.householdExpenses
+    },
+    mobileGeneral: {
+      selector: '[type=tel]:not([disabled])',
+      type: 'input',
+      data: fakeDataPL.mobile
+    },
+    SOI: {
+      selectorAll: document.querySelectorAll('input[inputmode="none"]')[4],
+      type: 'dispatchedClick'
+    },
+    SOIPicker: {
+      selectorAll: document.querySelectorAll(
+        '[target="[object HTMLDivElement]"] [role="listbox"] [data-no-activator]'
+      )[2],
+      type: 'dispatchedClick'
+    }
+  },
+  'platforma.qa.lendi.pl': {
+    clientFirstName: {
+      selector: '[id="clientFirstName"]',
+      type: 'input',
+      data: fakeDataPL.firstName
+    },
+    clientLastName: {
+      selector: '[id="clientLastName"]',
       type: 'input',
       data: fakeDataPL.lastName
     },
-    pesel: {
-      selector: 'input[name=personalIdentifier]',
+    clientPesel: {
+      selector: '[id="clientPesel"]',
       type: 'input',
       data: fakeDataPL.pesel
     },
-    selectAllcheckbox: {
-      selector: 'input[name=selectAllFields_step1]',
-      type: 'simpleClick'
+    clientPhoneNumber: {
+      selector: '[id="clientPhoneNumber"]',
+      type: 'input',
+      data: fakeDataPL.mobile
+    },
+    clientEmail: {
+      selector: '[id="clientEmail"]',
+      type: 'input',
+      data: fakeDataPL.email
+    },
+    acceptsProcessingCheckbox: {
+      selector: '[id="acceptsProcessing"] input',
+      type: 'checkCheckbox'
+    },
+    acceptsProcessingLeadCheckbox: {
+      selector: '[id="acceptsProcessingLead"] input',
+      type: 'checkCheckbox'
+    },
+    acceptsReceivingInfoCheckbox: {
+      selector: '[id="acceptsReceivingInfo"] input',
+      type: 'checkCheckbox'
+    },
+    acceptsReceivingOffersCheckbox: {
+      selector: '[id="acceptsReceivingOffers"] input',
+      type: 'checkCheckbox'
+    },
+    clientCompanyName: {
+      selector: '[id="clientCompanyName"]',
+      type: 'input',
+      data: fakeDataPL.companyName
+    },
+    clientNip: {
+      selector: '[id="clientNip"]',
+      type: 'input',
+      data: fakeDataPL.nip
+    },
+    clientRegon: {
+      selector: '[id="clientRegon"]',
+      type: 'input',
+      data: fakeDataPL.regon
     }
-    // ...other selectors
   },
+
   default: {
     email: {selector: 'input[name=email]', type: 'input', data: fakeDataPL.email},
     password: {
@@ -57,12 +166,5 @@ export const siteData = {
       selector: 'input[name=selectAllFields_step1]',
       type: 'simpleClick'
     }
-    // ...other selectors
   }
-  //   'www.example.com': {
-  //     username: {selector: 'input[name*=user]', type: 'text'},
-  //     password: {selector: 'input[name*=pass]', type: 'password'}
-  //     // ...other selectors
-  //   }
-  //   // ...other site data
 }
