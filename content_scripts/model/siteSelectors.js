@@ -1,7 +1,7 @@
 import {fakeDataPL} from './fakeDataPL'
 
 export const siteData = {
-  'www.qa.lendi.pl|www.lendi.pl|lendi.pl|qa.lendi.pl': {
+  'www.qa.lendi.pl|www.lendi.pl|lendi.pl|qa.lendi.pl|localhost|lendi-b2c-*': {
     firstName: {
       selector: '[data-cy=lead-card-firstname-input] input',
       type: 'inputShadow',
@@ -80,7 +80,7 @@ export const siteData = {
       type: 'dispatchedClick'
     }
   },
-  'platforma.qa.lendi.pl': {
+  'platforma.qa.lendi.pl|fincrm-frontend-git': {
     clientFirstName: {
       selector: '[id="clientFirstName"]',
       type: 'input',
@@ -107,19 +107,19 @@ export const siteData = {
       data: fakeDataPL.email
     },
     acceptsProcessingCheckbox: {
-      selector: '[id="acceptsProcessing"] input',
+      selector: 'input[id="acceptsProcessing"]',
       type: 'checkCheckbox'
     },
     acceptsProcessingLeadCheckbox: {
-      selector: '[id="acceptsProcessingLead"] input',
+      selector: 'input[id="acceptsProcessingLead"]',
       type: 'checkCheckbox'
     },
     acceptsReceivingInfoCheckbox: {
-      selector: '[id="acceptsReceivingInfo"] input',
+      selector: 'input[id="acceptsReceivingInfo"]',
       type: 'checkCheckbox'
     },
     acceptsReceivingOffersCheckbox: {
-      selector: '[id="acceptsReceivingOffers"] input',
+      selector: 'input[id="acceptsReceivingOffers"]',
       type: 'checkCheckbox'
     },
     clientCompanyName: {
@@ -166,5 +166,7 @@ export const siteData = {
       selector: 'input[name=selectAllFields_step1]',
       type: 'simpleClick'
     }
-  }
+  },
+  
+  
 }
