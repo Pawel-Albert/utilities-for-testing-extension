@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "TesterUtilities",
   "description": "TesterUtilities",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "icons": {
     "16": "gen.png",
     "48": "gen.png",
@@ -34,7 +34,8 @@
         "content_scripts/unlock_disabled.js",
         "content_scripts/phoneNumber.js",
         "content_scripts/nip.js",
-        "content_scripts/regon.js"
+        "content_scripts/regon.js",
+        "content_scripts/domain_switcher.js"
       ],
       "matches": ["<all_urls>"]
     }
@@ -58,12 +59,12 @@
       },
       "description": "Simple form filler - custom sites"
     },
-    "Remove all disabled attributes": {
+    "Switch domain": {
       "suggested_key": {
         "default": "Alt+1",
         "mac": "Alt+1"
       },
-      "description": "Remove all 'disabled' attributes"
+      "description": "Toggle domain between default and finance.imobiliare.ro"
     },
     "Convert password input to text": {
       "suggested_key": {
