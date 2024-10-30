@@ -27,6 +27,15 @@ $ npm run build
 
 A folder "dist" should be created. Go to chrome://extensions/. While in developer mode use "load unpacked" extension option and choose "dist" folder. Extension now is ready to use (remember to allow for use in incognito mode if needed).
 
+## Configuration
+
+The extension now includes basic configuration options for form filling:
+
+- User Prefix - allows setting a custom prefix for generated usernames (default: testUser)
+- Email Domain - allows setting a custom domain for generated email addresses (default: gmail.com)
+
+More configuration options will be added in future updates.
+
 ## Features
 
 All features are available to use in the form of a context menu. After using the right mouse button you can hover on TesterUtilities and click on the desired functionality.
@@ -116,4 +125,6 @@ Please switch to the 'vanila-SB' branch if you wish to continue using these feat
 
 - [x] Form auto filler with random data
 - [x] Fix Generate functions, as currently they are not registered by browser as user actions
+- [x] Add basic configuration for form filling (user prefix, email domain)
+- [ ] Expand configuration options for form filling
 - [ ] Lot of small "quality of life changes" on user requests
