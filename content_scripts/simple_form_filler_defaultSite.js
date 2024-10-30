@@ -1,7 +1,13 @@
 import {siteData} from './model/siteSelectors'
 import {fillForm} from './model/formFiller'
+import {updateEmailFields} from '../utilis/emailHelper'
 
-const currentSite = 'default'
-const currentSiteData = siteData[currentSite]
+async function initDefaultFormFiller() {
+  const config = await chrome.storage.sync.get(['userPrefix', 'emailDomain'])
+  const currentSite = 'default'
 
-fillForm(currentSite, currentSiteData)
+  const currentSiteData = updateEmailFields(siteData[currentSite], config)
+  fillForm(currentSite, currentSiteData)
+}
+
+initDefaultFormFiller()

@@ -41,7 +41,7 @@
     }
   ],
 
-  "permissions": ["contextMenus", "tabs", "scripting", "activeTab"],
+  "permissions": ["contextMenus", "tabs", "scripting", "activeTab", "storage"],
 
   "host_permissions": ["*://*/*"],
   "commands": {
@@ -73,5 +73,9 @@
       },
       "description": "Convert password input to text"
     }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
   }
 }

@@ -1,17 +1,26 @@
 import {siteData} from './model/siteSelectors'
 import {fillForm} from './model/formFiller'
+import {updateEmailFields} from '../utilis/emailHelper'
 
-const currentSite = window.location.hostname
-let currentSiteKey;
+async function initFormFiller() {
+  const config = await chrome.storage.sync.get(['userPrefix', 'emailDomain'])
+  const currentSite = window.location.hostname
+  let currentSiteKey
 
-if (currentSite.startsWith('lendi-b2c-')) {
-  currentSiteKey = Object.keys(siteData).find(key => key.includes('lendi-b2c-*'));
-} else if (currentSite.includes('fincrm-frontend-git')) {
-  currentSiteKey = Object.keys(siteData).find(key => key.includes('fincrm-frontend-git'));
-} else {
-  currentSiteKey = Object.keys(siteData).find(key => key.split('|').includes(currentSite));
+  if (currentSite.startsWith('lendi-b2c-')) {
+    currentSiteKey = Object.keys(siteData).find(key => key.includes('lendi-b2c-*'))
+  } else if (currentSite.includes('fincrm-frontend-git')) {
+    currentSiteKey = Object.keys(siteData).find(key =>
+      key.includes('fincrm-frontend-git')
+    )
+  } else {
+    currentSiteKey = Object.keys(siteData).find(key =>
+      key.split('|').includes(currentSite)
+    )
+  }
+
+  const currentSiteData = updateEmailFields(siteData[currentSiteKey], config)
+  fillForm(currentSite, currentSiteData)
 }
 
-const currentSiteData = siteData[currentSiteKey]
-console.log(currentSite)
-fillForm(currentSite, currentSiteData)
+initFormFiller()
