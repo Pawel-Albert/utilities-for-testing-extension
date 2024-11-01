@@ -128,3 +128,20 @@ Please switch to the 'vanila-SB' branch if you wish to continue using these feat
 - [x] Add basic configuration for form filling (user prefix, email domain)
 - [ ] Expand configuration options for form filling
 - [ ] Lot of small "quality of life changes" on user requests
+
+## Polityka Prywatności / Privacy Policy
+
+**TesterUtilities - Rozszerzenie dla Testowania**
+
+TesterUtilities nie zbiera ani nie przechowuje żadnych danych osobowych użytkowników. Rozszerzenie służy wyłącznie jako narzędzie pomocnicze do uruchamiania skryptów testerskich. Nie przekazujemy, nie przetwarzamy ani nie przechowujemy żadnych informacji dotyczących użytkowników tego rozszerzenia.
+
+W razie dodatkowych pytań proszę o kontakt.
+
+---
+
+**TesterUtilities - Testing Extension**
+
+TesterUtilities does not collect or store any personal user data. This extension serves solely as a utility tool for running testing scripts. We do not transmit, process, or retain any information about the users of this extension.
+
+For any further questions, please feel free to contact me.
+
