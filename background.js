@@ -133,7 +133,6 @@ const commandActions = {
   'Simple form filler - custom sites': [
     'content_scripts/simple_form_filler_customSites.js'
   ],
-  'Remove all disabled attributes': ['content_scripts/unlock_disabled.js'],
   'Convert password input to text': ['content_scripts/password_input_to_text.js'],
   'Switch domain': ['content_scripts/domain_switcher.js']
 }
