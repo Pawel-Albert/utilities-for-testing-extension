@@ -127,7 +127,7 @@ Each field configuration requires:
 
 ### Domain Tools
 
-- "Switch domain" - Switches between domains (Alt+1)
+- "Switch domain" - Switches between domains (Alt+1) - Company-specific feature, currently configured only for internal company domains. To use it for different domains, the configuration needs to be modified in the source code.
 
 ## Configuration
 
