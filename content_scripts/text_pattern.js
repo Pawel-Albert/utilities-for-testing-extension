@@ -1,4 +1,5 @@
 import {setNativeValue} from '../utilis/helpers.js'
+import {defaultSettings} from './config/defaults.js'
 ;(() => {
   const safeBase64Encode = str => {
     try {
@@ -54,35 +55,43 @@ import {setNativeValue} from '../utilis/helpers.js'
     return result.substring(0, length)
   }
 
-  const text = prompt('Enter text for pattern (try: test or admin):', 'test')
-  if (text) {
-    const length = parseInt(prompt('Total length:', '1000'))
-    if (length) {
-      const result = generatePattern(text, length)
-      console.log(
-        '%c Pattern Generator',
-        'font-family:monospace; color:#e67e22; font-size:16px; font-weight:bold;'
-      )
-      console.log(
-        `%c Length: ${result.length}`,
-        'font-family:monospace; color:#3498db; font-size:14px;'
-      )
-      console.log(
-        '%c Result:',
-        'font-family:monospace; color:#e74c3c; font-size:14px;',
-        result
-      )
-      console.log(
-        '%c Base64 encoded:',
-        'font-family:monospace; color:#1abc9c; font-size:14px;',
-        safeBase64Encode(result)
-      )
+  chrome.storage.sync.get(
+    {
+      defaultPatternText: defaultSettings.defaultPatternText,
+      defaultPatternLength: defaultSettings.defaultPatternLength
+    },
+    items => {
+      const text = prompt('Enter text for pattern:', items.defaultPatternText)
+      if (text) {
+        const length = parseInt(prompt('Total length:', items.defaultPatternLength))
+        if (length) {
+          const result = generatePattern(text, length)
+          console.log(
+            '%c Pattern Generator',
+            'font-family:monospace; color:#e67e22; font-size:16px; font-weight:bold;'
+          )
+          console.log(
+            `%c Length: ${result.length}`,
+            'font-family:monospace; color:#3498db; font-size:14px;'
+          )
+          console.log(
+            '%c Result:',
+            'font-family:monospace; color:#e74c3c; font-size:14px;',
+            result
+          )
+          console.log(
+            '%c Base64 encoded:',
+            'font-family:monospace; color:#1abc9c; font-size:14px;',
+            safeBase64Encode(result)
+          )
 
-      const indicatedElement = document.querySelector(':focus')
-      if (indicatedElement) {
-        setNativeValue(indicatedElement, result)
-        indicatedElement.dispatchEvent(new Event('input', {bubbles: true}))
+          const indicatedElement = document.querySelector(':focus')
+          if (indicatedElement) {
+            setNativeValue(indicatedElement, result)
+            indicatedElement.dispatchEvent(new Event('input', {bubbles: true}))
+          }
+        }
       }
     }
-  }
+  )
 })()

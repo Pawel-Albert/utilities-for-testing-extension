@@ -1,4 +1,5 @@
 import {setNativeValue} from '../utilis/helpers.js'
+import {defaultSettings} from './config/defaults.js'
 ;(() => {
   const multiplyText = (text, lines, lineLength) => {
     const result = []
@@ -20,37 +21,48 @@ import {setNativeValue} from '../utilis/helpers.js'
     return result.join('\n')
   }
 
-  const text = prompt('Enter text to multiply:', 'sample text')
-  if (text) {
-    const lines = parseInt(prompt('Number of lines:', '3'))
-    const lineLength = parseInt(prompt('Length of each line:', '50'))
+  chrome.storage.sync.get(
+    {
+      defaultMultiplierText: defaultSettings.defaultMultiplierText,
+      defaultMultiplierLines: defaultSettings.defaultMultiplierLines,
+      defaultMultiplierLength: defaultSettings.defaultMultiplierLength
+    },
+    items => {
+      const text = prompt('Enter text to multiply:', items.defaultMultiplierText)
+      if (text) {
+        const lines = parseInt(prompt('Number of lines:', items.defaultMultiplierLines))
+        const lineLength = parseInt(
+          prompt('Length of each line:', items.defaultMultiplierLength)
+        )
 
-    if (lines && lineLength) {
-      const result = multiplyText(text, lines, lineLength)
-      console.log(
-        '%c Text Multiplier',
-        'font-family:monospace; color:#f1c40f; font-size:16px; font-weight:bold;'
-      )
-      console.log(
-        `%c Configuration: ${lines} lines, ${lineLength} chars per line`,
-        'font-family:monospace; color:#3498db; font-size:14px;'
-      )
-      console.log(
-        '%c Total length:',
-        'font-family:monospace; color:#e74c3c; font-size:14px;',
-        result.length
-      )
-      console.log(
-        '%c Sample (first line):',
-        'font-family:monospace; color:#2ecc71; font-size:14px;',
-        result.split('\n')[0]
-      )
+        if (lines && lineLength) {
+          const result = multiplyText(text, lines, lineLength)
+          console.log(
+            '%c Text Multiplier',
+            'font-family:monospace; color:#f1c40f; font-size:16px; font-weight:bold;'
+          )
+          console.log(
+            `%c Configuration: ${lines} lines, ${lineLength} chars per line`,
+            'font-family:monospace; color:#3498db; font-size:14px;'
+          )
+          console.log(
+            '%c Total length:',
+            'font-family:monospace; color:#e74c3c; font-size:14px;',
+            result.length
+          )
+          console.log(
+            '%c Sample (first line):',
+            'font-family:monospace; color:#2ecc71; font-size:14px;',
+            result.split('\n')[0]
+          )
 
-      const indicatedElement = document.querySelector(':focus')
-      if (indicatedElement) {
-        setNativeValue(indicatedElement, result)
-        indicatedElement.dispatchEvent(new Event('input', {bubbles: true}))
+          const indicatedElement = document.querySelector(':focus')
+          if (indicatedElement) {
+            setNativeValue(indicatedElement, result)
+            indicatedElement.dispatchEvent(new Event('input', {bubbles: true}))
+          }
+        }
       }
     }
-  }
+  )
 })()

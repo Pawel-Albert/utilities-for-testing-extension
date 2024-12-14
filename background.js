@@ -1,3 +1,5 @@
+import {defaultSettings} from './content_scripts/config/defaults.js'
+
 const menuItems = [
   {
     id: 'data-generators',
@@ -213,6 +215,7 @@ try {
     menuItems.forEach(({title, id, contexts, type = 'normal', parentId}) => {
       chrome.contextMenus.create({title, id, contexts, type, parentId})
     })
+    chrome.storage.sync.set(defaultSettings)
   })
 
   chrome.contextMenus.onClicked.addListener((event, tab) => {

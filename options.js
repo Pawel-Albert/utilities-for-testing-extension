@@ -1,36 +1,44 @@
-document.addEventListener('DOMContentLoaded', () => {
-  chrome.storage.sync.get(
-    {
-      userPrefix: 'testLendi',
-      emailDomain: 'gmail.com'
-    },
-    items => {
-      document.getElementById('userPrefix').value = items.userPrefix
-      document.getElementById('emailDomain').value = items.emailDomain
-    }
-  )
-})
+import {defaultSettings} from './content_scripts/config/defaults.js'
 
-document.getElementById('settingsForm').addEventListener('submit', e => {
+function loadSettings() {
+  chrome.storage.sync.get(null, savedSettings => {
+    Object.keys(defaultSettings).forEach(key => {
+      const element = document.getElementById(key)
+      if (element) {
+        element.value = savedSettings[key] || defaultSettings[key]
+      }
+    })
+  })
+}
+
+function saveSettings(e) {
   e.preventDefault()
+  const newSettings = {}
 
-  const userPrefix = document.getElementById('userPrefix').value.trim() || 'testLendi'
-  const emailDomain = document.getElementById('emailDomain').value.trim() || 'gmail.com'
-
-  chrome.storage.sync.set(
-    {
-      userPrefix,
-      emailDomain
-    },
-    () => {
-      const status = document.getElementById('status')
-      status.textContent = 'Settings saved!'
-      status.className = 'status success'
-      status.style.display = 'block'
-
-      setTimeout(() => {
-        status.style.display = 'none'
-      }, 2000)
+  Object.keys(defaultSettings).forEach(key => {
+    const element = document.getElementById(key)
+    if (element) {
+      const value = element.value.trim()
+      newSettings[key] = value || defaultSettings[key]
     }
-  )
+  })
+
+  chrome.storage.sync.set(newSettings, () => {
+    showStatus('Settings saved!')
+  })
+}
+
+function showStatus(message) {
+  const status = document.getElementById('status')
+  status.textContent = message
+  status.className = 'status success'
+  status.style.display = 'block'
+  setTimeout(() => {
+    status.style.display = 'none'
+  }, 2000)
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadSettings()
+  document.getElementById('settingsForm').addEventListener('submit', saveSettings)
 })

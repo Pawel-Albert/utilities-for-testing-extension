@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Form Filler Settings</title>
+    <title>TesterUtilities Settings</title>
     <style>
       body {
         padding: 20px;
@@ -42,22 +42,75 @@
         color: #3c763d;
         border-radius: 4px;
       }
+      .settings-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .settings-section h3 {
+        margin-top: 0;
+        color: #333;
+      }
     </style>
   </head>
   <body>
-    <h2>Form Filler Settings</h2>
+    <h2>TesterUtilities Settings</h2>
+
     <form id="settingsForm">
-      <div class="form-group">
-        <label for="userPrefix">User Prefix (default: testLendi)</label>
-        <input type="text" id="userPrefix" placeholder="Enter your prefix" />
+      <!-- Form Filler Settings -->
+      <div class="settings-section">
+        <h3>Form Filler Settings</h3>
+        <div class="form-group">
+          <label for="userPrefix">User Prefix (default: testLendi)</label>
+          <input type="text" id="userPrefix" placeholder="Enter your prefix" />
+        </div>
+        <div class="form-group">
+          <label for="emailDomain">Email Domain (default: gmail.com)</label>
+          <input type="text" id="emailDomain" placeholder="Enter email domain" />
+        </div>
       </div>
-      <div class="form-group">
-        <label for="emailDomain">Email Domain (default: gmail.com)</label>
-        <input type="text" id="emailDomain" placeholder="Enter email domain" />
+
+      <!-- Text Generator Settings -->
+      <div class="settings-section">
+        <h3>Text Generator Settings</h3>
+        <div class="form-group">
+          <label for="defaultLoremLength">Lorem Ipsum default length</label>
+          <input type="number" id="defaultLoremLength" placeholder="Default: 100" />
+        </div>
+        <div class="form-group">
+          <label for="defaultPatternText">Pattern Generator default text</label>
+          <input type="text" id="defaultPatternText" placeholder="Default: test" />
+        </div>
+        <div class="form-group">
+          <label for="defaultPatternLength">Pattern Generator default length</label>
+          <input type="number" id="defaultPatternLength" placeholder="Default: 1000" />
+        </div>
+        <div class="form-group">
+          <label for="defaultMultiplierText">Text Multiplier default text</label>
+          <input
+            type="text"
+            id="defaultMultiplierText"
+            placeholder="Default: sample text"
+          />
+        </div>
+        <div class="form-group">
+          <label for="defaultMultiplierLines">Text Multiplier default lines</label>
+          <input type="number" id="defaultMultiplierLines" placeholder="Default: 3" />
+        </div>
+        <div class="form-group">
+          <label for="defaultMultiplierLength">Text Multiplier line length</label>
+          <input type="number" id="defaultMultiplierLength" placeholder="Default: 50" />
+        </div>
+        <div class="form-group">
+          <label for="defaultCounterLength">Counter String default length</label>
+          <input type="number" id="defaultCounterLength" placeholder="Default: 100" />
+        </div>
       </div>
-      <button type="submit">Save Settings</button>
+
+      <button type="submit">Save All Settings</button>
     </form>
     <div id="status" class="status"></div>
-    <script src="options.js"></script>
+    <script src="options.js" type="module"></script>
   </body>
 </html>
