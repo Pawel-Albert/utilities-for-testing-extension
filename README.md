@@ -135,7 +135,7 @@ The extension now includes configuration options for both form filling and text 
 
 ### Form Filler Settings
 
-- User Prefix - Custom prefix for generated usernames (default: testLendi)
+- User Prefix - Custom prefix for generated usernames (default: test)
 - Email Domain - Custom domain for generated email addresses (default: gmail.com)
 
 ### Text Generator Settings

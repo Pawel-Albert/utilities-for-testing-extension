@@ -11,8 +11,8 @@ export const fakeDataPL = {
   streetFull: faker.address.streetAddress(),
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
-  email: `testLendi${Date.now()}@gmail.com`,
-  login: `testLendi${Date.now()}`,
+  email: `test${Date.now()}@gmail.com`,
+  login: `test${Date.now()}`,
   promoCode: `${faker.word.adjective({strategy: 'shortest'})}_PromoTest`,
   mobile: generatePolishMobile(),
   password: 'Password1234!', // placeholder

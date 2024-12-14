@@ -1,6 +1,6 @@
 export const defaultSettings = {
   // Form Filler defaults
-  userPrefix: 'testLendi',
+  userPrefix: 'test',
   emailDomain: 'gmail.com',
 
   // Text Generator defaults
