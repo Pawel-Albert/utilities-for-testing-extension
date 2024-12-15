@@ -1,6 +1,49 @@
 import {fakeDataPL} from './fakeDataPL'
+import { fakeDataSb } from './fakeDataPL'
 
 export const siteData = {
+  'demo.sb-betting.com': {
+    mobile: {
+      selector: 'input[data-test="mobile"]',
+      type: 'input',
+      data: fakeDataSb.mobile
+    },
+    email: {
+      selector: 'input[data-test="email"]',
+      type: 'input',
+      data: fakeDataSb.email
+    },
+    password: {
+      selector: 'input[data-test="password"]',
+      type: 'input',
+      data: fakeDataSb.password
+    },
+    confirmPassword: {
+      selector: 'input[data-test="confirm_password"]',
+      type: 'input',
+      data: fakeDataSb.password
+    },
+    firstName: {
+      selector: 'input[data-test="first_name"]',
+      type: 'input',
+      data: fakeDataSb.firstName
+    },
+    lastName: {
+      selector: 'input[data-test="last_name"]',
+      type: 'input',
+      data: fakeDataSb.lastName
+    },
+    dateOfBirth: {
+      selector: 'input[data-test="date_of_birth"]',
+      type: 'input',
+      data: fakeDataSb.birthdayDate
+    },
+    consentCheckbox: {
+      selector: 'input[data-test="marketing_consent"]',
+      type: 'checkCheckbox'
+    }
+  },
+
   'www.qa.lendi.pl|www.lendi.pl|lendi.pl|qa.lendi.pl|localhost|lendi-b2c-*': {
     firstName: {
       selector: '[data-cy=lead-card-firstname-input] input',
@@ -80,6 +123,7 @@ export const siteData = {
       type: 'dispatchedClick'
     }
   },
+
   'platforma.qa.lendi.pl|fincrm-frontend-git': {
     clientFirstName: {
       selector: '[id="clientFirstName"]',
@@ -139,34 +183,37 @@ export const siteData = {
     }
   },
 
-  default: {
-    email: {selector: 'input[name=email]', type: 'input', data: fakeDataPL.email},
-    password: {
-      selector: 'input[name=password]',
-      type: 'input',
-      data: fakeDataPL.password
-    },
-    mobile: {selector: 'input[name=mobile]', type: 'input', data: fakeDataPL.mobile},
-    firstName: {
-      selector: 'input[name=firstName]',
-      type: 'input',
-      data: fakeDataPL.firstName
-    },
-    lastName: {
-      selector: 'input[name=lastName]',
-      type: 'input',
-      data: fakeDataPL.lastName
-    },
-    pesel: {
-      selector: 'input[name=personalIdentifier]',
-      type: 'input',
-      data: fakeDataPL.pesel
-    },
-    selectAllcheckbox: {
-      selector: 'input[name=selectAllFields_step1]',
-      type: 'simpleClick'
-    }
-  },
-  
-  
+  // default: {
+  //   email: {selector: 'input[name=email]', type: 'input', data: fakeDataPL.email},
+  //   password: {
+  //     selector: 'input[name=password]',
+  //     type: 'input',
+  //     data: fakeDataPL.password
+  //   },
+  //   confirmPassword: {
+  //     selector: 'input[data-test="confirm_password"]',
+  //     type: 'input',
+  //     data: fakeDataPL.password
+  //   },
+  //   mobile: {selector: 'input[name=mobile]', type: 'input', data: fakeDataPL.mobile},
+  //   firstName: {
+  //     selector: 'input[name=firstName]',
+  //     type: 'input',
+  //     data: fakeDataPL.firstName
+  //   },
+  //   lastName: {
+  //     selector: 'input[name=lastName]',
+  //     type: 'input',
+  //     data: fakeDataPL.lastName
+  //   },
+  //   pesel: {
+  //     selector: 'input[name=personalIdentifier]',
+  //     type: 'input',
+  //     data: fakeDataPL.pesel
+  //   },
+  //   selectAllcheckbox: {
+  //     selector: 'input[name=selectAllFields_step1]',
+  //     type: 'simpleClick'
+  //   }
+  // },
 }
