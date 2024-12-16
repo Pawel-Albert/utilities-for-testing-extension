@@ -1,5 +1,5 @@
 import {fakeDataPL} from './fakeDataPL'
-import { fakeDataSb } from './fakeDataPL'
+import {fakeDataSb} from './fakeDataPL'
 
 export const siteData = {
   'demo.sb-betting.com': {
@@ -183,37 +183,28 @@ export const siteData = {
     }
   },
 
-  // default: {
-  //   email: {selector: 'input[name=email]', type: 'input', data: fakeDataPL.email},
-  //   password: {
-  //     selector: 'input[name=password]',
-  //     type: 'input',
-  //     data: fakeDataPL.password
-  //   },
-  //   confirmPassword: {
-  //     selector: 'input[data-test="confirm_password"]',
-  //     type: 'input',
-  //     data: fakeDataPL.password
-  //   },
-  //   mobile: {selector: 'input[name=mobile]', type: 'input', data: fakeDataPL.mobile},
-  //   firstName: {
-  //     selector: 'input[name=firstName]',
-  //     type: 'input',
-  //     data: fakeDataPL.firstName
-  //   },
-  //   lastName: {
-  //     selector: 'input[name=lastName]',
-  //     type: 'input',
-  //     data: fakeDataPL.lastName
-  //   },
-  //   pesel: {
-  //     selector: 'input[name=personalIdentifier]',
-  //     type: 'input',
-  //     data: fakeDataPL.pesel
-  //   },
-  //   selectAllcheckbox: {
-  //     selector: 'input[name=selectAllFields_step1]',
-  //     type: 'simpleClick'
-  //   }
-  // },
+  default: {
+    email: {selector: 'input[name=email]', type: 'input', data: fakeDataPL.email},
+    password: {
+      selector: 'input[name=password]',
+      type: 'input',
+      data: fakeDataPL.password
+    },
+    confirmPassword: {
+      selector: 'input[data-test="confirm_password"]',
+      type: 'input',
+      data: fakeDataPL.password
+    },
+    mobile: {selector: 'input[name=mobile]', type: 'input', data: fakeDataPL.mobile},
+    firstName: {
+      selector: 'input[name=firstName]',
+      type: 'input',
+      data: fakeDataPL.firstName
+    },
+    lastName: {
+      selector: 'input[name=lastName]',
+      type: 'input',
+      data: fakeDataPL.lastName
+    }
+  }
 }
