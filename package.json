@@ -4,7 +4,8 @@
   "description": "Google chrome extension with couple of small functionalities (mostly niche and current company specific) for testers in form of context menu",
   "scripts": {
     "start": "parcel watch manifest.json --host localhost --config @parcel/config-webextension",
-    "build": "parcel build manifest.json --config @parcel/config-webextension"
+    "build": "parcel build manifest.json --config @parcel/config-webextension",
+    "build:zip": "npm run build && node scripts/create-zip.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
     "@parcel/config-webextension": "^2.8.0",
-    "parcel": "^2.8.0"
+    "parcel": "^2.8.0",
+    "archiver": "^5.3.2"
   }
 }

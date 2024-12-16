@@ -1,63 +1,178 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Form Filler Settings</title>
+    <title>TesterUtilities Settings</title>
     <style>
+      :root {
+        --primary: #2196f3; /* Main blue */
+        --primary-dark: #1976d2; /* Darker blue for hover */
+        --accent: #4caf50; /* Success green */
+        --text: #333333; /* Dark text */
+        --text-light: #757575; /* Light text */
+        --border: #bdbdbd; /* Light border */
+        --background: #fafafa; /* White background */
+        --section-bg: #ffffff; /* Light gray background */
+      }
+
       body {
         padding: 20px;
-        font-family: Arial, sans-serif;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        color: var(--text);
+        background: var(--background);
+        max-width: 600px;
+        margin: 0 auto;
       }
+
+      h2 {
+        color: var(--primary);
+        margin-bottom: 30px;
+      }
+
+      .settings-section {
+        background: var(--section-bg);
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      }
+
+      .settings-section h3 {
+        color: var(--primary);
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+
       .form-group {
         margin-bottom: 15px;
       }
+
       label {
         display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
+        margin-bottom: 8px;
+        color: var(--text);
+        font-weight: 500;
       }
+
       input {
+        width: calc(100% - 24px);
         padding: 8px;
-        width: 300px;
-        border: 1px solid #ddd;
+        border: 1px solid var(--border);
         border-radius: 4px;
+        font-size: 14px;
+        transition: all 0.2s;
       }
+
+      input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+      }
+
       button {
-        padding: 8px 15px;
-        background: #4caf50;
+        background: var(--primary);
         color: white;
         border: none;
-        border-radius: 4px;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-size: 16px;
         cursor: pointer;
+        transition: background-color 0.3s;
       }
+
       button:hover {
-        background: #45a049;
+        background: var(--primary-dark);
       }
+
       .status {
-        margin-top: 15px;
-        padding: 10px;
-        display: none;
-      }
-      .success {
-        background: #dff0d8;
-        color: #3c763d;
+        position: fixed;
+        left: 50%;
+        bottom: 30px;
+        transform: translateX(-50%);
+        padding: 12px 30px;
         border-radius: 4px;
+        font-size: 16px;
+        font-weight: 500;
+        display: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        animation: slideUp 0.3s ease-out;
+      }
+
+      .success {
+        background: var(--accent);
+        color: white;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translate(-50%, 20px);
+          opacity: 0;
+        }
+        to {
+          transform: translate(-50%, 0);
+          opacity: 1;
+        }
       }
     </style>
   </head>
   <body>
-    <h2>Form Filler Settings</h2>
+    <h2>TesterUtilities Settings</h2>
+
     <form id="settingsForm">
-      <div class="form-group">
-        <label for="userPrefix">User Prefix (default: testLendi)</label>
-        <input type="text" id="userPrefix" placeholder="Enter your prefix" />
+      <!-- Form Filler Settings -->
+      <div class="settings-section">
+        <h3>Form Filler Settings</h3>
+        <div class="form-group">
+          <label for="userPrefix">User Prefix (default: test)</label>
+          <input type="text" id="userPrefix" placeholder="Enter your prefix" />
+        </div>
+        <div class="form-group">
+          <label for="emailDomain">Email Domain (default: gmail.com)</label>
+          <input type="text" id="emailDomain" placeholder="Enter email domain" />
+        </div>
       </div>
-      <div class="form-group">
-        <label for="emailDomain">Email Domain (default: gmail.com)</label>
-        <input type="text" id="emailDomain" placeholder="Enter email domain" />
+
+      <!-- Text Generator Settings -->
+      <div class="settings-section">
+        <h3>Text Generator Settings</h3>
+        <div class="form-group">
+          <label for="defaultLoremLength">Lorem Ipsum default length</label>
+          <input type="number" id="defaultLoremLength" placeholder="Default: 100" />
+        </div>
+        <div class="form-group">
+          <label for="defaultPatternText">Pattern Generator default text</label>
+          <input type="text" id="defaultPatternText" placeholder="Default: test" />
+        </div>
+        <div class="form-group">
+          <label for="defaultPatternLength">Pattern Generator default length</label>
+          <input type="number" id="defaultPatternLength" placeholder="Default: 1000" />
+        </div>
+        <div class="form-group">
+          <label for="defaultMultiplierText">Text Multiplier default text</label>
+          <input
+            type="text"
+            id="defaultMultiplierText"
+            placeholder="Default: sample text"
+          />
+        </div>
+        <div class="form-group">
+          <label for="defaultMultiplierLines">Text Multiplier default lines</label>
+          <input type="number" id="defaultMultiplierLines" placeholder="Default: 3" />
+        </div>
+        <div class="form-group">
+          <label for="defaultMultiplierLength">Text Multiplier line length</label>
+          <input type="number" id="defaultMultiplierLength" placeholder="Default: 50" />
+        </div>
+        <div class="form-group">
+          <label for="defaultCounterLength">Counter String default length</label>
+          <input type="number" id="defaultCounterLength" placeholder="Default: 100" />
+        </div>
       </div>
-      <button type="submit">Save Settings</button>
+
+      <button type="submit">Save All Settings</button>
     </form>
     <div id="status" class="status"></div>
-    <script src="options.js"></script>
+    <script src="options.js" type="module"></script>
   </body>
 </html>

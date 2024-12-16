@@ -2,6 +2,8 @@
   try {
     const targetDomain = 'finance.imobiliare.ro'
     const defaultDomain = 'PL'
+    const cookieKey = 'setDomain'
+    const cookieValue = 'dsa'
 
     const showTempNotificationAndReload = message => {
       const notification = document.createElement('div')
@@ -28,8 +30,23 @@
       }, 1500)
     }
 
-    if (sessionStorage.getItem('__DOMAIN__') === targetDomain) {
+    const setCookie = (name, value) => {
+      document.cookie = `${name}=${value};path=/`
+    }
+
+    const getCookie = name => {
+      const value = `; ${document.cookie}`
+      const parts = value.split(`; ${name}=`)
+      if (parts.length === 2) return parts.pop().split(';').shift()
+      return null
+    }
+
+    if (
+      sessionStorage.getItem('__DOMAIN__') === targetDomain ||
+      getCookie(cookieKey) === cookieValue
+    ) {
       sessionStorage.removeItem('__DOMAIN__')
+      setCookie(cookieKey, 'pl')
       console.info(
         `%c Domain switched back to default (${defaultDomain})`,
         'background: #ff6b6b; color: white; font-size: 14px; padding: 5px; border-radius: 5px;'
@@ -39,6 +56,7 @@
       )
     } else {
       sessionStorage.setItem('__DOMAIN__', targetDomain)
+      setCookie(cookieKey, cookieValue)
       console.info(
         `%c Domain switched to: ${targetDomain}`,
         'background: #4CAF50; color: white; font-size: 14px; padding: 5px; border-radius: 5px;'
@@ -48,8 +66,9 @@
 
     const currentDomain =
       sessionStorage.getItem('__DOMAIN__') || `Not set (using default: ${defaultDomain})`
+    const currentCookie = getCookie(cookieKey) || 'pl'
     console.info(
-      `%c Current __DOMAIN__ value: ${currentDomain}`,
+      `%c Current domain settings:\n__DOMAIN__: ${currentDomain}\nCookie (${cookieKey}): ${currentCookie}`,
       'font-family: monospace; color: #9c27b0; font-size: 16px; font-weight: bold;'
     )
   } catch (err) {

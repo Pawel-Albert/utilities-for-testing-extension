@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "TesterUtilities",
   "description": "TesterUtilities",
-  "version": "0.2.5",
+  "version": "0.2.9",
   "icons": {
     "16": "gen.png",
     "48": "gen.png",
@@ -35,7 +35,12 @@
         "content_scripts/phoneNumber.js",
         "content_scripts/nip.js",
         "content_scripts/regon.js",
-        "content_scripts/domain_switcher.js"
+        "content_scripts/domain_switcher.js",
+        "content_scripts/counter_string.js",
+        "content_scripts/lorem_ipsum.js",
+        "content_scripts/text_multiplier.js",
+        "content_scripts/text_pattern.js",
+        "content_scripts/config/defaults.js"
       ],
       "matches": ["<all_urls>"]
     }
@@ -77,5 +82,8 @@
   "options_ui": {
     "page": "options.html",
     "open_in_tab": true
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 }
