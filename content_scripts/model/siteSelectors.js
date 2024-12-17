@@ -1,5 +1,4 @@
-import {fakeDataPL} from './fakeDataPL'
-import {fakeDataSb} from './fakeDataPL'
+import {fakeDataPL, fakeDataSb} from './fakeDataPL'
 
 export const siteData = {
   'demo.sb-betting.com': {
@@ -187,11 +186,6 @@ export const siteData = {
     email: {selector: 'input[name=email]', type: 'input', data: fakeDataPL.email},
     password: {
       selector: 'input[name=password]',
-      type: 'input',
-      data: fakeDataPL.password
-    },
-    confirmPassword: {
-      selector: 'input[data-test="confirm_password"]',
       type: 'input',
       data: fakeDataPL.password
     },
