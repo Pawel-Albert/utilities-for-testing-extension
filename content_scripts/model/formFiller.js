@@ -34,6 +34,10 @@ export function fillForm(currentSite, currentSiteData) {
         if (fieldData.type === 'checkCheckbox') {
           action.checkCheckbox(element)
         }
+
+        if (fieldData.type === 'select') {
+          action.selectOption(element, fieldData.data)
+        }
       }
       console.log(
         `%c Filled something for sure...but what?`,

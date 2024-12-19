@@ -45,6 +45,21 @@ export const action = {
     if (element && !element.checked) {
       element.click()
     }
+  },
+
+  selectOption: function (element, value) {
+    if (!element) return;
+    
+    element.click();
+
+    setTimeout(() => {
+      const option = document.querySelector(`[data-test="${value}"]`);
+      
+      if (option) {
+        option.click();
+      }
+    }, 500);
   }
+
   // more actions if needed
 }

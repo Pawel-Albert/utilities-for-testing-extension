@@ -1,7 +1,7 @@
 import {fakeDataPL, fakeDataSb} from './fakeDataPL'
 
 export const siteData = {
-  'demo.sb-betting.com': {
+  'demo.sb-betting.com|prod-sb.betonalfa.com.cy': {
     mobile: {
       selector: 'input[data-test="mobile"]',
       type: 'input',
@@ -39,6 +39,55 @@ export const siteData = {
     },
     consentCheckbox: {
       selector: 'input[data-test="marketing_consent"]',
+      type: 'checkCheckbox'
+    },
+    userName: {
+      selector: 'input[data-test="userName"]',
+      type: 'input',
+      data: fakeDataSb.userName
+    },
+    idNumber: {
+      selector: 'input[data-test="identification_number"]',
+      type: 'input',
+      data: fakeDataSb.idNumber
+    },
+    selectGender: {
+      selectorAll: document.querySelectorAll('[data-test="gender"] > button[data-test="select_button"]')[0],
+      type: 'select',
+      data: 'select_option_genderOptions_female'
+    },
+    selectDocumentType: {
+      selectorAll: document.querySelectorAll('[data-test="gender"] > button[data-test="select_button"]')[1],
+      type: 'select',
+      data: 'select_option_documentType_id'
+    },
+    selectNationality: {
+      selector: '[data-test="nationality"] > button[data-test="select_button"]',
+      type: 'select',
+      data: 'select_option_Poland'
+    },
+    address: {
+      selector: 'input[data-test="address"]',
+      type: 'input',
+      data: fakeDataSb.street
+    },
+    city: {
+      selector: 'input[data-test="city"]',
+      type: 'input',
+      data: fakeDataSb.cityName
+    },
+    postalCode: {
+      selector: 'input[data-test="post_code"]',
+      type: 'input',
+      data: fakeDataSb.postalCode
+    },
+    selectResidence: {
+      selector: '[data-test="national_residence"] > button[data-test="select_button"]',
+      type: 'select',
+      data: 'select_option_Poland'
+    },
+    ageCheckbox: {
+      selector: 'input[data-test="ageConfirmationConsent"]',
       type: 'checkCheckbox'
     }
   },
