@@ -114,6 +114,25 @@
           opacity: 1;
         }
       }
+
+      .backup-controls {
+        display: flex;
+        gap: 10px;
+      }
+
+      .backup-controls button {
+        flex: 1;
+      }
+
+      button.secondary {
+        background: white;
+        color: var(--primary);
+        border: 1px solid var(--primary);
+      }
+
+      button.secondary:hover {
+        background: rgba(33, 150, 243, 0.1);
+      }
     </style>
   </head>
   <body>
@@ -167,6 +186,24 @@
         <div class="form-group">
           <label for="defaultCounterLength">Counter String default length</label>
           <input type="number" id="defaultCounterLength" placeholder="Default: 100" />
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>Backup & Restore</h3>
+        <div class="form-group backup-controls">
+          <button type="button" id="exportSettings">Export Settings</button>
+          <button type="button" id="importSettings" class="secondary">
+            Import Settings
+          </button>
+          <input type="file" id="importFile" accept=".json" style="display: none" />
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>Debug</h3>
+        <div class="form-group">
+          <button type="button" id="debugStorage">Show Storage Contents</button>
         </div>
       </div>
 

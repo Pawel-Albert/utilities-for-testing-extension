@@ -160,6 +160,35 @@ All settings are persistent between browser sessions and can be modified at any 
 - Improved project structure with centralized configuration
 - Enhanced user experience with customizable default values
 
+### Version 0.2.10 Updates
+
+#### Settings Management Improvements
+
+- Added persistent settings storage using IndexedDB
+- Settings now survive extension reinstalls/updates
+- Added settings backup & restore functionality:
+  - Export settings to JSON file
+  - Import settings from JSON file
+- Added debug view for current settings state
+- Settings are now managed through a dedicated options page
+
+#### Storage Architecture
+
+The extension now uses a more robust storage system:
+
+- Primary storage: IndexedDB for persistent data
+- Settings are stored in a dedicated database 'TesterUtilitiesDB'
+- Improved error handling and fallback mechanisms
+- Debug tools for storage inspection
+
+#### New UI Features in Options Page
+
+- Added dedicated sections for different setting types
+- Form Filler Settings configuration
+- Text Generator Settings management
+- Backup & Restore tools
+- Debug tools for storage inspection
+
 ## Todo
 
 - [x] Form auto filler with random data

@@ -211,11 +211,10 @@ const menuItems = [
 ]
 
 try {
-  chrome.runtime.onInstalled.addListener(() => {
+  chrome.runtime.onInstalled.addListener(async () => {
     menuItems.forEach(({title, id, contexts, type = 'normal', parentId}) => {
       chrome.contextMenus.create({title, id, contexts, type, parentId})
     })
-    chrome.storage.sync.set(defaultSettings)
   })
 
   chrome.contextMenus.onClicked.addListener((event, tab) => {
