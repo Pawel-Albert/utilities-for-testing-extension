@@ -46,14 +46,7 @@
     }
   ],
 
-  "permissions": [
-    "debugger",
-    "contextMenus",
-    "tabs",
-    "scripting",
-    "activeTab",
-    "storage"
-  ],
+  "permissions": ["contextMenus", "tabs", "scripting", "activeTab", "storage"],
 
   "host_permissions": ["*://*/*"],
   "commands": {
