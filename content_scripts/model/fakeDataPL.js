@@ -4,6 +4,7 @@ import {generatePolishMobile} from '../custom_generators_logic/generatePolishMob
 import {generateNip} from '../custom_generators_logic/nip_core'
 import {generateRegon} from '../custom_generators_logic/regon_core'
 import {generateRandomBirthDate} from '../../utilis/helpers'
+import {generateIdNumber} from '../custom_generators_logic/idnumber_core'
 
 export const fakeDataPL = {
   cityName: faker.address.cityName(),
@@ -34,6 +35,7 @@ export const fakeDataSb = {
   streetFull: faker.address.streetAddress(),
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
+  userName: faker.internet.userName().replace(/\./g, '_'),
   email: `SBB-${Date.now()}@test.com`,
   login: `SBB-${Date.now()}`,
   mobile: generatePolishMobile(),
@@ -41,5 +43,6 @@ export const fakeDataSb = {
   pesel: generatePesel(sex),
   nip: generateNip(),
   regon: generateRegon(),
-  birthdayDate: generateRandomBirthDate()
+  birthdayDate: generateRandomBirthDate(),
+  idNumber: generateIdNumber()
 }
