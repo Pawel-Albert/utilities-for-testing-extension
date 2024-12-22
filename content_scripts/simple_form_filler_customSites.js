@@ -4,6 +4,7 @@ import {updateEmailFields} from '../utilis/emailHelper'
 
 async function initFormFiller() {
   const config = await chrome.storage.sync.get(['userPrefix', 'emailDomain'])
+  console.log('Loaded config:', config)
   const currentSite = window.location.hostname
   let currentSiteKey
 
@@ -18,7 +19,8 @@ async function initFormFiller() {
       key.split('|').includes(currentSite)
     )
   }
-
+  console.log('Current site:', currentSite)
+  console.log('Using site config:', currentSiteKey)
   const currentSiteData = updateEmailFields(siteData[currentSiteKey], config)
   fillForm(currentSite, currentSiteData)
 }

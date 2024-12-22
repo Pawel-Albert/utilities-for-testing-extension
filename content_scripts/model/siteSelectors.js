@@ -69,8 +69,9 @@ export const siteData = {
       type: 'checkCheckbox'
     },
     checkAll: {
-      selectorAll: document.querySelectorAll('[id^=checkbox]')[0],
-      type: 'checkCheckbox'
+      selector: '[id^=checkbox]',
+      type: 'checkCheckbox',
+      index: 0
     },
     mortagePeriod: {
       selector: 'input[pattern="[0-9]*"][min="5"][max="35"]',
@@ -78,21 +79,25 @@ export const siteData = {
       data: fakeDataPL.mortagePeriod
     },
     incomeAmmount: {
-      selectorAll: document.querySelectorAll('input[pattern="[0-9]*"][min="0"]')[1],
+      selector: 'input[pattern="[0-9]*"][min="0"]',
       type: 'input',
-      data: fakeDataPL.incomeAmmount
+      data: fakeDataPL.incomeAmmount,
+      index: 1
     },
     incomePeriod: {
-      selectorAll: document.querySelectorAll("[draggable='false']")[0],
-      type: 'simpleClick'
+      selector: '[draggable="false"]',
+      type: 'simpleClick',
+      index: 0
     },
     anyCreditsFalse: {
-      selectorAll: document.querySelectorAll("[draggable='false']")[3],
-      type: 'simpleClick'
+      selector: '[draggable="false"]',
+      type: 'simpleClick',
+      index: 3
     },
     anyCardsFalse: {
-      selectorAll: document.querySelectorAll("[draggable='false']")[5],
-      type: 'simpleClick'
+      selector: '[draggable="false"]',
+      type: 'simpleClick',
+      index: 5
     },
     yearOfBearth: {
       selector: 'input[pattern="[0-9]*"][min="1940"]',
@@ -100,11 +105,10 @@ export const siteData = {
       data: fakeDataPL.yearOfBearth
     },
     householdExpenses: {
-      selectorAll: document.querySelectorAll(
-        'input[pattern="[0-9]*"][data-mask-raw-value]'
-      )[2],
+      selector: 'input[pattern="[0-9]*"][data-mask-raw-value]',
       type: 'input',
-      data: fakeDataPL.householdExpenses
+      data: fakeDataPL.householdExpenses,
+      index: 2
     },
     mobileGeneral: {
       selector: '[type=tel]:not([disabled])',
@@ -112,14 +116,14 @@ export const siteData = {
       data: fakeDataPL.mobile
     },
     SOI: {
-      selectorAll: document.querySelectorAll('input[inputmode="none"]')[4],
-      type: 'dispatchedClick'
+      selector: 'input[inputmode="none"]',
+      type: 'dispatchedClick',
+      index: 4
     },
     SOIPicker: {
-      selectorAll: document.querySelectorAll(
-        '[target="[object HTMLDivElement]"] [role="listbox"] [data-no-activator]'
-      )[2],
-      type: 'dispatchedClick'
+      selector: '[target="[object HTMLDivElement]"] [role="listbox"] [data-no-activator]',
+      type: 'dispatchedClick',
+      index: 2
     }
   },
 
