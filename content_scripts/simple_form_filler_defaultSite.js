@@ -7,6 +7,7 @@ async function initDefaultFormFiller() {
   const currentSite = 'default'
 
   const currentSiteData = updateEmailFields(siteData[currentSite], config)
+  console.log('Current site data:', currentSiteData)
   fillForm(currentSite, currentSiteData)
 }
 

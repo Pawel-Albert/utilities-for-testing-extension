@@ -21,6 +21,7 @@ async function initFormFiller() {
   }
   console.log('Current site:', currentSite)
   console.log('Using site config:', currentSiteKey)
+  console.log('Site data:', siteData[currentSiteKey])
   const currentSiteData = updateEmailFields(siteData[currentSiteKey], config)
   fillForm(currentSite, currentSiteData)
 }

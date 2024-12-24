@@ -125,6 +125,28 @@ export const siteData = {
       type: 'dispatchedClick',
       index: 2
     }
+    // example of multiStep type
+    // selectWithDropdown: {
+    //   type: 'multiStep',
+    //   timeout: 500,
+    //   steps: [
+    //     {
+    //       selector: '[data-cy=lead-card-firstname-input] input',
+    //       type: 'inputShadow',
+    //       data: fakeDataPL.firstName
+    //     },
+    //     {
+    //       selector: '[data-cy=lead-card-lastname-input] input',
+    //       type: 'inputShadow',
+    //       data: fakeDataPL.lastName
+    //     },
+    //     {
+    //       selector: '[data-cy=lead-card-email-input] input',
+    //       type: 'inputShadow',
+    //       data: fakeDataPL.email
+    //     }
+    //   ]
+    // },
   },
 
   'platforma.qa.lendi.pl|fincrm-frontend-git': {
