@@ -4,45 +4,44 @@
   "description": "TesterUtilities",
   "version": "0.2.11",
   "icons": {
-    "16": "gen.png",
-    "48": "gen.png",
-    "128": "gen.png"
+    "16": "src/assets/gen.png",
+    "48": "src/assets/gen.png",
+    "128": "src/assets/gen.png"
   },
   "background": {
-    "service_worker": "background.js",
+    "service_worker": "src/background.js",
     "type": "module"
   },
 
   "web_accessible_resources": [
     {
       "resources": [
-        "content_scripts/json_prettier_to_console.js",
-        "content_scripts/base64_decode.js",
-        "content_scripts/base64_encode.js",
-        "content_scripts/clear_all_input_restrictions.js",
-        "content_scripts/display_all_none.js",
-        "content_scripts/display_one_none.js",
-        "content_scripts/password_input_to_text.js",
-        "content_scripts/simple_form_filler_defaultSite.js",
-        "content_scripts/simple_form_filler_customSites.js",
-        "content_scripts/iban.js",
-        "content_scripts/idnumber.js",
-        "content_scripts/passport_number.js",
-        "content_scripts/pesel.js",
-        "content_scripts/same_id.js",
-        "content_scripts/timestamp_to_date.js",
-        "content_scripts/unlock_disabled.js",
-        "content_scripts/phoneNumber.js",
-        "content_scripts/nip.js",
-        "content_scripts/regon.js",
-        "content_scripts/domain_switcher.js",
-        "content_scripts/counter_string.js",
-        "content_scripts/lorem_ipsum.js",
-        "content_scripts/text_multiplier.js",
-        "content_scripts/text_pattern.js",
-        "content_scripts/config/defaults.js",
-        "selectors.js",
-        "content_scripts/model/siteSelectors.js"
+        "src/content_scripts/json_prettier_to_console.js",
+        "src/content_scripts/base64_decode.js",
+        "src/content_scripts/base64_encode.js",
+        "src/content_scripts/clear_all_input_restrictions.js",
+        "src/content_scripts/display_all_none.js",
+        "src/content_scripts/display_one_none.js",
+        "src/content_scripts/password_input_to_text.js",
+        "src/content_scripts/simple_form_filler_defaultSite.js",
+        "src/content_scripts/simple_form_filler_customSites.js",
+        "src/content_scripts/iban.js",
+        "src/content_scripts/idnumber.js",
+        "src/content_scripts/passport_number.js",
+        "src/content_scripts/pesel.js",
+        "src/content_scripts/same_id.js",
+        "src/content_scripts/timestamp_to_date.js",
+        "src/content_scripts/unlock_disabled.js",
+        "src/content_scripts/phoneNumber.js",
+        "src/content_scripts/nip.js",
+        "src/content_scripts/regon.js",
+        "src/content_scripts/domain_switcher.js",
+        "src/content_scripts/counter_string.js",
+        "src/content_scripts/lorem_ipsum.js",
+        "src/content_scripts/text_multiplier.js",
+        "src/content_scripts/text_pattern.js",
+        "src/content_scripts/config/defaults.js",
+        "src/content_scripts/model/siteSelectors.js"
       ],
       "matches": ["<all_urls>"]
     }
@@ -82,10 +81,16 @@
     }
   },
   "options_ui": {
-    "page": "options.html",
+    "page": "src/pages/options/options.html",
     "open_in_tab": true
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "action": {
+    "default_popup": "src/pages/popup/popup.html",
+    "default_icon": {
+      "16": "src/assets/gen.png"
+    }
   }
 }

@@ -189,6 +189,26 @@ The extension now uses a more robust storage system:
 - Backup & Restore tools
 - Debug tools for storage inspection
 
+### Version 0.2.11 Updates
+
+#### Project Structure Improvements
+
+- Reorganized project structure with src/ directory
+- Moved all UI files to src/pages/
+- Added popup with quick links and description
+
+#### UI Enhancements
+
+- Added consistent styling across popup and options
+- Improved navigation between different pages
+- Added extension icon and description to popup
+
+#### Code Quality
+
+- Cleaned up duplicate navigation links
+- Improved file organization and imports
+- Updated all file paths for better maintainability
+
 ## Todo
 
 - [x] Form auto filler with random data

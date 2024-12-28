@@ -1,4 +1,4 @@
-import {defaultSettings} from './content_scripts/config/defaults.js'
+import {defaultSettings} from '../../content_scripts/config/defaults.js'
 
 const DB_NAME = 'TesterUtilitiesDB'
 const STORE_NAME = 'settings'

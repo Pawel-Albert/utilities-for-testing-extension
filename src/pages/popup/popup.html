@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TesterUtilities</title>
+    <style>
+      :root {
+        --primary: #2196f3;
+        --primary-dark: #1976d2;
+        --accent: #4caf50;
+        --text: #333333;
+        --border: #bdbdbd;
+        --background: #fafafa;
+        --section-bg: #ffffff;
+      }
+
+      body {
+        width: 350px;
+        padding: 15px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        color: var(--text);
+        background: var(--background);
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .header img {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+      }
+
+      .header h2 {
+        color: var(--primary);
+        margin: 0;
+      }
+
+      .description {
+        font-size: 13px;
+        line-height: 1.4;
+        color: var(--text-light);
+        margin-bottom: 20px;
+      }
+
+      .section {
+        background: var(--section-bg);
+        margin-bottom: 15px;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      }
+
+      button {
+        width: 100%;
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-bottom: 8px;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background: var(--primary-dark);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img src="../../assets/gen.png" alt="TesterUtilities" />
+      <h2>TesterUtilities</h2>
+    </div>
+
+    <div class="description">
+      Chrome extension with utilities for testers - data generators, form fillers, text
+      tools and more.
+    </div>
+
+    <div class="section">
+      <h3>Quick Links</h3>
+      <button id="openOptions">Settings</button>
+      <button id="openSelectors">Site Selectors</button>
+    </div>
+
+    <script src="popup.js" type="module"></script>
+  </body>
+</html>
