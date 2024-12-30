@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Scripts Manager</title>
+    <style>
+      :root {
+        --primary: #2196f3;
+        --primary-dark: #1976d2;
+        --accent: #4caf50;
+        --text: #333333;
+        --border: #bdbdbd;
+        --background: #fafafa;
+      }
+
+      body {
+        padding: 20px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        background: var(--background);
+      }
+
+      .script-editor {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .editor-main {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
+
+      .editor-sidebar {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
+
+      textarea {
+        width: 100%;
+        height: 400px;
+        font-family: monospace;
+        padding: 10px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        resize: vertical;
+      }
+
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+
+      button:hover {
+        background: var(--primary-dark);
+      }
+
+      .script-list {
+        margin-top: 20px;
+      }
+
+      .script-item {
+        padding: 10px;
+        border: 1px solid var(--border);
+        margin-bottom: 10px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .pattern-help {
+        font-size: 12px;
+        color: #666;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>User Scripts Manager</h2>
+
+    <div class="script-editor">
+      <div class="editor-main">
+        <textarea id="scriptEditor" placeholder="// Write your script here..."></textarea>
+        <div class="editor-controls">
+          <button id="saveScript">Save Script</button>
+        </div>
+      </div>
+
+      <div class="editor-sidebar">
+        <h3>Script Details</h3>
+        <div>
+          <label>Name:</label>
+          <input type="text" id="scriptName" />
+        </div>
+        <div>
+          <label>Match Pattern:</label>
+          <input type="text" id="scriptPattern" placeholder="*://*/*" />
+          <div class="pattern-help">
+            Examples: "*://*.example.com/*" or leave empty for all sites
+          </div>
+        </div>
+        <div>
+          <label>Description:</label>
+          <textarea id="scriptDescription"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="script-list">
+      <h3>Saved Scripts</h3>
+      <div id="scriptsList"></div>
+      <button id="debugStorage" class="debug-button">Show Storage Contents</button>
+    </div>
+
+    <script src="/src/pages/scripts/scripts.js" type="module"></script>
+  </body>
+</html>

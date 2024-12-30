@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "TesterUtilities",
   "description": "TesterUtilities",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "icons": {
     "16": "src/assets/gen.png",
     "48": "src/assets/gen.png",
@@ -41,13 +41,22 @@
         "src/content_scripts/text_multiplier.js",
         "src/content_scripts/text_pattern.js",
         "src/content_scripts/config/defaults.js",
-        "src/content_scripts/model/siteSelectors.js"
+        "src/content_scripts/model/siteSelectors.js",
+        "src/pages/scripts/scripts.html",
+        "src/pages/scripts/scripts.js"
       ],
       "matches": ["<all_urls>"]
     }
   ],
 
-  "permissions": ["contextMenus", "tabs", "scripting", "activeTab", "storage"],
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "scripting",
+    "activeTab",
+    "storage",
+    "userScripts"
+  ],
 
   "host_permissions": ["*://*/*"],
   "commands": {

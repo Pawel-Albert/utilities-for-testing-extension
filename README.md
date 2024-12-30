@@ -209,6 +209,16 @@ The extension now uses a more robust storage system:
 - Improved file organization and imports
 - Updated all file paths for better maintainability
 
+### Version 0.2.12 Updates
+
+#### User Scripts Feature
+
+- Added User Scripts feature (BETA)
+- Improved storage management with IndexedDB backup
+- Unified settings handling
+- Better pattern matching for script execution
+- Added script management UI
+
 ## Todo
 
 - [x] Form auto filler with random data
@@ -216,6 +226,13 @@ The extension now uses a more robust storage system:
 - [x] Add basic configuration for form filling (user prefix, email domain)
 - [x] Add text generator configuration options
 - [x] Organize context menu into logical groups
+- [ ] Improve User Scripts feature:
+  - [ ] Add script categories/tags
+  - [ ] Add script sharing functionality
+  - [ ] Add script import/export
+  - [ ] Add script versioning
+  - [ ] Add script dependencies
+- [ ] Implement Chrome Side Panel integration
 - [ ] Add more configuration options based on user feedback
 - [ ] Implement more "quality of life" improvements based on user requests
 
