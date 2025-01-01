@@ -1,7 +1,5 @@
-import {getFromStorages} from '../../utilis/storage.js'
-
 async function loadUserScripts() {
-  const userScripts = await getFromStorages()
+  const {userScripts = {}} = await chrome.storage.sync.get('userScripts')
   const list = document.getElementById('userScriptsList')
 
   Object.entries(userScripts).forEach(([name, script]) => {

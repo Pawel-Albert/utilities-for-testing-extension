@@ -43,7 +43,9 @@
         "src/content_scripts/config/defaults.js",
         "src/content_scripts/model/siteSelectors.js",
         "src/pages/scripts/scripts.html",
-        "src/pages/scripts/scripts.js"
+        "src/pages/scripts/scripts.js",
+        "src/pages/selectors/selectors.html",
+        "src/pages/selectors/selectors.js"
       ],
       "matches": ["<all_urls>"]
     }
