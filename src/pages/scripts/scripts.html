@@ -97,7 +97,31 @@
         border-radius: 4px;
         display: flex;
         justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .script-item.disabled {
+        opacity: 0.6;
+        background-color: #f8f9fa;
+      }
+
+      .script-controls {
+        display: flex;
+        flex: 1;
         align-items: center;
+        gap: 10px;
+      }
+
+      .script-info {
+        flex: 1;
+        margin-left: 10px;
+      }
+
+      .script-toggle {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        margin-top: 3px;
       }
 
       .pattern-help {
@@ -141,10 +165,79 @@
         border-radius: 4px;
         border: 1px solid #ffeeba;
       }
+
+      .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 24px;
+        border-radius: 4px;
+        color: white;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+        z-index: 1000;
+      }
+
+      .toast.success {
+        background-color: var(--success);
+      }
+
+      .toast.error {
+        background-color: #dc3545;
+      }
+
+      .toast.show {
+        opacity: 1;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+      }
+
+      .modal-content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .modal-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .script-buttons {
+        display: flex;
+        gap: 5px;
+        margin-left: 10px;
+      }
     </style>
   </head>
   <body>
     <h2>User Scripts Manager (BETA)</h2>
+    <div id="toast" class="toast"></div>
+    <div id="confirmModal" class="modal">
+      <div class="modal-content">
+        <p id="modalMessage"></p>
+        <div class="modal-buttons">
+          <button id="modalConfirm" class="btn-danger">Delete</button>
+          <button id="modalCancel" class="btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
     <div class="beta-notice">
       This feature is in BETA. Some functionality may be incomplete or change in future
       updates.

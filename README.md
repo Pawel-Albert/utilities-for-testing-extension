@@ -219,6 +219,26 @@ The extension now uses a more robust storage system:
 - Better pattern matching for script execution
 - Added script management UI
 
+### Version 0.3.0 Updates
+
+#### PESEL Generator Improvements
+
+- Split PESEL generator into separate modes:
+  - Male (18+)
+  - Female (18+)
+  - Custom with age/date options
+- Fixed control digit calculation
+- Improved validation and error handling
+
+#### User Scripts Enhancements
+
+- Added enable/disable functionality for scripts
+- Added unique IDs for better script management
+- Improved UI with toasts instead of alerts
+- Added confirmation modals for destructive actions
+- Scripts can now be filtered by enabled state
+- Better script state persistence
+
 ## Todo
 
 - [x] Form auto filler with random data
