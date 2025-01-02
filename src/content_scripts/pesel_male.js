@@ -1,5 +1,5 @@
 import {generatePesel} from './custom_generators_logic/pesel_core.js'
-import {setNativeValue} from '../utilis/helpers.js'
+import {setNativeValue} from '../utilis/helpers.ts'
 ;(() => {
   try {
     const pesel = generatePesel('male', {minAge: 18, maxAge: 100})

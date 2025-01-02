@@ -1,11 +1,11 @@
 ;(() => {
   try {
-    const tags = document.getElementsByTagName('*')
+    const tags = Array.from(document.getElementsByTagName('*')) as HTMLElement[]
 
     for (const tag of tags) {
       if (tag.style.display == 'none') {
         tag.style.display = 'block'
-        tag.style = tag.style + '; border:7px dashed #ae0000;'
+        tag.style.cssText = tag.style.cssText + '; border:7px dashed #ae0000;'
       }
     }
 
@@ -14,6 +14,6 @@
       'font-family:monospace; color:purple;font-size:20px'
     )
   } catch (err) {
-    console.error(`Error: ${err.message}`)
+    console.error(`Error: ${(err as Error).message}`)
   }
 })()

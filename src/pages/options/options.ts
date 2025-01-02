@@ -1,15 +1,15 @@
-import {defaultSettings} from '../../content_scripts/config/defaults.js'
+import {defaultSettings} from '../../content_scripts/config/defaults'
 
 const DB_NAME = 'TesterUtilitiesDB'
 const STORE_NAME = 'settings'
 
-async function openDB() {
+async function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, 1)
     request.onerror = () => reject(request.error)
     request.onsuccess = () => resolve(request.result)
-    request.onupgradeneeded = event => {
-      const db = event.target.result
+    request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
+      const db = (event.target as IDBOpenDBRequest).result
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         db.createObjectStore(STORE_NAME)
       }
@@ -17,7 +17,7 @@ async function openDB() {
   })
 }
 
-async function saveToIndexedDB(settings) {
+async function saveToIndexedDB(settings: Record<string, any>): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite')
@@ -28,7 +28,7 @@ async function saveToIndexedDB(settings) {
   })
 }
 
-async function getFromIndexedDB() {
+async function getFromIndexedDB(): Promise<Record<string, any> | null> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readonly')
@@ -39,18 +39,12 @@ async function getFromIndexedDB() {
   })
 }
 
-/**
- * @param {Object} settings - Settings object to save
- */
-async function saveToStorages(settings) {
+async function saveToStorages(settings: Record<string, any>): Promise<void> {
   await chrome.storage.sync.set(settings)
   await saveToIndexedDB(settings)
 }
 
-/**
- * @returns {Promise<Object>} Settings object
- */
-async function getSettings() {
+async function getSettings(): Promise<Record<string, any>> {
   try {
     const chromeSettings = await chrome.storage.sync.get(null)
     if (Object.keys(chromeSettings).length > 0) {
@@ -70,12 +64,12 @@ async function getSettings() {
   }
 }
 
-async function saveSettings(e) {
+async function saveSettings(e: Event): Promise<void> {
   e.preventDefault()
-  const newSettings = {}
+  const newSettings: Record<string, any> = {}
 
   Object.keys(defaultSettings).forEach(key => {
-    const element = document.getElementById(key)
+    const element = document.getElementById(key) as HTMLInputElement
     if (element) {
       const value = element.value.trim()
       newSettings[key] = value || defaultSettings[key]
@@ -86,10 +80,10 @@ async function saveSettings(e) {
   showStatus('Settings saved!')
 }
 
-function loadSettings() {
+function loadSettings(): void {
   getSettings().then(settings => {
     Object.keys(defaultSettings).forEach(key => {
-      const element = document.getElementById(key)
+      const element = document.getElementById(key) as HTMLInputElement
       if (element) {
         element.value = settings[key] || defaultSettings[key]
       }
@@ -97,7 +91,7 @@ function loadSettings() {
   })
 }
 
-function debugStorage() {
+function debugStorage(): void {
   console.group('Storage Debug Info')
   chrome.storage.sync.get(null).then(result => {
     console.log('Chrome Storage:', result)
@@ -112,7 +106,7 @@ function debugStorage() {
   console.groupEnd()
 }
 
-function exportSettings() {
+function exportSettings(): void {
   getSettings().then(settings => {
     const dataStr = JSON.stringify(settings, null, 2)
     const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr)
@@ -125,15 +119,15 @@ function exportSettings() {
   })
 }
 
-function importSettings() {
-  const fileInput = document.getElementById('importFile')
-  const file = fileInput.files[0]
+function importSettings(): void {
+  const fileInput = document.getElementById('importFile') as HTMLInputElement
+  const file = fileInput.files?.[0]
 
   if (file) {
     const reader = new FileReader()
-    reader.onload = async function (e) {
+    reader.onload = async function (e: ProgressEvent<FileReader>) {
       try {
-        const settings = JSON.parse(e.target.result)
+        const settings = JSON.parse((e.target?.result as string) || '{}')
         await saveToStorages(settings)
         loadSettings()
         showStatus('Settings imported successfully!')
@@ -146,23 +140,25 @@ function importSettings() {
   }
 }
 
-function showStatus(message) {
+function showStatus(message: string): void {
   const status = document.getElementById('status')
-  status.textContent = message
-  status.className = 'status success'
-  status.style.display = 'block'
-  setTimeout(() => {
-    status.style.display = 'none'
-  }, 2000)
+  if (status) {
+    status.textContent = message
+    status.className = 'status success'
+    status.style.display = 'block'
+    setTimeout(() => {
+      status.style.display = 'none'
+    }, 2000)
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   loadSettings()
-  document.getElementById('settingsForm').addEventListener('submit', saveSettings)
-  document.getElementById('exportSettings').addEventListener('click', exportSettings)
-  document.getElementById('importSettings').addEventListener('click', () => {
-    document.getElementById('importFile').click()
+  document.getElementById('settingsForm')?.addEventListener('submit', saveSettings)
+  document.getElementById('exportSettings')?.addEventListener('click', exportSettings)
+  document.getElementById('importSettings')?.addEventListener('click', () => {
+    document.getElementById('importFile')?.click()
   })
-  document.getElementById('importFile').addEventListener('change', importSettings)
-  document.getElementById('debugStorage').addEventListener('click', debugStorage)
+  document.getElementById('importFile')?.addEventListener('change', importSettings)
+  document.getElementById('debugStorage')?.addEventListener('click', debugStorage)
 })

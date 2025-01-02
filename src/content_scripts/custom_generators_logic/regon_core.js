@@ -1,4 +1,4 @@
-import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers.js'
+import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers.ts'
 
 const PROVINCE_LEADING_ZEROS = 2
 const LEADING_ZEROS = 6

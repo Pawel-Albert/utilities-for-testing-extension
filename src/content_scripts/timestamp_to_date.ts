@@ -1,11 +1,10 @@
 ;(() => {
   try {
-    const locale = prompt(
-      'Provide locale for date formatting. Examples: "en" or "pl"',
-      'pl'
-    )
-    const timeStampToLocaleDate = timeStamp => {
-      const options = {
+    const locale =
+      prompt('Provide locale for date formatting. Examples: "en" or "pl"', 'pl') || 'pl'
+
+    const timeStampToLocaleDate = (timeStamp: number): string => {
+      const options: Intl.DateTimeFormatOptions = {
         timeZone: 'Europe/Warsaw',
         year: 'numeric',
         month: '2-digit',
@@ -17,15 +16,17 @@
       }
       return new Intl.DateTimeFormat(locale, options).format(new Date(timeStamp))
     }
+
     const timeStamp = Number(
       prompt(
         "Enter timestamp (example: '1669852799000') to display formatted date (for example 'pl' will be Europe/Warsaw timezone)",
         ''
       )
     )
+
     const formattedDate = timeStampToLocaleDate(timeStamp)
     alert(formattedDate)
   } catch (err) {
-    alert(`Input proper data: ${err}`)
+    alert(`Input proper data: ${(err as Error).message}`)
   }
 })()

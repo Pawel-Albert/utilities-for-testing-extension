@@ -1,4 +1,4 @@
-import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers.js'
+import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers.ts'
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //PESEL_CONFIG

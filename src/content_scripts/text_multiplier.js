@@ -1,5 +1,5 @@
-import {setNativeValue} from '../utilis/helpers.js'
-import {defaultSettings} from './config/defaults.js'
+import {setNativeValue} from '../utilis/helpers.ts'
+import {defaultSettings} from './config/defaults.ts'
 ;(() => {
   const multiplyText = (text, lines, lineLength) => {
     const result = []

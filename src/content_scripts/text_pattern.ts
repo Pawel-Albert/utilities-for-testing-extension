@@ -1,10 +1,10 @@
-import {setNativeValue} from '../utilis/helpers.js'
-import {defaultSettings} from './config/defaults.js'
+import {setNativeValue} from '../utilis/helpers.ts'
+import {defaultSettings} from './config/defaults.ts'
 ;(() => {
-  const safeBase64Encode = str => {
+  const safeBase64Encode = (str: string): string => {
     try {
       const utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) =>
-        String.fromCharCode('0x' + p1)
+        String.fromCharCode(parseInt(p1, 16))
       )
       return btoa(utf8Bytes)
     } catch (e) {
@@ -13,8 +13,8 @@ import {defaultSettings} from './config/defaults.js'
     }
   }
 
-  const generatePattern = (text, length) => {
-    const patterns = [
+  const generatePattern = (text: string, length: number): string => {
+    const patterns: ((t: string) => string)[] = [
       t => t.toUpperCase(),
       t => t.toLowerCase(),
       t => `${t}' OR '1'='1`,
@@ -61,9 +61,11 @@ import {defaultSettings} from './config/defaults.js'
       defaultPatternLength: defaultSettings.defaultPatternLength
     },
     items => {
-      const text = prompt('Enter text for pattern:', items.defaultPatternText)
+      const text = prompt('Enter text for pattern:', items.defaultPatternText) || ''
       if (text) {
-        const length = parseInt(prompt('Total length:', items.defaultPatternLength))
+        const length = parseInt(
+          prompt('Total length:', items.defaultPatternLength) || '0'
+        )
         if (length) {
           const result = generatePattern(text, length)
           console.log(
@@ -85,7 +87,7 @@ import {defaultSettings} from './config/defaults.js'
             safeBase64Encode(result)
           )
 
-          const indicatedElement = document.querySelector(':focus')
+          const indicatedElement = document.querySelector(':focus') as HTMLElement | null
           if (indicatedElement) {
             setNativeValue(indicatedElement, result)
             indicatedElement.dispatchEvent(new Event('input', {bubbles: true}))
