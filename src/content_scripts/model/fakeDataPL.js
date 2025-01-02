@@ -17,7 +17,7 @@ export const fakeDataPL = {
   promoCode: `${faker.word.adjective({strategy: 'shortest'})}_PromoTest`,
   mobile: generatePolishMobile(),
   password: 'Password1234!', // placeholder
-  pesel: generatePesel(sex),
+  pesel: generatePesel('both', {minAge: 18, maxAge: 100}),
   nip: generateNip(),
   regon: generateRegon(),
   companyName: faker.company.name(),
@@ -38,7 +38,7 @@ export const fakeDataSb = {
   login: `SBB-${Date.now()}`,
   mobile: generatePolishMobile(),
   password: 'Admin123!', // placeholder
-  pesel: generatePesel(sex),
+  pesel: generatePesel('both', {minAge: 18, maxAge: 100}),
   nip: generateNip(),
   regon: generateRegon(),
   birthdayDate: generateRandomBirthDate()
