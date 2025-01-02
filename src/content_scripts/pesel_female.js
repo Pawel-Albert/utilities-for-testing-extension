@@ -1,9 +1,9 @@
-import {generatePesel, sex} from './custom_generators_logic/pesel_core.js'
+import {generatePesel} from './custom_generators_logic/pesel_core.js'
 import {setNativeValue} from '../utilis/helpers.js'
 ;(() => {
   try {
-    const pesel = generatePesel(sex)
-    console.info(`Pesel: ${pesel}`)
+    const pesel = generatePesel('female', {minAge: 18, maxAge: 100})
+    console.info(`Female PESEL: ${pesel}`)
 
     const indicatedElement = document.querySelector(':focus')
     setNativeValue(indicatedElement, pesel)

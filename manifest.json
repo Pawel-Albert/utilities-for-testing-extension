@@ -28,7 +28,6 @@
         "src/content_scripts/iban.js",
         "src/content_scripts/idnumber.js",
         "src/content_scripts/passport_number.js",
-        "src/content_scripts/pesel.js",
         "src/content_scripts/same_id.js",
         "src/content_scripts/timestamp_to_date.js",
         "src/content_scripts/unlock_disabled.js",
@@ -45,7 +44,10 @@
         "src/pages/scripts/scripts.html",
         "src/pages/scripts/scripts.js",
         "src/pages/selectors/selectors.html",
-        "src/pages/selectors/selectors.js"
+        "src/pages/selectors/selectors.js",
+        "src/content_scripts/pesel_male.js",
+        "src/content_scripts/pesel_female.js",
+        "src/content_scripts/pesel_custom.js"
       ],
       "matches": ["<all_urls>"]
     }

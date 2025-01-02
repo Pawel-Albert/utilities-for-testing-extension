@@ -3,17 +3,25 @@ import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers.js'
 ////////////////////////////////////////////////////////////////////////////////////////
 //PESEL_CONFIG
 ////////////////////////////////////////////////////////////////////////////////////////
-export const sex = 'both' // Hardcoded
 const LEADING_ZEROS = 3
 const PESEL_CONTROL_CONSTANTS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
 
-const randomTimeStamp = () => {
-  const maxBirthDate = new Date(Date.now() - 568036800000) // 18 years ago in milliseconds
-  const minBirthDate = new Date(Date.now() - 3155760000000) // 100 years ago in milliseconds
+const randomTimeStamp = (minAge = 18, maxAge = 100) => {
+  const maxBirthDate = new Date(Date.now() - minAge * 31557600000) // minAge years ago in milliseconds
+  const minBirthDate = new Date(Date.now() - maxAge * 31557600000) // maxAge years ago in milliseconds
   const minTimestamp = minBirthDate.getTime()
   const maxTimestamp = maxBirthDate.getTime()
   return new Date(generateRandomInt(minTimestamp, maxTimestamp))
 }
+
+const dateToTimeStamp = dateStr => {
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) {
+    throw new Error('Invalid date format')
+  }
+  return date
+}
+
 const timeStampToLocaleDate = timeStamp => {
   return new Date(timeStamp).toLocaleDateString('pl-PL', {
     year: 'numeric',
@@ -45,7 +53,7 @@ const getDatePartPesel = date => {
 
 const controlDigit = (weights, string) => {
   const controlSum = [...string].reduce((sum, digit, index) => {
-    return sum + digit * weights[index]
+    return sum + parseInt(digit) * weights[index]
   }, 0)
   const controlSumDigitValue = controlSum % 10
   const controlDigitValue = 10 - controlSumDigitValue
@@ -55,16 +63,23 @@ const controlDigit = (weights, string) => {
 ////////////////////////////////////////////////////////////////////////////////////////
 //PESEL
 ////////////////////////////////////////////////////////////////////////////////////////
-export const generatePesel = sex => {
-  const timeStamp = randomTimeStamp()
+export const generatePesel = (sex, options = {}) => {
+  let timeStamp
+  if (options.birthDate) {
+    timeStamp = dateToTimeStamp(options.birthDate)
+  } else if (options.age) {
+    timeStamp = randomTimeStamp(options.age, options.age)
+  } else {
+    timeStamp = randomTimeStamp(options.minAge, options.maxAge)
+  }
   const datePart = getDatePartPesel(timeStampToLocaleDate(timeStamp))
   const randomPart = addLeadingZeros(generateRandomInt(0, 999), LEADING_ZEROS)
   const sexFieldPart =
-    sex === 'both'
-      ? generateRandomInt(0, 9)
-      : sex === 'male'
+    sex === 'male'
       ? generateRandomInt(0, 4) * 2 + 1
-      : generateRandomInt(0, 4) * 2
+      : sex === 'female'
+      ? generateRandomInt(0, 4) * 2
+      : generateRandomInt(0, 9)
   const controlDigitValue = controlDigit(
     PESEL_CONTROL_CONSTANTS,
     datePart + randomPart + sexFieldPart

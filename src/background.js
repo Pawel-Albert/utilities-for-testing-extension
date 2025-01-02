@@ -7,9 +7,29 @@ const menuItems = [
   },
   {
     parentId: 'data-generators',
-    title: 'Generate PESEL (18+)',
-    id: 'Generate PESEL (18+)',
-    file: 'src/content_scripts/pesel.js',
+    title: 'Generate PESEL',
+    id: 'pesel-menu',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'pesel-menu',
+    title: 'Male (18+)',
+    id: 'Generate PESEL Male',
+    file: 'src/content_scripts/pesel_male.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'pesel-menu',
+    title: 'Female (18+)',
+    id: 'Generate PESEL Female',
+    file: 'src/content_scripts/pesel_female.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'pesel-menu',
+    title: 'Custom...',
+    id: 'Generate PESEL Custom',
+    file: 'src/content_scripts/pesel_custom.js',
     contexts: ['editable']
   },
   {
