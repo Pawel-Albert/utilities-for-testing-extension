@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>User Scripts Manager</title>
+    <title>User Scripts Manager (BETA)</title>
     <style>
       :root {
         --primary: #2196f3;
@@ -10,6 +10,10 @@
         --text: #333333;
         --border: #bdbdbd;
         --background: #fafafa;
+        --success: #28a745;
+        --secondary: #6c757d;
+        --warning-bg: #fff3cd;
+        --warning-text: #856404;
       }
 
       body {
@@ -84,16 +88,63 @@
         color: #666;
         margin-top: 4px;
       }
+
+      .edit-mode {
+        background-color: var(--warning-bg);
+        color: var(--warning-text);
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+      }
+
+      .btn-success {
+        background: var(--success);
+      }
+
+      .btn-secondary {
+        background: var(--secondary);
+      }
+
+      .editor-controls {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .beta-notice {
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border: 1px solid #ffeeba;
+      }
     </style>
   </head>
   <body>
-    <h2>User Scripts Manager</h2>
+    <h2>User Scripts Manager (BETA)</h2>
+    <div class="beta-notice">
+      This feature is in BETA. Some functionality may be incomplete or change in future
+      updates.
+    </div>
+    <div id="editMode"></div>
 
     <div class="script-editor">
       <div class="editor-main">
         <textarea id="scriptEditor" placeholder="// Write your script here..."></textarea>
         <div class="editor-controls">
-          <button id="saveScript">Save Script</button>
+          <button id="saveButton" class="btn-primary">Save Script</button>
+          <button id="updateButton" class="btn-success" style="display: none">
+            Update Script
+          </button>
+          <button id="cancelButton" class="btn-secondary" style="display: none">
+            Cancel
+          </button>
         </div>
       </div>
 

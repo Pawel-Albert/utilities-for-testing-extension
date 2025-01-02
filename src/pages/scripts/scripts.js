@@ -150,10 +150,49 @@ async function loadScript(name) {
   const script = userScripts[name]
   if (script) {
     document.getElementById('scriptName').value = name
-    document.getElementById('scriptEditor').value = script.code
-    document.getElementById('scriptPattern').value = script.pattern
-    document.getElementById('scriptDescription').value = script.description
+    document.getElementById('scriptPattern').value = script.pattern || ''
+    document.getElementById('scriptDescription').value = script.description || ''
+    document.getElementById('scriptEditor').value = script.code || ''
+
+    document.getElementById('editMode').textContent = `Editing script: ${name}`
+
+    document.getElementById('saveButton').style.display = 'none'
+    document.getElementById('updateButton').style.display = 'inline-block'
+    document.getElementById('cancelButton').style.display = 'inline-block'
   }
+}
+
+function cancelEdit() {
+  document.getElementById('scriptName').value = ''
+  document.getElementById('scriptPattern').value = ''
+  document.getElementById('scriptDescription').value = ''
+  document.getElementById('scriptEditor').value = ''
+
+  document.getElementById('editMode').textContent = ''
+  document.getElementById('saveButton').style.display = 'inline-block'
+  document.getElementById('updateButton').style.display = 'none'
+  document.getElementById('cancelButton').style.display = 'none'
+}
+
+async function updateScript() {
+  const name = document.getElementById('scriptName').value
+  const code = document.getElementById('scriptEditor').value
+  const pattern = document.getElementById('scriptPattern').value
+  const description = document.getElementById('scriptDescription').value
+
+  const scripts = await getScripts()
+  scripts[name] = {
+    code,
+    pattern,
+    description,
+    enabled: true,
+    updated: new Date().toISOString()
+  }
+
+  await saveToStorages(scripts)
+  refreshScriptsList()
+  cancelEdit()
+  alert('Script updated successfully!')
 }
 
 async function deleteScript(name) {
@@ -165,7 +204,12 @@ async function deleteScript(name) {
   }
 }
 
-document.getElementById('saveScript').onclick = saveScript
-document.getElementById('debugStorage').onclick = debugStorage
+// Add event listeners
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('saveButton').addEventListener('click', saveScript)
+  document.getElementById('updateButton').addEventListener('click', updateScript)
+  document.getElementById('cancelButton').addEventListener('click', cancelEdit)
+  document.getElementById('debugStorage').addEventListener('click', debugStorage)
 
-refreshScriptsList()
+  refreshScriptsList()
+})
