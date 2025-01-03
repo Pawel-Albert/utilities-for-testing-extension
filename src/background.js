@@ -151,6 +151,13 @@ const menuItems = [
     file: 'src/content_scripts/display_all_none.js',
     contexts: ['all']
   },
+  {
+    parentId: 'form-tools',
+    title: 'Display one hidden element',
+    id: 'Display one hidden element',
+    file: 'src/content_scripts/display_one_none.js',
+    contexts: ['all']
+  },
 
   {
     id: 'form-fillers',

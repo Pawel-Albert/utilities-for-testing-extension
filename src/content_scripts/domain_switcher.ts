@@ -5,7 +5,7 @@
     const cookieKey = 'setDomain'
     const cookieValue = 'dsa'
 
-    const showTempNotificationAndReload = message => {
+    const showTempNotificationAndReload = (message: string): void => {
       const notification = document.createElement('div')
       notification.style.cssText = `
         position: fixed;
@@ -30,15 +30,13 @@
       }, 1500)
     }
 
-    const setCookie = (name, value) => {
+    const setCookie = (name: string, value: string): void => {
       document.cookie = `${name}=${value};path=/`
     }
 
-    const getCookie = name => {
-      const value = `; ${document.cookie}`
-      const parts = value.split(`; ${name}=`)
-      if (parts.length === 2) return parts.pop().split(';').shift()
-      return null
+    const getCookie = (name: string): string | null => {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+      return match ? match[2] : null
     }
 
     if (
@@ -72,6 +70,6 @@
       'font-family: monospace; color: #9c27b0; font-size: 16px; font-weight: bold;'
     )
   } catch (err) {
-    console.error(`Error: ${err.message}`)
+    console.error(`Error: ${(err as Error).message}`)
   }
 })()
