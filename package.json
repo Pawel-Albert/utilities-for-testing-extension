@@ -20,7 +20,9 @@
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
     "@parcel/config-webextension": "^2.8.0",
+    "@types/chrome": "^0.0.288",
+    "archiver": "^5.3.2",
     "parcel": "^2.8.0",
-    "archiver": "^5.3.2"
+    "typescript": "^5.7.2"
   }
 }

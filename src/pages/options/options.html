@@ -21,6 +21,7 @@
         background: var(--background);
         max-width: 600px;
         margin: 0 auto;
+        font-size: 15px;
       }
 
       h2 {
@@ -52,6 +53,7 @@
         margin-bottom: 8px;
         color: var(--text);
         font-weight: 500;
+        font-size: 14px;
       }
 
       input {
@@ -75,7 +77,7 @@
         border: none;
         padding: 12px 24px;
         border-radius: 6px;
-        font-size: 16px;
+        font-size: 14px;
         cursor: pointer;
         transition: background-color 0.3s;
       }
@@ -132,6 +134,16 @@
 
       button.secondary:hover {
         background: rgba(33, 150, 243, 0.1);
+      }
+
+      .section-title {
+        font-size: 18px;
+        margin: 1em 0;
+      }
+
+      .help-text {
+        font-size: 13px;
+        color: #666;
       }
     </style>
   </head>
@@ -210,6 +222,6 @@
       <button type="submit">Save All Settings</button>
     </form>
     <div id="status" class="status"></div>
-    <script src="options.js" type="module"></script>
+    <script src="options.ts" type="module"></script>
   </body>
 </html>
