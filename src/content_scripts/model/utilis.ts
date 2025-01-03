@@ -1,24 +1,27 @@
 import {setNativeValue} from '../../utilis/helpers'
+import {ActionFunctions} from './types'
 
-export const action = {
-  inputFiller: function (element, data) {
-    setNativeValue(element, data)
+export const action: ActionFunctions = {
+  inputFiller: function (element: HTMLElement, data: string | number) {
+    setNativeValue(element, data.toString())
     element.dispatchEvent(new Event('input', {bubbles: true}))
   },
 
-  inputFillerShadow: function (element, data) {
-    element.value = data
-    element.dispatchEvent(new Event('input', {bubbles: true}))
-    element.dispatchEvent(new Event('change', {bubbles: true}))
+  inputFillerShadow: function (element: HTMLElement, data: string | number) {
+    if (element instanceof HTMLInputElement) {
+      element.value = data.toString()
+      element.dispatchEvent(new Event('input', {bubbles: true}))
+      element.dispatchEvent(new Event('change', {bubbles: true}))
+    }
   },
 
-  simpleClick: function (element) {
+  simpleClick: function (element: HTMLElement) {
     if (element) {
       element.click()
     }
   },
 
-  dispatchedClick: function (element) {
+  dispatchedClick: function (element: HTMLElement) {
     if (element) {
       const mouseDownEvent = new MouseEvent('mousedown', {
         bubbles: true,
@@ -41,10 +44,9 @@ export const action = {
     }
   },
 
-  checkCheckbox: function (element) {
+  checkCheckbox: function (element: HTMLInputElement) {
     if (element && !element.checked) {
       element.click()
     }
   }
-  // more actions if needed
 }

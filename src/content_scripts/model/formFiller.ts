@@ -1,17 +1,19 @@
 import {action} from './utilis'
+import {ActionType, SelectorType, StepType} from './types'
 
-/**
- * Executes action on element based on type and data
- */
-function executeAction(element, type, data) {
+function executeAction(
+  element: HTMLElement | null,
+  type: ActionType,
+  data?: string | number
+) {
   if (!element) return
 
   switch (type) {
     case 'input':
-      action.inputFiller(element, data)
+      action.inputFiller(element, data!)
       break
     case 'inputShadow':
-      action.inputFillerShadow(element, data)
+      action.inputFillerShadow(element, data!)
       break
     case 'simpleClick':
       action.simpleClick(element)
@@ -20,40 +22,44 @@ function executeAction(element, type, data) {
       action.dispatchedClick(element)
       break
     case 'checkCheckbox':
-      action.checkCheckbox(element)
+      if (element instanceof HTMLInputElement) {
+        action.checkCheckbox(element)
+      }
       break
   }
 }
 
-/**
- * Gets element based on selector and index
- */
-function getElement(selector, index) {
+function getElement(selector: string, index?: number): HTMLElement | null {
   if (typeof index !== 'undefined') {
     const elements = document.querySelectorAll(selector)
-    return elements[index]
+    return (elements[index] as HTMLElement) || null
   }
   return document.querySelector(selector)
 }
 
-async function executeStep(step) {
+async function executeStep(step: StepType) {
   const element = getElement(step.selector, step.index)
   executeAction(element, step.type, step.data)
 }
 
-async function executeMultiStep(fieldData) {
+async function executeMultiStep(fieldData: SelectorType) {
   const timeout = fieldData.timeout || 1000
 
-  for (let i = 0; i < fieldData.steps.length; i++) {
-    await executeStep(fieldData.steps[i])
+  if (fieldData.steps) {
+    for (let i = 0; i < fieldData.steps.length; i++) {
+      await executeStep(fieldData.steps[i])
 
-    if (i < fieldData.steps.length - 1) {
-      await new Promise(resolve => setTimeout(resolve, timeout))
+      if (i < fieldData.steps.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, timeout))
+      }
     }
   }
 }
 
-export function fillForm(currentSite, currentSiteData) {
+export function fillForm(
+  currentSite: string,
+  currentSiteData: Record<string, SelectorType>
+) {
   if (!currentSiteData) {
     console.log(
       `%c No site object prepared for ${currentSite}`,

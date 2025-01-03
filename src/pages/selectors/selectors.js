@@ -1,4 +1,4 @@
-import {siteData} from '../../content_scripts/model/siteSelectors.js'
+import {siteData} from '../../content_scripts/model/siteSelectors.ts'
 
 function displaySelectors() {
   const container = document.getElementById('siteSelectors')

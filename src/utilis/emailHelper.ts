@@ -1,11 +1,6 @@
-type SiteDataField = {
-  data: string
-  [key: string]: any
-}
+import {SelectorType} from '../content_scripts/model/types'
 
-type SiteData = {
-  [key: string]: SiteDataField
-}
+type SiteData = Record<string, SelectorType>
 
 type EmailConfig = {
   userPrefix?: string

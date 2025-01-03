@@ -1,11 +1,15 @@
 import {faker} from '@faker-js/faker/locale/pl'
-import {generatePesel, sex} from '../custom_generators_logic/pesel_core'
-import {generatePolishMobile} from '../custom_generators_logic/generatePolishMobile.ts'
+import {generatePesel} from '../custom_generators_logic/pesel_core'
+import {generatePolishMobile} from '../custom_generators_logic/generatePolishMobile'
 import {generateNip} from '../custom_generators_logic/nip_core'
 import {generateRegon} from '../custom_generators_logic/regon_core'
 import {generateRandomBirthDate} from '../../utilis/helpers'
 
-export const fakeDataPL = {
+type FakeDataType = {
+  [key: string]: string | number
+}
+
+export const fakeDataPL: FakeDataType = {
   cityName: faker.address.cityName(),
   postalCode: faker.address.zipCode(),
   street: faker.address.street(),
@@ -27,7 +31,7 @@ export const fakeDataPL = {
   householdExpenses: 100
 }
 
-export const fakeDataSb = {
+export const fakeDataSb: FakeDataType = {
   cityName: faker.address.cityName(),
   postalCode: faker.address.zipCode(),
   street: faker.address.street(),
