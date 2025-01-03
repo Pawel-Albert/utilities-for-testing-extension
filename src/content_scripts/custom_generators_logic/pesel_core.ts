@@ -1,20 +1,27 @@
-import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers.ts'
+import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers'
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //PESEL_CONFIG
 ////////////////////////////////////////////////////////////////////////////////////////
 const LEADING_ZEROS = 3
-const PESEL_CONTROL_CONSTANTS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
+const PESEL_CONTROL_CONSTANTS: number[] = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
 
-const randomTimeStamp = (minAge = 18, maxAge = 100) => {
-  const maxBirthDate = new Date(Date.now() - minAge * 31557600000) // minAge years ago in milliseconds
-  const minBirthDate = new Date(Date.now() - maxAge * 31557600000) // maxAge years ago in milliseconds
+type PeselOptions = {
+  birthDate?: string
+  age?: number
+  minAge?: number
+  maxAge?: number
+}
+
+const randomTimeStamp = (minAge = 18, maxAge = 100): Date => {
+  const maxBirthDate = new Date(Date.now() - minAge * 31557600000)
+  const minBirthDate = new Date(Date.now() - maxAge * 31557600000)
   const minTimestamp = minBirthDate.getTime()
   const maxTimestamp = maxBirthDate.getTime()
   return new Date(generateRandomInt(minTimestamp, maxTimestamp))
 }
 
-const dateToTimeStamp = dateStr => {
+const dateToTimeStamp = (dateStr: string): Date => {
   const date = new Date(dateStr)
   if (isNaN(date.getTime())) {
     throw new Error('Invalid date format')
@@ -22,22 +29,21 @@ const dateToTimeStamp = dateStr => {
   return date
 }
 
-const timeStampToLocaleDate = timeStamp => {
-  return new Date(timeStamp).toLocaleDateString('pl-PL', {
+const timeStampToLocaleDate = (timeStamp: Date): string => {
+  return timeStamp.toLocaleDateString('pl-PL', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit'
   })
 }
 
-// First 6 digits are from birth date - no need for 19 and 22 century cases at they are not possible either way
-const getDatePartPesel = date => {
+const getDatePartPesel = (date: string): string => {
   const digitOneFromYear = date.slice(8, 9)
   const digitTwoFromYear = date.slice(9, 10)
   const milenialPartFromYear = date.slice(6, 8)
 
   const digitThreeFromYear =
-    milenialPartFromYear == 20 ? parseInt(date.slice(3, 4)) + 2 : date.slice(3, 4)
+    milenialPartFromYear == '20' ? parseInt(date.slice(3, 4)) + 2 : date.slice(3, 4)
   const digitFourFromYear = date.slice(4, 5)
   const digitFiveFromYear = date.slice(0, 1)
   const digitSixFromYear = date.slice(1, 2)
@@ -51,7 +57,7 @@ const getDatePartPesel = date => {
   )
 }
 
-const controlDigit = (weights, string) => {
+const controlDigit = (weights: number[], string: string): string => {
   const controlSum = [...string].reduce((sum, digit, index) => {
     return sum + parseInt(digit) * weights[index]
   }, 0)
@@ -63,8 +69,11 @@ const controlDigit = (weights, string) => {
 ////////////////////////////////////////////////////////////////////////////////////////
 //PESEL
 ////////////////////////////////////////////////////////////////////////////////////////
-export const generatePesel = (sex, options = {}) => {
-  let timeStamp
+export const generatePesel = (
+  sex: 'male' | 'female' | 'both',
+  options: PeselOptions = {}
+): string => {
+  let timeStamp: Date
   if (options.birthDate) {
     timeStamp = dateToTimeStamp(options.birthDate)
   } else if (options.age) {

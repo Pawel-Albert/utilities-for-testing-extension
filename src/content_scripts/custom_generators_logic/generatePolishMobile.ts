@@ -1,7 +1,7 @@
 import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers'
 
-export function generatePolishMobile() {
-  const prefixes = [
+export function generatePolishMobile(): string {
+  const prefixes: string[] = [
     '50',
     '51',
     '53',

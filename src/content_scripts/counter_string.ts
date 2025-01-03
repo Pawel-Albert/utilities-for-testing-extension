@@ -1,11 +1,10 @@
-import {setNativeValue} from '../utilis/helpers.ts'
-import {defaultSettings} from './config/defaults.ts'
+import {setNativeValue} from '../utilis/helpers'
+import {defaultSettings} from './config/defaults'
 ;(() => {
-  const reverseString = str => str.split('').reverse().join('')
+  const reverseString = (str: string): string => str.split('').reverse().join('')
 
-  const getCounterString = count => {
+  const getCounterString = (count: number): string => {
     let counterString = ''
-    count = parseInt(count)
 
     while (count > 0) {
       const appendThis = '*' + reverseString(count.toString())
@@ -25,7 +24,12 @@ import {defaultSettings} from './config/defaults.ts'
   chrome.storage.sync.get(
     {defaultCounterLength: defaultSettings.defaultCounterLength},
     items => {
-      const count = prompt('Enter Counter String length:', items.defaultCounterLength)
+      const countInput = prompt(
+        'Enter Counter String length:',
+        items.defaultCounterLength?.toString()
+      )
+      const count = countInput ? parseInt(countInput) : null
+
       if (count) {
         const result = getCounterString(count)
         console.log(
@@ -42,7 +46,7 @@ import {defaultSettings} from './config/defaults.ts'
           result
         )
 
-        const indicatedElement = document.querySelector(':focus')
+        const indicatedElement = document.querySelector(':focus') as HTMLElement | null
         if (indicatedElement) {
           setNativeValue(indicatedElement, result)
           indicatedElement.dispatchEvent(new Event('input', {bubbles: true}))

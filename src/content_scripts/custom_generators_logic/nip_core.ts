@@ -2,9 +2,9 @@ import {
   generateRandomInt,
   addLeadingZeros,
   randomArrayElement
-} from '../../utilis/helpers.ts'
+} from '../../utilis/helpers'
 
-const DEPERTMENT_CODE_NUMBER = [
+const DEPERTMENT_CODE_NUMBER: number[] = [
   101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 112, 113, 114, 115, 116, 117, 118,
   119, 121, 122, 123, 124, 125, 126, 127, 128, 129, 131, 132, 133, 134, 135, 136, 137,
   138, 139, 141, 142, 143, 144, 145, 146, 147, 148, 149, 151, 152, 153, 154, 155, 156,
@@ -55,20 +55,20 @@ const DEPERTMENT_CODE_NUMBER = [
 const LEADING_ZEROS = 6
 const CONTROL_SUM_DEVIDER = 11
 
-export const generateNip = () => {
+export const generateNip = (): string => {
   const deparmentCodeNumber = randomArrayElement(DEPERTMENT_CODE_NUMBER)
   const nipRandomPart = addLeadingZeros(generateRandomInt(0, 999999), LEADING_ZEROS)
   const core = deparmentCodeNumber + nipRandomPart
   const controlDigit =
-    (core[0] * 6 +
-      core[1] * 5 +
-      core[2] * 7 +
-      core[3] * 2 +
-      core[4] * 3 +
-      core[5] * 4 +
-      core[6] * 5 +
-      core[7] * 6 +
-      core[8] * 7) %
+    (parseInt(core[0]) * 6 +
+      parseInt(core[1]) * 5 +
+      parseInt(core[2]) * 7 +
+      parseInt(core[3]) * 2 +
+      parseInt(core[4]) * 3 +
+      parseInt(core[5]) * 4 +
+      parseInt(core[6]) * 5 +
+      parseInt(core[7]) * 6 +
+      parseInt(core[8]) * 7) %
     CONTROL_SUM_DEVIDER
   if (controlDigit == 10) return generateNip()
   return core + controlDigit

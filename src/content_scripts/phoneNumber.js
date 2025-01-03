@@ -1,5 +1,5 @@
 import {setNativeValue} from '../utilis/helpers'
-import {generatePolishMobile} from './custom_generators_logic/generatePolishMobile'
+import {generatePolishMobile} from './custom_generators_logic/generatePolishMobile.ts'
 ;(() => {
   try {
     const phoneNumber = generatePolishMobile()

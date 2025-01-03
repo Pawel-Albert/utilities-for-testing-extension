@@ -1,6 +1,6 @@
 import {faker} from '@faker-js/faker/locale/pl'
 import {generatePesel, sex} from '../custom_generators_logic/pesel_core'
-import {generatePolishMobile} from '../custom_generators_logic/generatePolishMobile'
+import {generatePolishMobile} from '../custom_generators_logic/generatePolishMobile.ts'
 import {generateNip} from '../custom_generators_logic/nip_core'
 import {generateRegon} from '../custom_generators_logic/regon_core'
 import {generateRandomBirthDate} from '../../utilis/helpers'

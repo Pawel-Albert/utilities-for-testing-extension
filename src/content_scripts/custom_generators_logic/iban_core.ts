@@ -3,7 +3,7 @@ import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers'
 ////////////////////////////////////////////////////////////////////////////////////////
 //IBAN_CONFIG
 ///////////////////////////////////////////////////////////////////////////////////////
-const BANK_BRANCH_CODE = [
+const BANK_BRANCH_CODE: string[] = [
   '10100000',
   '10100039',
   '10100055',
@@ -3065,13 +3065,14 @@ const BANK_BRANCH_CODE = [
   '96811038'
 ]
 
-const randomBankCode = array => array[generateRandomInt(0, array.length)]
+const randomBankCode = (array: string[]): string =>
+  array[generateRandomInt(0, array.length)]
 const LEADING_ZEROS = 16
 const IBAN_COUNTRY_PREFIX_CODE = '252100' // Hardcoded as generator is  curently only for PL
 
 // The weird part as the whole IBAN number is really big and there is no elegant way to use modulo on it
 // TODO : This code  can be cleaner but it works as it is - could refactor it later
-const calcControlNumber = num => {
+const calcControlNumber = (num: string): string => {
   let controlSum = parseInt(num.slice(0, 7))
   for (let i = 7; i < num.length; i += 7) {
     const block = num.slice(i, i + 7)
@@ -3085,7 +3086,7 @@ const calcControlNumber = num => {
 ////////////////////////////////////////////////////////////////////////
 //IBAN
 ////////////////////////////////////////////////////////////////////////
-export const generateIban = () => {
+export const generateIban = (): string => {
   const bankCodePart = randomBankCode(BANK_BRANCH_CODE)
   const randomPart = addLeadingZeros(
     generateRandomInt(0, 9999999999999999),
