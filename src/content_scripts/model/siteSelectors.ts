@@ -1,5 +1,5 @@
+import {SiteDataType} from '../../types/formFiller'
 import {fakeDataPL, fakeDataSb} from './fakeDataPL'
-import {SiteDataType} from './types'
 
 export const siteData: SiteDataType = {
   'demo.sb-betting.com': {

@@ -42,9 +42,9 @@
         "src/content_scripts/config/defaults.ts",
         "src/content_scripts/model/siteSelectors.ts",
         "src/pages/scripts/scripts.html",
-        "src/pages/scripts/scripts.js",
+        "src/pages/scripts/scripts.ts",
         "src/pages/selectors/selectors.html",
-        "src/pages/selectors/selectors.js",
+        "src/pages/selectors/selectors.ts",
         "src/content_scripts/pesel_male.ts",
         "src/content_scripts/pesel_female.ts",
         "src/content_scripts/pesel_custom.ts"

@@ -1,8 +1,11 @@
-import {siteData} from '../../content_scripts/model/siteSelectors.ts'
+import {siteData} from '../../content_scripts/model/siteSelectors'
+import {SelectorType} from '../../types/formFiller'
 
-function displaySelectors() {
+const DEFAULT_TIMEOUT = 1000
+
+function displaySelectors(): void {
   const container = document.getElementById('siteSelectors')
-  const DEFAULT_TIMEOUT = 1000
+  if (!container) return
 
   Object.entries(siteData).forEach(([site, selectors]) => {
     const siteGroup = document.createElement('div')
@@ -13,7 +16,7 @@ function displaySelectors() {
       <div class="selector-list">
         ${Object.entries(selectors)
           .map(
-            ([name, config]) => `
+            ([name, config]: [string, SelectorType]) => `
             <div class="selector-item">
               <h4>${name}</h4>
               <div class="selector-details">
@@ -29,7 +32,7 @@ function displaySelectors() {
                       }</div>
                       <div class="steps">
                         ${config.steps
-                          .map(
+                          ?.map(
                             (step, index) => `
                           <div class="step">
                             <div>Step ${index + 1}:</div>

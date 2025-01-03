@@ -13,6 +13,7 @@
         padding: 20px;
         font-family: 'Segoe UI', Arial, sans-serif;
         background: var(--background);
+        font-size: 15px;
       }
 
       .container {
@@ -43,6 +44,7 @@
         background: var(--background);
         padding: 15px;
         border-radius: 4px;
+        font-size: 14px;
       }
 
       .selector-item h4 {
@@ -103,6 +105,27 @@
         border-radius: 4px;
         border: 1px solid #b8daff;
       }
+
+      input,
+      textarea,
+      button {
+        font-size: 14px;
+      }
+
+      .selector-pattern {
+        font-size: 13px;
+        color: #666;
+      }
+
+      h3 {
+        font-size: 18px;
+        margin: 1em 0;
+      }
+
+      .help-text {
+        font-size: 13px;
+        color: #666;
+      }
     </style>
   </head>
   <body>
@@ -114,6 +137,6 @@
       <div id="siteSelectors"></div>
     </div>
 
-    <script src="selectors.js" type="module"></script>
+    <script src="selectors.ts" type="module"></script>
   </body>
 </html>

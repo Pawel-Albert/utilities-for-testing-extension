@@ -22,6 +22,8 @@
         max-width: 1200px;
         margin: 0 auto;
         background: var(--background);
+        font-size: 15px;
+        line-height: 1.5;
       }
 
       .script-editor {
@@ -115,6 +117,7 @@
       .script-info {
         flex: 1;
         margin-left: 10px;
+        font-size: 14px;
       }
 
       .script-toggle {
@@ -124,10 +127,14 @@
         margin-top: 3px;
       }
 
-      .pattern-help {
-        font-size: 12px;
+      .script-pattern {
+        font-size: 13px;
         color: #666;
-        margin-top: 4px;
+      }
+
+      .pattern-help {
+        font-size: 13px;
+        color: #666;
       }
 
       .edit-mode {
@@ -224,6 +231,17 @@
         gap: 5px;
         margin-left: 10px;
       }
+
+      h3 {
+        font-size: 18px;
+        margin: 1em 0;
+      }
+
+      input,
+      textarea,
+      button {
+        font-size: 14px;
+      }
     </style>
   </head>
   <body>
@@ -266,9 +284,14 @@
         </div>
         <div>
           <label>Match Pattern:</label>
-          <input type="text" id="scriptPattern" placeholder="*://*/*" />
+          <input
+            type="text"
+            id="scriptPattern"
+            placeholder="e.g. *://*.example.com/* | *://*.test.com/* | localhost:*"
+          />
           <div class="pattern-help">
-            Examples: "*://*.example.com/*" or leave empty for all sites
+            Examples: "*://*.example.com/* | localhost:* | *://*.test.com/*" (separate
+            multiple patterns with |) Leave empty for all sites (*://*/*)
           </div>
         </div>
         <div>
@@ -284,6 +307,6 @@
       <button id="debugStorage" class="debug-button">Show Storage Contents</button>
     </div>
 
-    <script src="/src/pages/scripts/scripts.js" type="module"></script>
+    <script src="/src/pages/scripts/scripts.ts" type="module"></script>
   </body>
 </html>
