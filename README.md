@@ -1,10 +1,10 @@
 ![](https://github.com/Pawel-Albert/utilities-for-testing-extension/blob/main/%F0%9F%92%BButylis%E2%9A%99%EF%B8%8F.png)
 
-# Google chrome extension with a couple of small functionalities for testers in the form of context menu
+# TesterUtilities - Chrome Extension for Testing
 
 ## Project Description
 
-The project is a chrome extension in the form of a context menu (available via right mouse button) - mostly niche and company-specific functionalities. The project was written in vanilla Javascript, bundled with Parcel. This project heavily uses already written code from https://github.com/Pawel-Albert/test-data-generators. The purpose of the project is to provide an actual utility tool for personal and team usage while practicing building chrome extensions.
+A Chrome extension that combines context menu tools with a user scripts manager. Started as a simple testing utility with generators and form fillers, now expanded to include custom JavaScript execution, data persistence and configurable settings. The extension provides various testing tools like data generators, form manipulation utilities, and text processing features. All functionalities can be accessed through the context menu or managed via a dedicated settings panel. Built with TypeScript and Parcel.
 
 ## Installation
 
