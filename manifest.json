@@ -47,7 +47,9 @@
         "src/pages/selectors/selectors.ts",
         "src/content_scripts/pesel_male.ts",
         "src/content_scripts/pesel_female.ts",
-        "src/content_scripts/pesel_custom.ts"
+        "src/content_scripts/pesel_custom.ts",
+        "src/pages/user-scripts/panel.html",
+        "src/pages/user-scripts/panel.ts"
       ],
       "matches": ["<all_urls>"]
     }
@@ -59,7 +61,8 @@
     "scripting",
     "activeTab",
     "storage",
-    "userScripts"
+    "userScripts",
+    "sidePanel"
   ],
 
   "host_permissions": ["*://*/*"],

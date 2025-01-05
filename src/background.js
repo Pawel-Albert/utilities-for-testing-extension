@@ -240,6 +240,14 @@ try {
     menuItems.forEach(({title, id, contexts, type = 'normal', parentId}) => {
       chrome.contextMenus.create({title, id, contexts, type, parentId})
     })
+
+    await chrome.sidePanel.setPanelBehavior({
+      openPanelOnActionClick: false
+    })
+
+    await chrome.sidePanel.setOptions({
+      enabled: false
+    })
   })
 
   chrome.contextMenus.onClicked.addListener((event, tab) => {

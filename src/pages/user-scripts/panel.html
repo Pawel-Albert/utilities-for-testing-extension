@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Scripts Manager</title>
+    <style>
+      :root {
+        --border: #e0e0e0;
+        --primary: #2196f3;
+      }
+
+      body {
+        margin: 0;
+        padding: 15px;
+        font-family: system-ui, -apple-system, sans-serif;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .scripts-section {
+        margin-bottom: 20px;
+      }
+
+      h3 {
+        margin: 0 0 10px 0;
+        font-size: 16px;
+      }
+
+      .script-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .script-item {
+        padding: 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--primary);
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .script-item:hover {
+        opacity: 0.9;
+      }
+
+      .beta-notice {
+        background: #fff3cd;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+
+      .error-notice {
+        background: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="beta-notice">
+      This feature is in BETA. Some functionality may be incomplete or change in future
+      updates.
+    </div>
+
+    <div class="scripts-section">
+      <h3>User Scripts</h3>
+      <div id="userScriptsList" class="script-grid"></div>
+    </div>
+
+    <script src="panel.ts" type="module"></script>
+  </body>
+</html>
