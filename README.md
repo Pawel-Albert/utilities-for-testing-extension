@@ -239,6 +239,34 @@ The extension now uses a more robust storage system:
 - Scripts can now be filtered by enabled state
 - Better script state persistence
 
+### Version 0.4.0 Updates
+
+#### Script Management Improvements
+
+- Added dual script execution modes:
+  - User Scripts Panel: Persistent buttons injected into page DOM (like TamperMonkey)
+  - Execution Scripts Panel: Instant script execution (may be limited by CSP)
+- Enhanced script registration with new options:
+  - `runAt`: Control when scripts are executed
+  - `allFrames`: Control script execution in frames
+  - `persistAcrossSessions`: Keep scripts between browser sessions
+- Improved script execution reliability with DOM content loading checks
+- Better error handling and script state management
+
+#### UI/UX Enhancements
+
+- Added Chrome Side Panel integration
+- Improved script management interface
+- Better visual feedback for script states
+- Added tooltips and help text for new features
+
+#### Technical Improvements
+
+- Updated Chrome User Scripts API implementation
+- Enhanced TypeScript type definitions
+- Better script injection timing control
+- Improved error handling and logging
+
 ## Todo
 
 - [x] Form auto filler with random data

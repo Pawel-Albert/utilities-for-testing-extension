@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "TesterUtilities",
   "description": "TesterUtilities",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "icons": {
     "16": "src/assets/gen.png",
     "48": "src/assets/gen.png",
@@ -47,7 +47,11 @@
         "src/pages/selectors/selectors.ts",
         "src/content_scripts/pesel_male.ts",
         "src/content_scripts/pesel_female.ts",
-        "src/content_scripts/pesel_custom.ts"
+        "src/content_scripts/pesel_custom.ts",
+        "src/pages/user-scripts/userScriptsPanel.html",
+        "src/pages/user-scripts/userScriptsPanel.ts",
+        "src/pages/execution-scripts-panel/executionScriptsPanel.html",
+        "src/pages/execution-scripts-panel/executionScriptsPanel.ts"
       ],
       "matches": ["<all_urls>"]
     }
@@ -59,7 +63,8 @@
     "scripting",
     "activeTab",
     "storage",
-    "userScripts"
+    "userScripts",
+    "sidePanel"
   ],
 
   "host_permissions": ["*://*/*"],

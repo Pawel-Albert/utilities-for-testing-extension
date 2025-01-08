@@ -240,6 +240,14 @@ try {
     menuItems.forEach(({title, id, contexts, type = 'normal', parentId}) => {
       chrome.contextMenus.create({title, id, contexts, type, parentId})
     })
+
+    await chrome.sidePanel.setPanelBehavior({
+      openPanelOnActionClick: false
+    })
+
+    await chrome.sidePanel.setOptions({
+      enabled: false
+    })
   })
 
   chrome.contextMenus.onClicked.addListener((event, tab) => {
@@ -288,3 +296,17 @@ try {
 } catch (error) {
   console.log(error)
 }
+
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  if (message.type === 'unregisterScript') {
+    try {
+      await chrome.userScripts.unregister({ids: [message.scriptId]})
+      console.log('Successfully unregistered script:', message.scriptId)
+      sendResponse({success: true})
+    } catch (error) {
+      console.error('Failed to unregister script:', error)
+      sendResponse({success: false, error: error.message})
+    }
+    return true
+  }
+})
