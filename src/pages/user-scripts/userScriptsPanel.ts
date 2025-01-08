@@ -1,5 +1,6 @@
 import {createPanelSelector} from '../../components/PanelSelector'
 import {loadUserScripts} from '../../services/userScripts'
+import {getUserScriptButtonCode} from '../../components/UserScriptButton'
 
 createPanelSelector(document.body)
 
@@ -72,32 +73,11 @@ async function refreshPanel() {
               matches: [patternValue.textContent || '*://*/*'],
               js: [
                 {
-                  code: `
-                    (function() {
-                      const button = document.createElement('button');
-                      button.id = 'script-button-${name}-${Date.now()}';
-                      button.textContent = ${JSON.stringify(name)};
-                      button.style.cssText = 'position: fixed; z-index: 9999; bottom: ${
-                        20 + index * 50
-                      }px; right: 20px; padding: 8px; background: #2196f3; color: white; border: none; border-radius: 4px; cursor: pointer;';
-                      
-                      button.addEventListener('click', () => {
-                        console.log('Executing script:', ${JSON.stringify(name)});
-                        try {
-                          (function() { ${script.code} })();
-                          console.log('Script executed successfully');
-                        } catch (err) {
-                          console.error('Script execution error:', err);
-                        }
-                      });
-
-                      if (document.readyState === 'loading') {
-                        document.addEventListener('DOMContentLoaded', () => document.body.appendChild(button));
-                      } else {
-                        document.body.appendChild(button);
-                      }
-                    })();
-                  `
+                  code: getUserScriptButtonCode({
+                    name,
+                    code: script.code,
+                    index
+                  })
                 }
               ],
               world: 'MAIN',
