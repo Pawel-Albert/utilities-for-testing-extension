@@ -1,5 +1,5 @@
+import {ActionType, SelectorType, StepType} from '../../types/formFiller'
 import {action} from './utilis'
-import {ActionType, SelectorType, StepType} from './types'
 
 function executeAction(
   element: HTMLElement | null,
