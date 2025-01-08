@@ -1,4 +1,4 @@
-import {setNativeValue} from '../utilis/helpers'
+import {setNativeValue} from '../utils/helpers'
 import {generateRegon} from './custom_generators_logic/regon_core'
 ;(() => {
   try {

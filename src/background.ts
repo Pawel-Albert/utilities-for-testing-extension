@@ -1,4 +1,6 @@
-const menuItems = [
+import {MenuItems} from './types/menu'
+
+const menuItems: MenuItems = [
   {
     id: 'data-generators',
     title: 'Data Generators',
@@ -250,22 +252,32 @@ try {
     })
   })
 
-  chrome.contextMenus.onClicked.addListener((event, tab) => {
-    if (tab.id === -1 || tab.url.match('chrome://')) return
+  chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+    if (!tab?.id) return
 
-    const item = menuItems.find(({id}) => id === event.menuItemId)
-    if (!item || !item.file) return
+    const menuItem = menuItems.find(item => item.id === info.menuItemId)
+    if (!menuItem?.file) return
 
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      files: [item.file]
-    })
+    try {
+      await chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        files: [menuItem.file]
+      })
+    } catch (error) {
+      console.error('Failed to execute script:', error)
+    }
+  })
+
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === 'GET_MENU_ITEMS') {
+      sendResponse(menuItems)
+    }
   })
 } catch (error) {
-  console.error(error)
+  console.error('Failed to initialize extension:', error)
 }
 
-const commandActions = {
+const commandActions: Record<string, string[]> = {
   'Simple form filler - default site': [
     'src/content_scripts/simple_form_filler_defaultSite.js'
   ],
@@ -279,13 +291,11 @@ const commandActions = {
 try {
   chrome.commands.onCommand.addListener(command => {
     const files = commandActions[command]
-
     if (!files) return
 
     chrome.tabs.query({active: true, currentWindow: true}, tabs => {
       const tab = tabs[0]
-
-      if (!tab || tab.id === -1 || tab.url.match('chrome://')) return
+      if (!tab?.id || tab.id === -1 || tab.url?.match('chrome://')) return
 
       chrome.scripting.executeScript({
         target: {tabId: tab.id},
@@ -294,7 +304,7 @@ try {
     })
   })
 } catch (error) {
-  console.log(error)
+  console.error('Failed to initialize commands:', error)
 }
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
@@ -303,10 +313,15 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       await chrome.userScripts.unregister({ids: [message.scriptId]})
       console.log('Successfully unregistered script:', message.scriptId)
       sendResponse({success: true})
-    } catch (error) {
-      console.error('Failed to unregister script:', error)
-      sendResponse({success: false, error: error.message})
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Failed to unregister script:', error)
+        sendResponse({success: false, error: error.message})
+      } else {
+        console.error('Failed to unregister script with unknown error:', error)
+        sendResponse({success: false, error: 'Unknown error occurred'})
+      }
+      return true
     }
-    return true
   }
 })

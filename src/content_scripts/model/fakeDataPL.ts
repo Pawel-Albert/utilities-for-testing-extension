@@ -3,7 +3,7 @@ import {generatePesel} from '../custom_generators_logic/pesel_core'
 import {generatePolishMobile} from '../custom_generators_logic/generatePolishMobile'
 import {generateNip} from '../custom_generators_logic/nip_core'
 import {generateRegon} from '../custom_generators_logic/regon_core'
-import {generateRandomBirthDate} from '../../utilis/helpers'
+import {generateRandomBirthDate} from '../../utils/helpers'
 
 type FakeDataType = {
   [key: string]: string | number

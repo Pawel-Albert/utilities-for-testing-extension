@@ -1,4 +1,4 @@
-import {setNativeValue} from '../utilis/helpers.ts'
+import {setNativeValue} from '../utils/helpers.ts'
 import {defaultSettings} from './config/defaults.ts'
 ;(() => {
   const safeBase64Encode = (str: string): string => {
