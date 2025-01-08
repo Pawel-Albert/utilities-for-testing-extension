@@ -26,7 +26,7 @@ document.getElementById('openSidePanel')?.addEventListener('click', async () => 
 
     await chrome.sidePanel.setOptions({
       enabled: true,
-      path: 'src/pages/user-scripts/panel.html'
+      path: 'src/pages/execution-scripts-panel/executionScriptsPanel.html'
     })
     await chrome.sidePanel.open({windowId: tab.windowId})
   } catch (error) {

@@ -1,4 +1,4 @@
-type PanelType = 'userScripts'
+type PanelType = 'userScripts' | 'executionScripts'
 
 type PanelConfig = {
   [K in PanelType]: {
@@ -9,8 +9,12 @@ type PanelConfig = {
 
 export const PANELS: PanelConfig = {
   userScripts: {
-    path: 'src/pages/user-scripts/panel.html',
+    path: 'src/pages/user-scripts/userScriptsPanel.html',
     label: 'User Scripts'
+  },
+  executionScripts: {
+    path: 'src/pages/execution-scripts-panel/executionScriptsPanel.html',
+    label: 'Execution Scripts'
   }
   // more panels can be added here
 }

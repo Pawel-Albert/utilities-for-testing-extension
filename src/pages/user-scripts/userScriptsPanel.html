@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Scripts Manager</title>
+    <style>
+      :root {
+        --border: #e0e0e0;
+        --primary: #2196f3;
+      }
+
+      body {
+        margin: 0;
+        padding: 15px;
+        font-family: system-ui, -apple-system, sans-serif;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+      }
+
+      .scripts-section {
+        margin-bottom: 20px;
+      }
+
+      h3 {
+        margin: 0 0 10px 0;
+        font-size: 16px;
+      }
+
+      .script-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .script-item {
+        padding: 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--primary);
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .script-item:hover {
+        opacity: 0.9;
+      }
+
+      .beta-notice {
+        background: #fff3cd;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+
+      .error-notice {
+        background: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+
+      /* Kontener dla skryptu */
+      .script-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 12px;
+        margin-bottom: 8px;
+        background: #fff;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .script-left-column {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .script-right-column {
+        text-align: right;
+        min-width: 0;
+        flex-shrink: 1;
+      }
+
+      .script-pattern-label {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 4px;
+      }
+
+      .script-pattern-value {
+        font-family: monospace;
+        font-size: 12px;
+        color: #2196f3;
+        background: #e3f2fd;
+        padding: 4px 8px;
+        border-radius: 4px;
+        word-break: break-all;
+        max-width: 200px;
+        overflow-wrap: break-word;
+      }
+
+      /* Toggle switch */
+      .script-toggle {
+        appearance: none;
+        width: 40px;
+        height: 20px;
+        background: #ddd;
+        border-radius: 20px;
+        position: relative;
+        cursor: pointer;
+        margin-right: 12px;
+        transition: background 0.3s;
+      }
+
+      .script-toggle:checked {
+        background: #2196f3;
+      }
+
+      .script-toggle:before {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: white;
+        top: 2px;
+        left: 2px;
+        transition: transform 0.3s;
+      }
+
+      .script-toggle:checked:before {
+        transform: translateX(20px);
+      }
+
+      /* Nazwa skryptu */
+      .script-name {
+        flex: 1;
+        font-size: 14px;
+        color: #333;
+        margin: 0 12px;
+      }
+
+      /* Przycisk usuwania */
+      .script-remove {
+        padding: 6px 12px;
+        background: #ff4444;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: background 0.3s;
+      }
+
+      .script-remove:hover {
+        background: #cc0000;
+      }
+
+      /* Lista skryptów */
+      #userScriptsList {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      /* Beta notice */
+      .beta-notice {
+        margin-bottom: 20px;
+      }
+
+      .script-pattern {
+        margin-left: 10px;
+        padding: 4px 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 12px;
+        flex: 1;
+      }
+
+      .script-pattern:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="beta-notice">
+      This feature is in BETA. Some functionality may be incomplete or change in future
+      updates.
+    </div>
+
+    <div class="scripts-section">
+      <h3>User Scripts</h3>
+      <div id="userScriptsList" class="script-grid"></div>
+    </div>
+
+    <script src="userScriptsPanel.ts" type="module"></script>
+  </body>
+</html>

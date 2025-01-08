@@ -296,3 +296,17 @@ try {
 } catch (error) {
   console.log(error)
 }
+
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  if (message.type === 'unregisterScript') {
+    try {
+      await chrome.userScripts.unregister({ids: [message.scriptId]})
+      console.log('Successfully unregistered script:', message.scriptId)
+      sendResponse({success: true})
+    } catch (error) {
+      console.error('Failed to unregister script:', error)
+      sendResponse({success: false, error: error.message})
+    }
+    return true
+  }
+})
