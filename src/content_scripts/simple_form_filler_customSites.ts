@@ -1,6 +1,6 @@
 import {fillForm} from './model/formFiller'
 import {siteData} from './model/siteSelectors'
-import {updateEmailFields} from '../utilis/emailHelper'
+import {updateEmailFields} from '../utils/emailHelper'
 
 async function fillCustomForm() {
   try {

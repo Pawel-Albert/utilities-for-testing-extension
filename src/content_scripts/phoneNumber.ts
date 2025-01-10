@@ -1,4 +1,4 @@
-import {setNativeValue} from '../utilis/helpers'
+import {setNativeValue} from '../utils/helpers'
 import {generatePolishMobile} from './custom_generators_logic/generatePolishMobile'
 ;(() => {
   try {

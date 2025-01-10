@@ -1,4 +1,4 @@
-import {SelectorType} from '../content_scripts/model/types'
+import {SelectorType} from '../types/formFiller'
 
 type SiteData = Record<string, SelectorType>
 

@@ -1,5 +1,5 @@
 import {generatePesel} from './custom_generators_logic/pesel_core'
-import {setNativeValue} from '../utilis/helpers'
+import {setNativeValue} from '../utils/helpers'
 ;(() => {
   try {
     const sex = prompt('Enter sex (male/female):', 'male')

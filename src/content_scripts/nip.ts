@@ -1,4 +1,4 @@
-import {setNativeValue} from '../utilis/helpers'
+import {setNativeValue} from '../utils/helpers'
 import {generateNip} from './custom_generators_logic/nip_core'
 ;(() => {
   try {

@@ -1,5 +1,5 @@
-import {setNativeValue} from '../../utilis/helpers'
 import {ActionFunctions} from '../../types/formFiller'
+import {setNativeValue} from '../../utils/helpers'
 
 export const action: ActionFunctions = {
   inputFiller: function (element: HTMLElement, data: string | number) {

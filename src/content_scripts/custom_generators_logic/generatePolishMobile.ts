@@ -1,4 +1,4 @@
-import {generateRandomInt, addLeadingZeros} from '../../utilis/helpers'
+import {generateRandomInt, addLeadingZeros} from '../../utils/helpers'
 
 export function generatePolishMobile(): string {
   const prefixes: string[] = [

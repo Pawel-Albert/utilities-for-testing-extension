@@ -1,4 +1,4 @@
-import {setNativeValue} from '../utilis/helpers'
+import {setNativeValue} from '../utils/helpers'
 import {defaultSettings} from './config/defaults'
 ;(() => {
   const reverseString = (str: string): string => str.split('').reverse().join('')

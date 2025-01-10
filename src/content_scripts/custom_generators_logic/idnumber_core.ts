@@ -1,4 +1,4 @@
-import {generateRandomInt, addLeadingZeros, getRandomKey} from '../../utilis/helpers'
+import {generateRandomInt, addLeadingZeros, getRandomKey} from '../../utils/helpers'
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //ID_NUMBER_CONFIG
@@ -8,7 +8,10 @@ const VALUES = [
   10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
   32, 33, 34, 35
 ]
-const createObjectTwoArrays = (KEYS: string[], VALUES: number[]): Record<string, number> => {
+const createObjectTwoArrays = (
+  KEYS: string[],
+  VALUES: number[]
+): Record<string, number> => {
   return Object.fromEntries(KEYS.map((_, i) => [KEYS[i], VALUES[i]]))
 }
 const letersToIntigiersMap = createObjectTwoArrays(KEYS, VALUES)
@@ -37,4 +40,4 @@ export const generateIdNumber = (): string => {
       3 * parseInt(idNumberRandomPart[4])) %
     CONTROL_SUM_DEVIDER
   return randomThreeLeters.join('') + controlDigit + idNumberRandomPart
-} 
+}

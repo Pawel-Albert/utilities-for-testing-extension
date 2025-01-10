@@ -1,8 +1,4 @@
-import {
-  generateRandomInt,
-  addLeadingZeros,
-  randomArrayElement
-} from '../../utilis/helpers'
+import {generateRandomInt, addLeadingZeros, randomArrayElement} from '../../utils/helpers'
 
 const DEPERTMENT_CODE_NUMBER: number[] = [
   101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 112, 113, 114, 115, 116, 117, 118,
