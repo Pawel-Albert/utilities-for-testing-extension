@@ -1,8 +1,8 @@
-import {siteData} from '../../content_scripts/model/siteSelectors'
+import {getSiteData} from '../../content_scripts/model/siteSelectors'
 import {SelectorType} from '../../types/formFiller'
 
 const DEFAULT_TIMEOUT = 1000
-
+const siteData = getSiteData()
 function displaySelectors(): void {
   const container = document.getElementById('siteSelectors')
   if (!container) return

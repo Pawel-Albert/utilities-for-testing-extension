@@ -1,12 +1,12 @@
 import {fillForm} from './model/formFiller'
-import {siteData} from './model/siteSelectors'
+import {getSiteData} from './model/siteSelectors'
 import {updateEmailFields} from '../utils/emailHelper'
 
 async function fillDefaultForm() {
   try {
     const config = await chrome.storage.sync.get(['userPrefix', 'emailDomain'])
     console.log('Loaded config:', config)
-
+    const siteData = getSiteData()
     const currentSite = 'default'
     const currentSiteData = siteData[currentSite]
 

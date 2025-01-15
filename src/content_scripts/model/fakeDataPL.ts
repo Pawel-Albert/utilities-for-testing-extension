@@ -9,7 +9,7 @@ type FakeDataType = {
   [key: string]: string | number
 }
 
-export const fakeDataPL: FakeDataType = {
+export const fakeDataPL = (): FakeDataType => ({
   cityName: faker.address.cityName(),
   postalCode: faker.address.zipCode(),
   street: faker.address.street(),
@@ -20,7 +20,7 @@ export const fakeDataPL: FakeDataType = {
   login: `test${Date.now()}`,
   promoCode: `${faker.word.adjective({strategy: 'shortest'})}_PromoTest`,
   mobile: generatePolishMobile(),
-  password: 'Password1234!', // placeholder
+  password: 'Password1234!',
   pesel: generatePesel('both', {minAge: 18, maxAge: 100}),
   nip: generateNip(),
   regon: generateRegon(),
@@ -29,9 +29,9 @@ export const fakeDataPL: FakeDataType = {
   incomeAmmount: 5000,
   yearOfBearth: 1950,
   householdExpenses: 100
-}
+})
 
-export const fakeDataSb: FakeDataType = {
+export const fakeDataSb = (): FakeDataType => ({
   cityName: faker.address.cityName(),
   postalCode: faker.address.zipCode(),
   street: faker.address.street(),
@@ -41,9 +41,9 @@ export const fakeDataSb: FakeDataType = {
   email: `SBB-${Date.now()}@test.com`,
   login: `SBB-${Date.now()}`,
   mobile: generatePolishMobile(),
-  password: 'Admin123!', // placeholder
+  password: 'Admin123!',
   pesel: generatePesel('both', {minAge: 18, maxAge: 100}),
   nip: generateNip(),
   regon: generateRegon(),
   birthdayDate: generateRandomBirthDate()
-}
+})
