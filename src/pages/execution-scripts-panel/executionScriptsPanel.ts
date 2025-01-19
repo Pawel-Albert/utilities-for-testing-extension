@@ -1,24 +1,22 @@
 import {createPanelSelector} from '../../components/PanelSelector'
 import {loadUserScripts, executeUserScript} from '../../services/userScripts'
 import {ExecuteResult} from '../../types/userScripts'
+import {initializeLocationChecker} from '../../utils/locationChecker'
 
 createPanelSelector(document.body)
 
-async function initializeScripts() {
+async function refreshScriptsList(locationInfo: {
+  isChromePage: boolean
+  currentUrl: string
+  tabId?: number
+}) {
   const userScripts = await loadUserScripts()
   const list = document.getElementById('userScriptsList')
   if (!list) return
 
-  const [tab] = await chrome.tabs.query({active: true, currentWindow: true})
-  const currentUrl = tab?.url || ''
+  list.innerHTML = ''
 
-  if (currentUrl.startsWith('chrome://') || !tab?.id) {
-    const notice = document.createElement('div')
-    notice.className = 'error-notice'
-    notice.textContent = 'Scripts cannot be executed on chrome:// pages'
-    list.appendChild(notice)
-    return
-  }
+  if (locationInfo.isChromePage || !locationInfo.tabId) return
 
   Object.entries(userScripts).forEach(([name, script]) => {
     if (!script.enabled) return
@@ -26,16 +24,16 @@ async function initializeScripts() {
     const patterns = script.pattern.split('|').map(p => p.trim())
     const matchesPattern = patterns.some(pattern => {
       const regex = pattern.replace(/\./g, '\\.').replace(/\*/g, '.*').replace(/\?/g, '.')
-      return new RegExp(regex).test(currentUrl)
+      return new RegExp(regex).test(locationInfo.currentUrl)
     })
 
-    if (matchesPattern && tab?.id) {
+    if (matchesPattern) {
       const button = document.createElement('div')
       button.className = 'script-item'
       button.textContent = name
       button.onclick = async () => {
         try {
-          const results = await executeUserScript(script, tab.id)
+          const results = await executeUserScript(script, locationInfo.tabId!)
           const result = results[0].result as ExecuteResult
 
           result.logs.forEach(([type, ...args]) => {
@@ -57,4 +55,4 @@ async function initializeScripts() {
   })
 }
 
-initializeScripts()
+initializeLocationChecker(refreshScriptsList)
