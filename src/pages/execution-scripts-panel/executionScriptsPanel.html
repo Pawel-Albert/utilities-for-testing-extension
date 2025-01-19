@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>User Scripts Manager</title>
+    <title>Execution Scripts</title>
     <style>
       :root {
         --border: #e0e0e0;
@@ -66,6 +66,34 @@
         margin-bottom: 15px;
         font-size: 14px;
       }
+
+      .description {
+        margin-bottom: 15px;
+      }
+
+      .description small {
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .location-warning {
+        background: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-size: 13px;
+        display: none;
+      }
+
+      .current-url {
+        font-family: monospace;
+        background: #f5f5f5;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-top: 5px;
+        word-break: break-all;
+      }
     </style>
   </head>
   <body>
@@ -74,8 +102,23 @@
       updates.
     </div>
 
+    <div id="locationWarning" class="location-warning">
+      Scripts cannot be executed on chrome:// or chrome-extension:// pages
+      <div id="currentUrl" class="current-url"></div>
+    </div>
+
+    <p class="description">
+      <small>
+        Execution Scripts are one-time scripts that run immediately when executed. Unlike
+        User Scripts, they don't persist on the page and don't create buttons. Use these
+        for quick, one-off operations. <br /><br />
+        <strong>Note:</strong> Some websites may block these scripts due to Content
+        Security Policy (CSP) restrictions.
+      </small>
+    </p>
+
     <div class="scripts-section">
-      <h3>User Scripts</h3>
+      <h3>Execution Scripts</h3>
       <div id="userScriptsList" class="script-grid"></div>
     </div>
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>User Scripts Manager</title>
+    <title>User Scripts</title>
     <style>
       :root {
         --border: #e0e0e0;
@@ -194,6 +194,34 @@
         outline: none;
         border-color: var(--primary);
       }
+
+      .description {
+        margin-bottom: 15px;
+      }
+
+      .description small {
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .location-warning {
+        background: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-size: 13px;
+        display: none;
+      }
+
+      .current-url {
+        font-family: monospace;
+        background: #f5f5f5;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-top: 5px;
+        word-break: break-all;
+      }
     </style>
   </head>
   <body>
@@ -201,6 +229,21 @@
       This feature is in BETA. Some functionality may be incomplete or change in future
       updates.
     </div>
+
+    <div id="locationWarning" class="location-warning">
+      Scripts cannot be executed on chrome:// or chrome-extension:// pages
+      <div id="currentUrl" class="current-url"></div>
+    </div>
+
+    <p class="description">
+      <small>
+        User Scripts are persistent scripts that add buttons to pages matching their
+        patterns. Unlike Execution Scripts, they remain on the page and can be triggered
+        multiple times. Use these for recurring operations on specific sites. <br /><br />
+        <strong>Note:</strong> These scripts can bypass Content Security Policy (CSP)
+        restrictions on most websites.
+      </small>
+    </p>
 
     <div class="scripts-section">
       <h3>User Scripts</h3>

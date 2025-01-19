@@ -1,6 +1,7 @@
 import {createPanelSelector} from '../../components/PanelSelector'
 import {loadUserScripts} from '../../services/userScripts'
 import {getUserScriptButtonCode} from '../../components/UserScriptButton'
+import {initializeLocationChecker} from '../../utils/locationChecker'
 
 createPanelSelector(document.body)
 
@@ -8,13 +9,16 @@ function sanitizeId(name: string): string {
   return name.replace(/[^a-zA-Z0-9-_]/g, '_')
 }
 
-async function refreshPanel() {
+async function refreshPanel(locationInfo: {
+  isChromePage: boolean
+  currentUrl: string
+  tabId?: number
+}) {
   const userScripts = await loadUserScripts()
   const list = document.getElementById('userScriptsList')
   if (!list) return
 
-  const [tab] = await chrome.tabs.query({active: true, currentWindow: true})
-  if (!tab?.id) return
+  if (!locationInfo.tabId) return
 
   const registeredScripts = await chrome.userScripts.getScripts()
   console.log('Currently registered scripts:', registeredScripts)
@@ -86,7 +90,7 @@ async function refreshPanel() {
             }
           ])
           console.log(`Script "${name}" registered with ID: ${scriptId}`)
-          await refreshPanel()
+          await refreshPanel(locationInfo)
         } catch (err) {
           console.error('Failed to register script:', err)
           toggle.checked = false
@@ -107,7 +111,7 @@ async function refreshPanel() {
             console.error('Failed to unregister script:', script.id, err)
           }
         }
-        await refreshPanel()
+        await refreshPanel(locationInfo)
       }
     }
   })
@@ -117,9 +121,7 @@ async function initializeScripts() {
   await chrome.userScripts.configureWorld({
     messaging: true
   })
-
-  await refreshPanel()
-  setInterval(refreshPanel, 3000)
 }
 
 initializeScripts()
+initializeLocationChecker(refreshPanel)
