@@ -30,7 +30,18 @@ async function refreshScriptsList(locationInfo: {
     if (matchesPattern) {
       const button = document.createElement('div')
       button.className = 'script-item'
-      button.textContent = name
+
+      const nameSpan = document.createElement('span')
+      nameSpan.className = 'script-item-name'
+      nameSpan.textContent = name
+
+      const patternSpan = document.createElement('span')
+      patternSpan.className = 'script-item-pattern'
+      patternSpan.textContent = script.pattern || '*://*/*'
+
+      button.appendChild(nameSpan)
+      button.appendChild(patternSpan)
+
       button.onclick = async () => {
         try {
           const results = await executeUserScript(script, locationInfo.tabId!)

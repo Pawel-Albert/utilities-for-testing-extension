@@ -34,20 +34,47 @@
       }
 
       .script-item {
-        padding: 8px;
+        padding: 8px 12px;
         border: 1px solid var(--border);
         border-radius: 4px;
         background: var(--primary);
         color: white;
         cursor: pointer;
         font-size: 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        transition: background-color 0.2s ease;
+        position: relative;
+        top: 0;
+      }
+
+      .script-item:hover {
+        background: #1976d2;
+      }
+
+      .script-item:active {
+        transform: translateY(2px);
+      }
+
+      .script-item-name {
+        font-weight: 500;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      .script-item:hover {
-        opacity: 0.9;
+      .script-item-pattern {
+        font-size: 12px;
+        opacity: 0.8;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 2px 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        flex-shrink: 0;
       }
 
       .beta-notice {
