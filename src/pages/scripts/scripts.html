@@ -1,196 +1,190 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
     <title>User Scripts Manager (BETA)</title>
     <style>
       :root {
         --primary: #2196f3;
-        --primary-dark: #1976d2;
-        --accent: #4caf50;
-        --text: #333333;
-        --border: #bdbdbd;
-        --background: #fafafa;
-        --success: #28a745;
-        --secondary: #6c757d;
+        --border: #ccc;
+        --error: #f44336;
+        --success: #4caf50;
+        --danger: #dc3545;
         --warning-bg: #fff3cd;
         --warning-text: #856404;
       }
 
       body {
-        padding: 20px;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        max-width: 1200px;
-        margin: 0 auto;
-        background: var(--background);
-        font-size: 15px;
-        line-height: 1.5;
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #f5f5f5;
       }
 
-      .script-editor {
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .editor-layout {
         display: grid;
         grid-template-columns: 1fr 300px;
         gap: 20px;
-        margin-bottom: 20px;
-        padding: 20px;
-        background: white;
-        border-radius: 8px;
-        border: 1px solid var(--border);
       }
 
       .editor-main {
-        padding-right: 20px;
+        min-height: 400px;
       }
 
       .editor-sidebar {
+        border-left: 1px solid var(--border);
         padding-left: 20px;
       }
 
-      .editor-sidebar > div {
+      .form-group {
         margin-bottom: 15px;
       }
 
-      .editor-sidebar label {
+      label {
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #666;
       }
 
-      .editor-sidebar input,
-      .editor-sidebar textarea {
+      input[type='text'],
+      textarea,
+      select {
         width: 100%;
+        padding: 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
         box-sizing: border-box;
       }
 
-      .editor-sidebar textarea {
-        height: 100px;
-      }
-
       textarea {
-        width: 100%;
         height: 400px;
         font-family: monospace;
-        padding: 10px;
-        border: 1px solid var(--border);
-        border-radius: 4px;
         resize: vertical;
       }
 
       button {
+        padding: 6px 12px;
         background: var(--primary);
         color: white;
         border: none;
-        padding: 8px 16px;
         border-radius: 4px;
         cursor: pointer;
-        margin: 5px;
+        margin-right: 10px;
+        font-size: 13px;
+        position: relative;
+        top: 0;
+        transition: all 0.2s ease;
       }
 
       button:hover {
-        background: var(--primary-dark);
+        background: #1976d2;
       }
 
-      .script-list {
-        margin-top: 20px;
-      }
-
-      .script-item {
-        padding: 10px;
-        border: 1px solid var(--border);
-        margin-bottom: 10px;
-        border-radius: 4px;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-      }
-
-      .script-item.disabled {
-        opacity: 0.6;
-        background-color: #f8f9fa;
-      }
-
-      .script-controls {
-        display: flex;
-        flex: 1;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .script-info {
-        flex: 1;
-        margin-left: 10px;
-        font-size: 14px;
-      }
-
-      .script-toggle {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-        margin-top: 3px;
-      }
-
-      .script-pattern {
-        font-size: 13px;
-        color: #666;
-      }
-
-      .pattern-help {
-        font-size: 13px;
-        color: #666;
-      }
-
-      .edit-mode {
-        background-color: var(--warning-bg);
-        color: var(--warning-text);
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 4px;
-        font-weight: bold;
-      }
-
-      .btn-primary {
-        background: var(--primary);
+      button:active {
+        transform: translateY(2px);
       }
 
       .btn-success {
         background: var(--success);
       }
 
-      .btn-secondary {
-        background: var(--secondary);
+      .btn-success:hover {
+        background: #388e3c;
       }
 
-      .editor-controls {
-        margin-top: 15px;
+      .btn-danger {
+        background: var(--danger);
+      }
+
+      .btn-danger:hover {
+        background: #c82333;
+      }
+
+      #updateButton,
+      #cancelButton {
+        display: none;
+      }
+
+      #editMode {
+        color: var(--primary);
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      .script-item {
+        border: 1px solid var(--border);
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 4px;
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+      }
+
+      .script-item.disabled {
+        opacity: 0.5;
+      }
+
+      .script-info {
+        flex-grow: 1;
+        margin: 0 10px;
+      }
+
+      .script-pattern {
+        font-size: 0.8em;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .script-desc {
+        font-size: 0.9em;
+        color: #444;
+        margin-top: 5px;
+      }
+
+      .script-controls {
+        display: flex;
+        align-items: center;
         gap: 10px;
       }
 
-      .beta-notice {
-        background-color: #fff3cd;
-        color: #856404;
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 4px;
-        border: 1px solid #ffeeba;
+      .script-buttons {
+        display: flex;
+        gap: 5px;
+      }
+
+      .script-toggle {
+        margin: 0;
       }
 
       .toast {
         position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 12px 24px;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
         border-radius: 4px;
         color: white;
         opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-        z-index: 1000;
+        transition: opacity 0.3s;
       }
 
       .toast.success {
-        background-color: var(--success);
+        background: var(--success);
       }
 
       .toast.error {
-        background-color: #dc3545;
+        background: var(--error);
       }
 
       .toast.show {
@@ -205,108 +199,160 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
       }
 
       .modal-content {
-        position: fixed;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         background: white;
         padding: 20px;
-        border-radius: 8px;
-        text-align: center;
+        border-radius: 4px;
+        min-width: 300px;
       }
 
       .modal-buttons {
         margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
+        text-align: right;
       }
 
-      .script-buttons {
-        display: flex;
-        gap: 5px;
+      #addGroupBtn {
+        padding: 4px 8px;
+        font-size: 0.9em;
         margin-left: 10px;
       }
 
-      h3 {
-        font-size: 18px;
-        margin: 1em 0;
+      .scripts-list {
+        margin-top: 20px;
+        border-top: 1px solid var(--border);
+        padding-top: 20px;
       }
 
-      input,
-      textarea,
-      button {
-        font-size: 14px;
+      .beta-notice {
+        background-color: var(--warning-bg);
+        color: var(--warning-text);
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border: 1px solid #ffeeba;
+      }
+
+      .pattern-help {
+        font-size: 0.8em;
+        color: #666;
+        margin-top: 4px;
+      }
+
+      .editor-sidebar .buttons-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      .editor-sidebar .buttons-row .left-buttons {
+        display: flex;
+        gap: 10px;
       }
     </style>
   </head>
   <body>
-    <h2>User Scripts Manager (BETA)</h2>
-    <div id="toast" class="toast"></div>
-    <div id="confirmModal" class="modal">
-      <div class="modal-content">
-        <p id="modalMessage"></p>
-        <div class="modal-buttons">
-          <button id="modalConfirm" class="btn-danger">Delete</button>
-          <button id="modalCancel" class="btn-secondary">Cancel</button>
-        </div>
-      </div>
-    </div>
-    <div class="beta-notice">
-      This feature is in BETA. Some functionality may be incomplete or change in future
-      updates.
-    </div>
-    <div id="editMode"></div>
+    <div class="container">
+      <h2>User Scripts Manager (BETA)</h2>
 
-    <div class="script-editor">
-      <div class="editor-main">
-        <textarea id="scriptEditor" placeholder="// Write your script here..."></textarea>
-        <div class="editor-controls">
-          <button id="saveButton" class="btn-primary">Save Script</button>
-          <button id="updateButton" class="btn-success" style="display: none">
-            Update Script
-          </button>
-          <button id="cancelButton" class="btn-secondary" style="display: none">
-            Cancel
-          </button>
-        </div>
+      <div class="beta-notice">
+        This feature is in BETA. Some functionality may be incomplete or change in future
+        updates.
       </div>
 
-      <div class="editor-sidebar">
-        <h3>Script Details</h3>
-        <div>
-          <label>Name:</label>
-          <input type="text" id="scriptName" />
-        </div>
-        <div>
-          <label>Match Pattern:</label>
-          <input
-            type="text"
-            id="scriptPattern"
-            placeholder="e.g. *://*.example.com/* | *://*.test.com/* | localhost:*"
-          />
-          <div class="pattern-help">
-            Examples: "*://*.example.com/* | localhost:* | *://*.test.com/*" (separate
-            multiple patterns with |) Leave empty for all sites (*://*/*)
+      <form id="scriptForm">
+        <div id="editMode"></div>
+
+        <div class="editor-layout">
+          <div class="editor-main">
+            <div class="form-group">
+              <label>Code:</label>
+              <textarea
+                id="scriptEditor"
+                spellcheck="false"
+                placeholder="// Write your script here..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="editor-sidebar">
+            <div class="form-group">
+              <label>Name:</label>
+              <input type="text" id="scriptName" placeholder="Script name" />
+            </div>
+
+            <div class="form-group">
+              <label>Pattern:</label>
+              <input
+                type="text"
+                id="scriptPattern"
+                placeholder="e.g. *://*.example.com/* | *://*.test.com/* | localhost:*"
+              />
+              <div class="pattern-help">
+                Examples: "*://*.example.com/* | localhost:* | *://*.test.com/*"<br />
+                (separate multiple patterns with |)<br />
+                Leave empty for all sites (*://*/*)
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Description:</label>
+              <input
+                type="text"
+                id="scriptDescription"
+                placeholder="Script description"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Group:</label>
+              <div style="display: flex; align-items: center">
+                <select id="scriptGroup">
+                  <option value="">Select group...</option>
+                </select>
+                <button type="button" id="addGroupBtn">+</button>
+              </div>
+            </div>
+
+            <div class="buttons-row">
+              <div class="left-buttons">
+                <button type="button" id="saveButton" class="btn-success">
+                  Save Script
+                </button>
+                <button type="button" id="updateButton" class="btn-success">
+                  Update Script
+                </button>
+                <button type="button" id="cancelButton">Cancel</button>
+              </div>
+              <button type="button" id="debugStorage">Debug</button>
+            </div>
           </div>
         </div>
-        <div>
-          <label>Description:</label>
-          <textarea id="scriptDescription"></textarea>
+      </form>
+
+      <div class="scripts-list">
+        <div id="scriptsList"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <div id="confirmModal" class="modal">
+      <div class="modal-content">
+        <div id="modalMessage"></div>
+        <div class="modal-buttons">
+          <button id="modalConfirm" class="btn-success">Add Group</button>
+          <button id="modalCancel">Cancel</button>
         </div>
       </div>
     </div>
 
-    <div class="script-list">
-      <h3>Saved Scripts</h3>
-      <div id="scriptsList"></div>
-      <button id="debugStorage" class="debug-button">Show Storage Contents</button>
-    </div>
-
-    <script src="/src/pages/scripts/scripts.ts" type="module"></script>
+    <script type="module" src="scripts.ts"></script>
   </body>
 </html>
