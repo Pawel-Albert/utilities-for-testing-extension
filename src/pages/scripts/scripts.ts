@@ -3,17 +3,14 @@ import {createToast} from '../../components/Toast'
 import {createModal} from '../../components/Modal'
 import {createScriptForm} from '../../components/ScriptForm'
 import {createScriptList} from '../../components/ScriptList'
-import {createIndexedDBService} from '../../services/indexedDB'
+import {createGroupFilter} from '../../components/GroupFilter'
+import {createGroupedList} from '../../components/GroupedList'
+import {groupStyles} from '../../components/styles'
 
 type Storage = {
   scripts: UserScripts
   groups: Groups
 }
-
-const db = createIndexedDBService({
-  dbName: 'TesterUtilitiesDB',
-  stores: ['settings', 'scripts']
-})
 
 const toast = createToast('toast')
 const modal = createModal({
@@ -76,6 +73,8 @@ style.textContent = `
   .script-toggle {
     margin: 0;
   }
+
+  ${groupStyles}
 `
 document.head.appendChild(style)
 
@@ -156,40 +155,26 @@ const groupManager = initializeGroupSelect()
 
 async function getStorage(): Promise<Storage> {
   try {
-    const {userScripts, groups} = await chrome.storage.sync.get(['userScripts', 'groups'])
-    const storage = {
-      scripts: userScripts || {},
-      groups: groups || {}
-    }
-
-    await Promise.all([
-      db.saveData('settings', 'currentScripts', storage.scripts),
-      db.saveData('settings', 'groups', storage.groups)
-    ])
-
-    return storage
-  } catch (err) {
-    console.error('Error loading storage:', err)
+    const result = await chrome.storage.local.get(['userScripts', 'groups'])
     return {
-      scripts: {},
-      groups: {}
+      scripts: result.userScripts || {},
+      groups: result.groups || {}
     }
+  } catch (error) {
+    console.error('Error reading storage:', error)
+    return {scripts: {}, groups: {}}
   }
 }
 
-async function saveStorage(storage: Storage) {
+async function saveStorage(data: Storage): Promise<void> {
   try {
-    await Promise.all([
-      chrome.storage.sync.set({
-        userScripts: storage.scripts,
-        groups: storage.groups
-      }),
-      db.saveData('settings', 'currentScripts', storage.scripts),
-      db.saveData('settings', 'groups', storage.groups)
-    ])
-  } catch (err) {
-    console.error('Error saving storage:', err)
-    toast.show('Error saving data', 'error')
+    await chrome.storage.local.set({
+      userScripts: data.scripts,
+      groups: data.groups
+    })
+  } catch (error) {
+    console.error('Error saving storage:', error)
+    throw error
   }
 }
 
@@ -339,19 +324,101 @@ async function loadScript(name: string) {
   }
 }
 
-async function refreshScriptsList() {
+const groupFilter = createGroupFilter('filterContainer', {
+  onChange: selectedGroups => {
+    refreshScriptsList(selectedGroups)
+  }
+})
+
+const groupedList = createGroupedList<UserScript & {name: string}>('scriptsList', {
+  renderItem: script => {
+    const scriptElement = document.createElement('div')
+    scriptElement.className = `script-item ${script.enabled ? '' : 'disabled'}`
+
+    const scriptInfo = document.createElement('div')
+    scriptInfo.className = 'script-info'
+
+    const scriptName = document.createElement('div')
+    scriptName.textContent = script.name
+
+    const scriptPattern = document.createElement('div')
+    scriptPattern.className = 'script-pattern'
+    scriptPattern.textContent = script.pattern
+
+    if (script.description) {
+      const scriptDesc = document.createElement('div')
+      scriptDesc.className = 'script-desc'
+      scriptDesc.textContent = script.description
+      scriptInfo.appendChild(scriptDesc)
+    }
+
+    scriptInfo.appendChild(scriptName)
+    scriptInfo.appendChild(scriptPattern)
+
+    const controls = document.createElement('div')
+    controls.className = 'script-controls'
+
+    const toggle = document.createElement('input')
+    toggle.type = 'checkbox'
+    toggle.checked = script.enabled
+    toggle.className = 'script-toggle'
+    toggle.onclick = () => toggleScript(script.name)
+
+    const buttons = document.createElement('div')
+    buttons.className = 'script-buttons'
+
+    const editBtn = document.createElement('button')
+    editBtn.textContent = 'Edit'
+    editBtn.onclick = () => loadScript(script.name)
+
+    const deleteBtn = document.createElement('button')
+    deleteBtn.textContent = 'Delete'
+    deleteBtn.onclick = () => deleteScript(script.name)
+
+    buttons.appendChild(editBtn)
+    buttons.appendChild(deleteBtn)
+
+    controls.appendChild(toggle)
+    controls.appendChild(buttons)
+
+    scriptElement.appendChild(scriptInfo)
+    scriptElement.appendChild(controls)
+
+    return scriptElement
+  }
+})
+
+async function refreshScriptsList(selectedGroups: string[] = []) {
   const storage = await getStorage()
-  scriptList.render(storage.scripts)
+
+  if (!groupedList) return
+
+  if (!storage.scripts || Object.keys(storage.scripts).length === 0) {
+    groupedList.render([], selectedGroups)
+    return
+  }
+
+  const scriptsWithGroups = Object.entries(storage.scripts).map(([name, script]) => ({
+    ...script,
+    name,
+    groupName: storage.groups[script.groupId || '']?.name || 'No Group'
+  }))
+
+  groupedList.render(scriptsWithGroups, selectedGroups)
 }
 
-async function debugStorage() {
-  console.group('Storage Debug Info')
+async function debugStorage(): Promise<void> {
+  console.group('Chrome Storage Debug Info')
   try {
-    const chromeStorage = await chrome.storage.sync.get('userScripts')
-    console.log('Chrome Storage (userScripts):', chromeStorage.userScripts || {})
-    await db.debugStorage()
-  } catch (err) {
-    console.error('Debug error:', err)
+    const storage = await getStorage()
+    console.log('Current storage state:', storage)
+
+    chrome.storage.local.getBytesInUse(null, bytes => {
+      console.log(`Storage size: ${bytes} bytes (${(bytes / 1024 / 1024).toFixed(2)} MB)`)
+      console.log(`Storage limit with unlimitedStorage: ~5-6 GB`)
+    })
+  } catch (error) {
+    console.error('Debug error:', error)
   }
   console.groupEnd()
 }

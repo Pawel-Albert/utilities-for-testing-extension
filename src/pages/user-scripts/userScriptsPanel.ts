@@ -2,32 +2,29 @@ import {createPanelSelector} from '../../components/PanelSelector'
 import {loadUserScripts} from '../../services/userScripts'
 import {getUserScriptButtonCode} from '../../components/UserScriptButton'
 import {initializeLocationChecker} from '../../utils/locationChecker'
+import {createGroupFilter} from '../../components/GroupFilter'
+import {createGroupedList} from '../../components/GroupedList'
+import {groupStyles} from '../../components/styles'
+import {UserScript} from '../../types/userScripts'
 
 createPanelSelector(document.body)
+
+const style = document.createElement('style')
+style.textContent = groupStyles
+document.head.appendChild(style)
 
 function sanitizeId(name: string): string {
   return name.replace(/[^a-zA-Z0-9-_]/g, '_')
 }
 
-async function refreshPanel(locationInfo: {
-  isChromePage: boolean
-  currentUrl: string
-  tabId?: number
-}) {
-  const userScripts = await loadUserScripts()
-  const list = document.getElementById('userScriptsList')
-  if (!list) return
+const groupFilter = createGroupFilter('filterContainer', {
+  onChange: selectedGroups => {
+    refreshPanel(locationInfo, selectedGroups)
+  }
+})
 
-  if (!locationInfo.tabId) return
-
-  const registeredScripts = await chrome.userScripts.getScripts()
-  console.log('Currently registered scripts:', registeredScripts)
-
-  list.innerHTML = ''
-
-  Object.entries(userScripts).forEach(([name, script], index) => {
-    if (!script.enabled) return
-
+const groupedList = createGroupedList<UserScript & {name: string}>('userScriptsList', {
+  renderItem: script => {
     const scriptContainer = document.createElement('div')
     scriptContainer.className = 'script-container'
 
@@ -37,13 +34,13 @@ async function refreshPanel(locationInfo: {
     const toggle = document.createElement('input')
     toggle.type = 'checkbox'
     toggle.checked = registeredScripts.some(s => {
-      const expectedId = `script-${sanitizeId(name)}`
+      const expectedId = `script-${sanitizeId(script.name)}`
       return s.id.startsWith(expectedId) && s.id.slice(expectedId.length).match(/^-\d+$/)
     })
     toggle.className = 'script-toggle'
 
     const scriptName = document.createElement('span')
-    scriptName.textContent = name
+    scriptName.textContent = script.name
     scriptName.className = 'script-name'
 
     leftColumn.appendChild(toggle)
@@ -65,11 +62,10 @@ async function refreshPanel(locationInfo: {
 
     scriptContainer.appendChild(leftColumn)
     scriptContainer.appendChild(rightColumn)
-    list.appendChild(scriptContainer)
 
     toggle.onchange = async () => {
       if (toggle.checked) {
-        const scriptId = `script-${sanitizeId(name)}-${Date.now()}`
+        const scriptId = `script-${sanitizeId(script.name)}-${Date.now()}`
         try {
           await chrome.userScripts.register([
             {
@@ -78,9 +74,9 @@ async function refreshPanel(locationInfo: {
               js: [
                 {
                   code: getUserScriptButtonCode({
-                    name,
+                    name: script.name,
                     code: script.code,
-                    index
+                    index: 0
                   })
                 }
               ],
@@ -89,7 +85,7 @@ async function refreshPanel(locationInfo: {
               allFrames: false
             }
           ])
-          console.log(`Script "${name}" registered with ID: ${scriptId}`)
+          console.log(`Script "${script.name}" registered with ID: ${scriptId}`)
           await refreshPanel(locationInfo)
         } catch (err) {
           console.error('Failed to register script:', err)
@@ -97,7 +93,7 @@ async function refreshPanel(locationInfo: {
         }
       } else {
         const scriptsToRemove = registeredScripts.filter(s => {
-          const expectedId = `script-${sanitizeId(name)}`
+          const expectedId = `script-${sanitizeId(script.name)}`
           return (
             s.id.startsWith(expectedId) && s.id.slice(expectedId.length).match(/^-\d+$/)
           )
@@ -114,7 +110,46 @@ async function refreshPanel(locationInfo: {
         await refreshPanel(locationInfo)
       }
     }
-  })
+
+    return scriptContainer
+  }
+})
+
+let locationInfo: {
+  isChromePage: boolean
+  currentUrl: string
+  tabId?: number
+} = {
+  isChromePage: false,
+  currentUrl: ''
+}
+
+let registeredScripts: chrome.userScripts.RegisteredUserScript[] = []
+
+async function refreshPanel(info: typeof locationInfo, selectedGroups: string[] = []) {
+  locationInfo = info
+  const {scripts, groups} = await loadUserScripts()
+  registeredScripts = await chrome.userScripts.getScripts()
+
+  if (!groupedList) return
+
+  if (!info.tabId) {
+    groupedList.render([], selectedGroups)
+    return
+  }
+
+  const scriptsWithGroups = Object.entries(scripts)
+    .filter(([_, script]: [string, UserScript]) => script.enabled)
+    .map(([name, script]: [string, UserScript]) => {
+      const group = script.groupId ? groups[script.groupId] : null
+      return {
+        ...script,
+        name,
+        groupName: group?.name || 'No Group'
+      }
+    })
+
+  groupedList.render(scriptsWithGroups, selectedGroups)
 }
 
 async function initializeScripts() {

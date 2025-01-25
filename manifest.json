@@ -64,7 +64,8 @@
     "activeTab",
     "storage",
     "userScripts",
-    "sidePanel"
+    "sidePanel",
+    "unlimitedStorage"
   ],
 
   "host_permissions": ["*://*/*"],
