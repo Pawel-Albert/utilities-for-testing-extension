@@ -1,6 +1,8 @@
+import {groupStyles} from './styles'
+
 interface GroupFilterConfig {
   onChange: (selectedGroups: string[]) => void
-  pageKey: 'executionScripts' | 'scripts' | 'userScripts' // Which panel is using the filter
+  pageKey: 'executionScripts' | 'scripts' | 'userScripts'
 }
 
 export function createGroupFilter(containerId: string, config: GroupFilterConfig) {
@@ -15,7 +17,7 @@ export function createGroupFilter(containerId: string, config: GroupFilterConfig
 
   const title = document.createElement('span')
   title.className = 'filter-title'
-  title.textContent = 'Group Filters'
+  title.textContent = 'Filter by Groups'
 
   const toggle = document.createElement('span')
   toggle.className = 'filter-toggle collapsed'
@@ -27,9 +29,8 @@ export function createGroupFilter(containerId: string, config: GroupFilterConfig
   const content = document.createElement('div')
   content.className = 'filter-content'
 
-  const select = document.createElement('select')
-  select.multiple = true
-  select.className = 'group-filter-select'
+  const pillsContainer = document.createElement('div')
+  pillsContainer.className = 'group-filter-pills'
 
   const actions = document.createElement('div')
   actions.className = 'filter-actions'
@@ -37,36 +38,35 @@ export function createGroupFilter(containerId: string, config: GroupFilterConfig
   const selectAllBtn = document.createElement('button')
   selectAllBtn.className = 'filter-button'
   selectAllBtn.textContent = 'Select All'
-  selectAllBtn.onclick = async () => {
-    Array.from(select.options).forEach(opt => (opt.selected = true))
-    const selectedGroups = Array.from(select.selectedOptions).map(opt => opt.value)
-    await saveFilterState(selectedGroups)
-    config.onChange(selectedGroups)
-    console.log('Select All clicked, groups:', selectedGroups)
-  }
 
-  const clearAllBtn = document.createElement('button')
-  clearAllBtn.className = 'filter-button'
-  clearAllBtn.textContent = 'Clear All'
-  clearAllBtn.onclick = async () => {
-    Array.from(select.options).forEach(opt => (opt.selected = false))
-    await saveFilterState([])
-    config.onChange([])
-    console.log('Clear All clicked, cleared filters')
-  }
+  const clearBtn = document.createElement('button')
+  clearBtn.className = 'filter-button debug'
+  clearBtn.textContent = 'Clear'
 
   actions.appendChild(selectAllBtn)
-  actions.appendChild(clearAllBtn)
+  actions.appendChild(clearBtn)
 
-  content.appendChild(select)
+  content.appendChild(pillsContainer)
   content.appendChild(actions)
 
-  header.onclick = () => {
-    const wasCollapsed = toggle.classList.contains('collapsed')
-    toggle.classList.toggle('collapsed')
-    content.classList.toggle('expanded')
-    toggle.textContent = wasCollapsed ? '▼' : '▼'
-    console.log('Filter panel is now:', wasCollapsed ? 'expanded' : 'collapsed')
+  let selectedGroups: string[] = []
+  let groups: string[] = []
+  let groupsData: any = {}
+
+  async function saveFilterState(selected: string[]) {
+    try {
+      const result = await chrome.storage.local.get(['filterStates'])
+      const states = result.filterStates || {}
+
+      await chrome.storage.local.set({
+        filterStates: {
+          ...states,
+          [config.pageKey]: selected
+        }
+      })
+    } catch (error) {
+      console.error('Failed to save filter state:', error)
+    }
   }
 
   async function loadFilterState() {
@@ -76,16 +76,13 @@ export function createGroupFilter(containerId: string, config: GroupFilterConfig
       const currentState = states[config.pageKey] || []
 
       if (!states[config.pageKey]) {
-        const allGroups = Array.from(select.options).map(opt => opt.value)
-        await saveFilterState(allGroups)
-        return allGroups
+        await saveFilterState(groups)
+        return groups
       }
 
-      Array.from(select.options).forEach(option => {
-        option.selected = currentState.includes(option.value)
-      })
+      selectedGroups = currentState
+      updatePills()
 
-      console.log('Loaded filter state for', config.pageKey, ':', currentState)
       return currentState
     } catch (error) {
       console.error('Failed to load filter state:', error)
@@ -93,76 +90,75 @@ export function createGroupFilter(containerId: string, config: GroupFilterConfig
     }
   }
 
-  async function saveFilterState(selectedGroups: string[]) {
-    try {
-      const result = await chrome.storage.local.get(['filterStates'])
-      const states = result.filterStates || {}
+  function updatePills() {
+    pillsContainer.innerHTML = ''
 
-      await chrome.storage.local.set({
-        filterStates: {
-          ...states,
-          [config.pageKey]: selectedGroups
+    groups.forEach(group => {
+      const pill = document.createElement('div')
+      pill.className = `group-pill${selectedGroups.includes(group) ? ' selected' : ''}`
+
+      if (group === 'no-group') {
+        pill.textContent = 'No Group'
+      } else {
+        const groupData = groupsData[group]
+        pill.textContent = groupData?.name || group
+      }
+
+      pill.addEventListener('click', async () => {
+        if (selectedGroups.includes(group)) {
+          selectedGroups = selectedGroups.filter(g => g !== group)
+        } else {
+          selectedGroups.push(group)
         }
+        updatePills()
+        await saveFilterState(selectedGroups)
+        config.onChange(selectedGroups)
       })
 
-      console.log('Saved filter state for', config.pageKey, ':', selectedGroups)
-    } catch (error) {
-      console.error('Failed to save filter state:', error)
-    }
+      pillsContainer.appendChild(pill)
+    })
   }
 
-  select.addEventListener('change', async () => {
-    const selectedGroups = Array.from(select.selectedOptions).map(opt => opt.value)
+  header.addEventListener('click', () => {
+    content.classList.toggle('expanded')
+    toggle.classList.toggle('collapsed')
+  })
+
+  selectAllBtn.addEventListener('click', async () => {
+    selectedGroups = [...groups]
+    updatePills()
     await saveFilterState(selectedGroups)
     config.onChange(selectedGroups)
-    console.log('Selection changed:', selectedGroups)
+  })
+
+  clearBtn.addEventListener('click', async () => {
+    selectedGroups = []
+    updatePills()
+    await saveFilterState([])
+    config.onChange([])
   })
 
   filterContainer.appendChild(header)
   filterContainer.appendChild(content)
   container.appendChild(filterContainer)
 
+  const style = document.createElement('style')
+  style.textContent = groupStyles
+  document.head.appendChild(style)
+
+  async function refreshGroups() {
+    const result = await chrome.storage.local.get(['groups'])
+    groupsData = result.groups || {}
+
+    // Always add No Group option first
+    groups = ['no-group', ...Object.values(groupsData).map((g: any) => g.id)]
+    updatePills()
+  }
+
   async function init() {
     await refreshGroups()
     const savedGroups = await loadFilterState()
     config.onChange(savedGroups)
-  }
-
-  async function refreshGroups() {
-    const currentSelection = Array.from(select.selectedOptions).map(opt => opt.value)
-
-    const result = await chrome.storage.local.get(['groups'])
-    const groups = result.groups || {}
-
-    select.innerHTML = ''
-
-    // Always add No Group option first
-    const noGroupOption = document.createElement('option')
-    noGroupOption.value = 'no-group'
-    noGroupOption.textContent = 'No Group'
-    select.appendChild(noGroupOption)
-
-    Object.values(groups)
-      .sort((a: any, b: any) => a.order - b.order)
-      .forEach((group: any) => {
-        const option = document.createElement('option')
-        option.value = group.id
-        option.textContent = group.name
-        select.appendChild(option)
-      })
-
-    if (currentSelection.length > 0) {
-      Array.from(select.options).forEach(option => {
-        option.selected = currentSelection.includes(option.value)
-      })
-    } else {
-      Array.from(select.options).forEach(option => (option.selected = true))
-    }
-
-    console.log(
-      'Groups refreshed, selection:',
-      currentSelection.length ? 'restored' : 'all selected'
-    )
   }
 
   init()

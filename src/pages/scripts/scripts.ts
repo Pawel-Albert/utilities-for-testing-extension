@@ -99,6 +99,17 @@ function initializeGroupSelect() {
 
   async function addNewGroup(name: string, description: string = '') {
     const storage = await getStorage()
+
+    // Check if group with this name already exists
+    const existingGroup = Object.values(storage.groups || {}).find(
+      (group: any) => group.name.toLowerCase() === name.toLowerCase()
+    )
+
+    if (existingGroup) {
+      toast.show('Group with this name already exists', 'error')
+      return
+    }
+
     const groupId = `group-${Date.now()}`
     const newGroup: Group = {
       id: groupId,

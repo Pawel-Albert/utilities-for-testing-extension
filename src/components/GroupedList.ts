@@ -74,14 +74,17 @@ export function createGroupedList<T extends GroupedItem>(
         content.appendChild(itemElement)
       })
 
-      header.querySelector('.group-toggle')?.addEventListener('click', e => {
+      // Single click handler for both header and button
+      const toggleGroup = (e: Event) => {
         e.preventDefault()
-        const btn = e.target as HTMLElement
+        const btn = header.querySelector('.group-toggle') as HTMLElement
         const isCollapsed = btn.classList.toggle('collapsed')
         btn.innerHTML = isCollapsed ? '▸' : '▾'
         content.style.display = isCollapsed ? 'none' : 'block'
         collapsedGroups.set(groupId, isCollapsed)
-      })
+      }
+
+      header.addEventListener('click', toggleGroup)
 
       groupContainer.appendChild(header)
       groupContainer.appendChild(content)

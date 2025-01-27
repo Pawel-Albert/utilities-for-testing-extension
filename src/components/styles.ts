@@ -44,28 +44,54 @@ export const groupStyles = `
     display: block;
   }
 
-  .group-filter-select {
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
+  .group-filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .group-pill {
+    padding: 6px 12px;
+    border-radius: 16px;
+    background: #f0f0f0;
     border: 1px solid var(--border);
-    margin-bottom: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    user-select: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .group-pill:hover {
+    background: #e8e8e8;
+  }
+
+  .group-pill.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
   }
 
   .filter-actions {
     display: flex;
     justify-content: flex-end;
     gap: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
   }
 
   .filter-button {
-    padding: 4px 8px;
+    padding: 6px 12px;
     border: none;
     border-radius: 4px;
     background: var(--primary);
     color: white;
     cursor: pointer;
     font-size: 12px;
+    transition: opacity 0.2s;
   }
 
   .filter-button:hover {
