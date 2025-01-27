@@ -12,10 +12,15 @@ const style = document.createElement('style')
 style.textContent = groupStyles
 document.head.appendChild(style)
 
+// Keep track of selected groups
+let currentSelectedGroups: string[] = []
+
 const groupFilter = createGroupFilter('filterContainer', {
   onChange: selectedGroups => {
+    currentSelectedGroups = selectedGroups
     refreshScriptsList(locationInfo, selectedGroups)
-  }
+  },
+  pageKey: 'executionScripts'
 })
 
 const groupedList = createGroupedList<UserScript & {name: string}>('userScriptsList', {
@@ -81,6 +86,11 @@ async function refreshScriptsList(
     return
   }
 
+  if (selectedGroups.length === 0) {
+    groupedList.render([], selectedGroups)
+    return
+  }
+
   const scriptsWithGroups = Object.entries(scripts)
     .filter(([_, script]: [string, UserScript]) => {
       if (!script.enabled) return false
@@ -106,4 +116,5 @@ async function refreshScriptsList(
   groupedList.render(scriptsWithGroups, selectedGroups)
 }
 
-initializeLocationChecker(refreshScriptsList)
+// Update initializeLocationChecker to use currentSelectedGroups
+initializeLocationChecker(info => refreshScriptsList(info, currentSelectedGroups))

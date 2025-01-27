@@ -327,7 +327,8 @@ async function loadScript(name: string) {
 const groupFilter = createGroupFilter('filterContainer', {
   onChange: selectedGroups => {
     refreshScriptsList(selectedGroups)
-  }
+  },
+  pageKey: 'scripts'
 })
 
 const groupedList = createGroupedList<UserScript & {name: string}>('scriptsList', {
@@ -392,6 +393,11 @@ async function refreshScriptsList(selectedGroups: string[] = []) {
   const storage = await getStorage()
 
   if (!groupedList) return
+
+  if (selectedGroups.length === 0) {
+    groupedList.render([], selectedGroups)
+    return
+  }
 
   if (!storage.scripts || Object.keys(storage.scripts).length === 0) {
     groupedList.render([], selectedGroups)

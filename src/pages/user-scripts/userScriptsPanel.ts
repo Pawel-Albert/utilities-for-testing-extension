@@ -17,10 +17,15 @@ function sanitizeId(name: string): string {
   return name.replace(/[^a-zA-Z0-9-_]/g, '_')
 }
 
+// Keep track of selected groups
+let currentSelectedGroups: string[] = []
+
 const groupFilter = createGroupFilter('filterContainer', {
   onChange: selectedGroups => {
+    currentSelectedGroups = selectedGroups
     refreshPanel(locationInfo, selectedGroups)
-  }
+  },
+  pageKey: 'userScripts'
 })
 
 const groupedList = createGroupedList<UserScript & {name: string}>('userScriptsList', {
@@ -138,6 +143,11 @@ async function refreshPanel(info: typeof locationInfo, selectedGroups: string[] 
     return
   }
 
+  if (selectedGroups.length === 0) {
+    groupedList.render([], selectedGroups)
+    return
+  }
+
   const scriptsWithGroups = Object.entries(scripts)
     .filter(([_, script]: [string, UserScript]) => script.enabled)
     .map(([name, script]: [string, UserScript]) => {
@@ -159,4 +169,5 @@ async function initializeScripts() {
 }
 
 initializeScripts()
-initializeLocationChecker(refreshPanel)
+// Update initializeLocationChecker to use currentSelectedGroups
+initializeLocationChecker(info => refreshPanel(info, currentSelectedGroups))
