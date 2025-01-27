@@ -1,4 +1,9 @@
-import {UserScript, UserScripts, ExecuteResult} from '../types/userScripts'
+import {UserScript, UserScripts, ExecuteResult, Groups} from '../types/userScripts'
+
+interface UserScriptsData {
+  scripts: UserScripts
+  groups: Groups
+}
 
 export async function executeUserScript(script: UserScript, tabId: number | undefined) {
   if (!tabId) {
@@ -40,18 +45,19 @@ export async function executeUserScript(script: UserScript, tabId: number | unde
   })
 }
 
-export async function loadUserScripts() {
-  const {userScripts = {}} = (await chrome.storage.sync.get('userScripts')) as {
-    userScripts: UserScripts
+export async function loadUserScripts(): Promise<UserScriptsData> {
+  const result = await chrome.storage.local.get(['userScripts', 'groups'])
+  return {
+    scripts: result.userScripts || {},
+    groups: result.groups || {}
   }
-  return userScripts
 }
 
 export async function refreshScriptsList(container: HTMLElement) {
   const userScripts = await loadUserScripts()
   container.innerHTML = ''
 
-  Object.entries(userScripts)
+  Object.entries(userScripts.scripts)
     .filter(([_, script]) => script.enabled)
     .forEach(([name, script]) => {
       const div = document.createElement('div')
