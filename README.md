@@ -267,6 +267,25 @@ The extension now uses a more robust storage system:
 - Better script injection timing control
 - Improved error handling and logging
 
+### Version 0.4.1 Updates
+
+#### Romanian Data Generators
+
+- Added Romanian data generators:
+  - CNP (Personal Numeric Code) with male/female/custom options
+  - CUI (Company ID) with optional RO prefix for VAT payers
+  - Romanian mobile phone numbers with national/international format
+- Reorganized Data Generators menu into country-specific sections:
+  - Polish Data Generators (PESEL, NIP, etc.)
+  - Romanian Data Generators (CNP, CUI, phone)
+
+#### Technical Improvements
+
+- Updated Chrome User Scripts API implementation
+- Enhanced TypeScript type definitions
+- Better script injection timing control
+- Improved error handling and logging
+
 ## Todo
 
 - [x] Form auto filler with random data

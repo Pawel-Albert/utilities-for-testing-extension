@@ -7,8 +7,16 @@ const menuItems: MenuItems = [
     contexts: ['all'],
     type: 'normal'
   },
+  // Polish generators submenu
   {
     parentId: 'data-generators',
+    id: 'pl-generators',
+    title: 'Polish Data Generators',
+    contexts: ['all'],
+    type: 'normal'
+  },
+  {
+    parentId: 'pl-generators',
     title: 'Generate PESEL',
     id: 'pesel-menu',
     contexts: ['editable']
@@ -35,45 +43,95 @@ const menuItems: MenuItems = [
     contexts: ['editable']
   },
   {
-    parentId: 'data-generators',
+    parentId: 'pl-generators',
     title: 'Generate IBAN',
     id: 'Generate IBAN',
     file: 'src/content_scripts/iban.js',
     contexts: ['editable']
   },
   {
-    parentId: 'data-generators',
+    parentId: 'pl-generators',
     title: 'Generate ID number',
     id: 'Generate ID number',
     file: 'src/content_scripts/idnumber.js',
     contexts: ['editable']
   },
   {
-    parentId: 'data-generators',
+    parentId: 'pl-generators',
     title: 'Generate PASSPORT number',
     id: 'Generate PASSPORT number',
     file: 'src/content_scripts/passport_number.js',
     contexts: ['editable']
   },
   {
-    parentId: 'data-generators',
+    parentId: 'pl-generators',
     title: 'Generate valid PL mobile phone',
     id: 'Generate valid PL mobile phone',
     file: 'src/content_scripts/phoneNumber.js',
     contexts: ['editable']
   },
   {
-    parentId: 'data-generators',
+    parentId: 'pl-generators',
     title: 'Generate valid PL NIP',
     id: 'Generate valid PL NIP',
     file: 'src/content_scripts/nip.js',
     contexts: ['editable']
   },
   {
-    parentId: 'data-generators',
+    parentId: 'pl-generators',
     title: 'Generate valid PL REGON',
     id: 'Generate valid PL REGON',
     file: 'src/content_scripts/regon.js',
+    contexts: ['editable']
+  },
+
+  // Romanian generators submenu
+  {
+    parentId: 'data-generators',
+    id: 'ro-generators',
+    title: 'Romanian Data Generators',
+    contexts: ['all'],
+    type: 'normal'
+  },
+  {
+    parentId: 'ro-generators',
+    title: 'Generate CNP',
+    id: 'cnp-menu',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'cnp-menu',
+    title: 'Male (18+)',
+    id: 'Generate CNP Male',
+    file: 'src/content_scripts/ro_cnp_male.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'cnp-menu',
+    title: 'Female (18+)',
+    id: 'Generate CNP Female',
+    file: 'src/content_scripts/ro_cnp_female.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'cnp-menu',
+    title: 'Custom...',
+    id: 'Generate CNP Custom',
+    file: 'src/content_scripts/ro_cnp.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'ro-generators',
+    title: 'Generate CUI',
+    id: 'Generate CUI',
+    file: 'src/content_scripts/ro_cui.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'ro-generators',
+    title: 'Generate Romanian Phone',
+    id: 'Generate Romanian Phone',
+    file: 'src/content_scripts/ro_phone.js',
     contexts: ['editable']
   },
 
