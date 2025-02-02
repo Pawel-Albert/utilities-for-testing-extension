@@ -6,6 +6,8 @@
 
 A Chrome extension that combines context menu tools with a user scripts manager. Started as a simple testing utility with generators and form fillers, now expanded to include custom JavaScript execution, data persistence and configurable settings. The extension provides various testing tools like data generators, form manipulation utilities, and text processing features. All functionalities can be accessed through the context menu or managed via a dedicated settings panel. Built with TypeScript and Parcel.
 
+🌐 Available on Chrome Web Store: [TesterUtilities](https://chromewebstore.google.com/detail/testerutilities/lmlfadbikkafmfacnbdlcjaehopomkii)
+
 ## Installation
 
 ### Clone
@@ -259,6 +261,25 @@ The extension now uses a more robust storage system:
 - Improved script management interface
 - Better visual feedback for script states
 - Added tooltips and help text for new features
+
+#### Technical Improvements
+
+- Updated Chrome User Scripts API implementation
+- Enhanced TypeScript type definitions
+- Better script injection timing control
+- Improved error handling and logging
+
+### Version 0.4.1 Updates
+
+#### Romanian Data Generators
+
+- Added Romanian data generators:
+  - CNP (Personal Numeric Code) with male/female/custom options
+  - CUI (Company ID) with optional RO prefix for VAT payers
+  - Romanian mobile phone numbers with national/international format
+- Reorganized Data Generators menu into country-specific sections:
+  - Polish Data Generators (PESEL, NIP, etc.)
+  - Romanian Data Generators (CNP, CUI, phone)
 
 #### Technical Improvements
 

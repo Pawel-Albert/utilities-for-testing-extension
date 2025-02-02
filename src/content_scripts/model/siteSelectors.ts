@@ -1,7 +1,29 @@
 import {SiteDataType} from '../../types/formFiller'
 import {fakeDataPL, fakeDataSb} from './fakeDataPL'
+import {fakeDataRO} from './fakeDataRO'
 
 export function getSiteData(): SiteDataType {
+  // This is company specific code, later we will also ad fully customizable site selectors
+  // Get domain from session storage and current host to determine the country
+  const domain = sessionStorage.getItem('__DOMAIN__')
+  const currentHost = window.location.host
+  console.log('Domain:', domain)
+
+  // Determine if Romania based on:
+  // 1. Session storage domain (for domain switcher)
+  // 2. Current host (for direct access to RO platform)
+  const isRomania =
+    domain === 'finance.imobiliare.ro' || currentHost.includes('finance.imobiliare.ro')
+
+  console.log('Is Romania:', isRomania)
+
+  // Generate both data sets upfront
+  const plData = fakeDataPL()
+  const roData = fakeDataRO()
+
+  // Use commonData for shared fields, avoiding repetitive ternary operators
+  const commonData = isRomania ? roData : plData
+
   return {
     'demo.sb-betting.com': {
       mobile: {
@@ -49,22 +71,22 @@ export function getSiteData(): SiteDataType {
       firstName: {
         selector: '[data-cy=lead-card-firstname-input] input',
         type: 'inputShadow',
-        data: fakeDataPL().firstName
+        data: commonData.firstName
       },
       lastName: {
         selector: '[data-cy=lead-card-lastname-input] input',
         type: 'inputShadow',
-        data: fakeDataPL().lastName
+        data: commonData.lastName
       },
       email: {
         selector: '[data-cy=lead-card-email-input] input',
         type: 'inputShadow',
-        data: fakeDataPL().email
+        data: commonData.email
       },
       phone: {
         selector: '[data-cy=lead-card-phone-input] input:not([disabled])',
         type: 'inputShadow',
-        data: fakeDataPL().mobile
+        data: commonData.mobile
       },
       consultCheckbox: {
         selector: '[data-cy="lead-card-data-process-checkbox"] input',
@@ -78,12 +100,12 @@ export function getSiteData(): SiteDataType {
       mortagePeriod: {
         selector: 'input[pattern="[0-9]*"][min="5"][max="35"]',
         type: 'input',
-        data: fakeDataPL().mortagePeriod
+        data: commonData.mortagePeriod
       },
       incomeAmmount: {
         selector: 'input[pattern="[0-9]*"][min="0"]',
         type: 'input',
-        data: fakeDataPL().incomeAmmount,
+        data: commonData.incomeAmmount,
         index: 1
       },
       incomePeriod: {
@@ -104,18 +126,18 @@ export function getSiteData(): SiteDataType {
       yearOfBearth: {
         selector: 'input[pattern="[0-9]*"][min="1940"]',
         type: 'input',
-        data: fakeDataPL().yearOfBearth
+        data: commonData.yearOfBearth
       },
       householdExpenses: {
         selector: 'input[pattern="[0-9]*"][data-mask-raw-value]',
         type: 'input',
-        data: fakeDataPL().householdExpenses,
+        data: commonData.householdExpenses,
         index: 2
       },
       mobileGeneral: {
         selector: '[type=tel]:not([disabled])',
         type: 'input',
-        data: fakeDataPL().mobile
+        data: commonData.mobile
       },
       SOI: {
         selector: 'input[inputmode="none"]',
@@ -130,82 +152,96 @@ export function getSiteData(): SiteDataType {
       }
     },
 
-    'platforma.qa.lendi.pl|fincrm-frontend-git': {
+    'platforma.qa.lendi.pl|fincrm-frontend|platforma.qa.finance.imobiliare.ro': {
       clientFirstName: {
         selector: '[id="clientFirstName"]',
         type: 'input',
-        data: fakeDataPL().firstName
+        data: commonData.firstName
       },
       clientLastName: {
         selector: '[id="clientLastName"]',
         type: 'input',
-        data: fakeDataPL().lastName
+        data: commonData.lastName
       },
-      clientPesel: {
+      clientIdentityNumber: {
         selector: '[id="clientPesel"]',
         type: 'input',
-        data: fakeDataPL().pesel
+        data: isRomania ? roData.cnp : plData.pesel
       },
       clientPhoneNumber: {
         selector: '[id="clientPhoneNumber"]',
         type: 'input',
-        data: fakeDataPL().mobile
+        data: commonData.mobile
       },
       clientEmail: {
         selector: '[id="clientEmail"]',
         type: 'input',
-        data: fakeDataPL().email
+        data: commonData.email
+      },
+      acceptsAllCheckbox: {
+        selector: 'div [role=checkbox]',
+        type: 'checkCheckbox',
+        index: 0
       },
       acceptsProcessingCheckbox: {
-        selector: 'input[id="acceptsProcessing"]',
+        selector: '[id="acceptsProcessing"] [role=checkbox]',
         type: 'checkCheckbox'
       },
       acceptsProcessingLeadCheckbox: {
-        selector: 'input[id="acceptsProcessingLead"]',
+        selector: '[id="acceptsProcessingLead"] [role=checkbox]',
         type: 'checkCheckbox'
       },
       acceptsReceivingInfoCheckbox: {
-        selector: 'input[id="acceptsReceivingInfo"]',
+        selector: '[id="acceptsReceivingInfo"] [role=checkbox]',
         type: 'checkCheckbox'
       },
       acceptsReceivingOffersCheckbox: {
-        selector: 'input[id="acceptsReceivingOffers"]',
+        selector: '[id="acceptsReceivingOffers"] [role=checkbox]',
         type: 'checkCheckbox'
       },
       clientCompanyName: {
         selector: '[id="clientCompanyName"]',
         type: 'input',
-        data: fakeDataPL().companyName
+        data: commonData.companyName
       },
-      clientNip: {
+      clientTaxId: {
         selector: '[id="clientNip"]',
         type: 'input',
-        data: fakeDataPL().nip
+        data: isRomania ? roData.cui : plData.nip
       },
+      // Only for PL
       clientRegon: {
         selector: '[id="clientRegon"]',
         type: 'input',
-        data: fakeDataPL().regon
+        data: plData.regon
       }
     },
 
     default: {
-      email: {selector: 'input[name=email]', type: 'input', data: fakeDataPL().email},
+      email: {
+        selector: 'input[name=email]',
+        type: 'input',
+        data: commonData.email
+      },
       password: {
         selector: 'input[name=password]',
         type: 'input',
-        data: fakeDataPL().password
+        data: commonData.password
       },
-      mobile: {selector: 'input[name=mobile]', type: 'input', data: fakeDataPL().mobile},
+      mobile: {
+        selector: 'input[name=mobile]',
+        type: 'input',
+        data: commonData.mobile
+      },
       firstName: {
         selector: 'input[name=firstName]',
         type: 'input',
-        data: fakeDataPL().firstName
+        data: commonData.firstName
       },
       lastName: {
         selector: 'input[name=lastName]',
         type: 'input',
-        data: fakeDataPL().lastName
+        data: commonData.lastName
       }
     }
   }

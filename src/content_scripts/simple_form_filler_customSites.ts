@@ -13,10 +13,8 @@ async function fillCustomForm() {
 
     if (currentHost.startsWith('lendi-b2c-')) {
       currentSiteKey = Object.keys(siteData).find(key => key.includes('lendi-b2c-*'))
-    } else if (currentHost.includes('fincrm-frontend-git')) {
-      currentSiteKey = Object.keys(siteData).find(key =>
-        key.includes('fincrm-frontend-git')
-      )
+    } else if (currentHost.includes('fincrm-frontend')) {
+      currentSiteKey = Object.keys(siteData).find(key => key.includes('fincrm-frontend'))
     } else {
       currentSiteKey = Object.keys(siteData).find(key =>
         key.split('|').includes(currentHost)

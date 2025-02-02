@@ -52,6 +52,46 @@ export const setNativeValue = (el: HTMLElement, insertedValue: string): void => 
 }
 
 /**
+ * Converts a date string to a Date object with validation
+ * @param dateStr - Date string in YYYY-MM-DD format
+ * @param minYear - Optional minimum year constraint
+ * @param maxYear - Optional maximum year constraint
+ * @throws Error if date is invalid or outside constraints
+ */
+export const validateAndParseDate = (
+  dateStr: string,
+  minYear?: number,
+  maxYear?: number
+): Date => {
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) {
+    throw new Error('Invalid date format')
+  }
+  const year = date.getFullYear()
+  if (minYear && year < minYear) {
+    throw new Error(`Year must be greater than or equal to ${minYear}`)
+  }
+  if (maxYear && year > maxYear) {
+    throw new Error(`Year must be less than or equal to ${maxYear}`)
+  }
+  return date
+}
+
+/**
+ * Generates a random Date object within specified age range
+ * @param minAge - Minimum age (default: 18)
+ * @param maxAge - Maximum age (default: 100)
+ * @returns Date object
+ */
+export const generateRandomDate = (minAge = 18, maxAge = 100): Date => {
+  const maxBirthDate = new Date(Date.now() - minAge * 31557600000)
+  const minBirthDate = new Date(Date.now() - maxAge * 31557600000)
+  const minTimestamp = minBirthDate.getTime()
+  const maxTimestamp = maxBirthDate.getTime()
+  return new Date(generateRandomInt(minTimestamp, maxTimestamp))
+}
+
+/**
  * Generates a random birth date within specified age range
  * The date is returned in ISO format (YYYY-MM-DD)
  *
