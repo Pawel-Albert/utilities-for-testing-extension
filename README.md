@@ -6,6 +6,8 @@
 
 A Chrome extension that combines context menu tools with a user scripts manager. Started as a simple testing utility with generators and form fillers, now expanded to include custom JavaScript execution, data persistence and configurable settings. The extension provides various testing tools like data generators, form manipulation utilities, and text processing features. All functionalities can be accessed through the context menu or managed via a dedicated settings panel. Built with TypeScript and Parcel.
 
+🌐 Available on Chrome Web Store: [TesterUtilities](https://chromewebstore.google.com/detail/testerutilities/lmlfadbikkafmfacnbdlcjaehopomkii)
+
 ## Installation
 
 ### Clone
