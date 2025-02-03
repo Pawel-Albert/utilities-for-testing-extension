@@ -3,6 +3,7 @@ type FormElements = {
   patternInput: HTMLInputElement | null
   descriptionInput: HTMLTextAreaElement | null
   editorInput: HTMLTextAreaElement | null
+  groupSelect: HTMLSelectElement | null
   editMode: HTMLElement | null
   saveButton: HTMLElement | null
   updateButton: HTMLElement | null
@@ -15,6 +16,7 @@ export function createScriptForm() {
     patternInput: document.getElementById('scriptPattern') as HTMLInputElement,
     descriptionInput: document.getElementById('scriptDescription') as HTMLTextAreaElement,
     editorInput: document.getElementById('scriptEditor') as HTMLTextAreaElement,
+    groupSelect: document.getElementById('scriptGroup') as HTMLSelectElement,
     editMode: document.getElementById('editMode'),
     saveButton: document.getElementById('saveButton'),
     updateButton: document.getElementById('updateButton'),
@@ -27,6 +29,7 @@ export function createScriptForm() {
       pattern: elements.patternInput?.value.trim() || '*://*/*',
       description: elements.descriptionInput?.value.trim() || '',
       code: elements.editorInput?.value.trim() || '',
+      groupId: elements.groupSelect?.value || '',
       editingId: elements.editorInput?.dataset.editingId
     }
   }
@@ -39,6 +42,7 @@ export function createScriptForm() {
       elements.editorInput.value = ''
       elements.editorInput.dataset.editingId = ''
     }
+    if (elements.groupSelect) elements.groupSelect.value = ''
     if (elements.editMode) elements.editMode.textContent = ''
 
     toggleEditMode(false)
@@ -51,6 +55,7 @@ export function createScriptForm() {
       pattern?: string
       description?: string
       code?: string
+      groupId?: string
     }
   ) {
     if (elements.nameInput) elements.nameInput.value = name
@@ -64,6 +69,9 @@ export function createScriptForm() {
     if (elements.editorInput) {
       elements.editorInput.value = data.code || ''
       elements.editorInput.dataset.editingId = scriptId
+    }
+    if (elements.groupSelect) {
+      elements.groupSelect.value = data.groupId || ''
     }
     if (elements.editMode) elements.editMode.textContent = `Editing script: ${name}`
 
@@ -83,6 +91,7 @@ export function createScriptForm() {
     getValues,
     clear,
     setEditMode,
-    toggleEditMode
+    toggleEditMode,
+    elements
   }
 }

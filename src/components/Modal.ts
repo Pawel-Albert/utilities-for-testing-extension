@@ -5,38 +5,63 @@ type ModalConfig = {
   cancelId: string
 }
 
-export function createModal(config: ModalConfig) {
-  const modal = document.getElementById(config.modalId)
-  const message = document.getElementById(config.messageId)
+type ShowOptions = {
+  confirmText?: string
+  cancelText?: string
+  content?: string
+  confirmClass?: string
+}
 
-  function show(text: string): Promise<boolean> {
+export const createModal = ({modalId, messageId, confirmId, cancelId}: ModalConfig) => {
+  const modalElement = document.getElementById(modalId) as HTMLElement
+  const messageElement = document.getElementById(messageId) as HTMLElement
+  const confirmButton = document.getElementById(confirmId) as HTMLButtonElement
+  const cancelButton = document.getElementById(cancelId) as HTMLButtonElement
+
+  const close = () => {
+    modalElement.style.display = 'none'
+  }
+
+  const show = async (text: string, options: ShowOptions = {}): Promise<boolean> => {
     return new Promise(resolve => {
-      if (!modal || !message) {
+      messageElement.innerHTML = options.content || text
+
+      confirmButton.textContent = options.confirmText || 'Confirm'
+      confirmButton.className = options.confirmClass || 'btn-success'
+
+      if (options.cancelText === '') {
+        cancelButton.style.display = 'none'
+      } else {
+        cancelButton.style.display = ''
+        cancelButton.textContent = options.cancelText || 'Cancel'
+      }
+
+      modalElement.style.display = 'block'
+
+      const handleConfirm = () => {
+        modalElement.style.display = 'none'
+        cleanup()
+        resolve(true)
+      }
+
+      const handleCancel = () => {
+        modalElement.style.display = 'none'
+        cleanup()
         resolve(false)
-        return
       }
 
-      message.textContent = text
-      modal.style.display = 'block'
-
-      const confirmBtn = document.getElementById(config.confirmId)
-      const cancelBtn = document.getElementById(config.cancelId)
-
-      if (confirmBtn) {
-        confirmBtn.onclick = () => {
-          if (modal) modal.style.display = 'none'
-          resolve(true)
-        }
+      const cleanup = () => {
+        confirmButton.removeEventListener('click', handleConfirm)
+        cancelButton.removeEventListener('click', handleCancel)
       }
 
-      if (cancelBtn) {
-        cancelBtn.onclick = () => {
-          if (modal) modal.style.display = 'none'
-          resolve(false)
-        }
-      }
+      confirmButton.addEventListener('click', handleConfirm)
+      cancelButton.addEventListener('click', handleCancel)
     })
   }
 
-  return {show}
+  return {
+    show,
+    close
+  }
 }
