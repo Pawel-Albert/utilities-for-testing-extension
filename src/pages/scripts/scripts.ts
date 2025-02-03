@@ -74,33 +74,259 @@ style.textContent = `
     margin: 0;
   }
 
+  .group-select-container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .group-select-container select {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .groups-list {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+
+  .group-info {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+
+  .group-name {
+    font-weight: 500;
+  }
+
+  .group-desc {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+  }
+
+  .group-actions {
+    display: flex;
+    gap: 5px;
+  }
+
   ${groupStyles}
 `
 document.head.appendChild(style)
 
-function initializeGroupSelect() {
-  const groupSelect = document.getElementById('scriptGroup') as HTMLSelectElement
-  const addGroupBtn = document.getElementById('addGroupBtn')
+// Move loadGroups to global scope
+let groupSelect: HTMLSelectElement
 
-  async function loadGroups() {
-    const storage = await getStorage()
-    const groups = storage.groups || {}
+// Keep track of selected groups
+let currentSelectedGroups: string[] = []
 
-    groupSelect.innerHTML = '<option value="">Select group...</option>'
-    Object.values(groups)
-      .sort((a: unknown, b: unknown) => (a as Group).order - (b as Group).order)
-      .forEach((group: unknown) => {
-        const option = document.createElement('option')
-        option.value = (group as Group).id
-        option.textContent = (group as Group).name
-        groupSelect.appendChild(option)
-      })
+async function loadGroups() {
+  if (!groupSelect) {
+    groupSelect = document.getElementById('scriptGroup') as HTMLSelectElement
   }
+  const storage = await getStorage()
+  const groups = storage.groups || {}
+
+  groupSelect.innerHTML = '<option value="">Select group...</option>'
+  Object.values(groups)
+    .sort((a: unknown, b: unknown) => (a as Group).order - (b as Group).order)
+    .forEach((group: unknown) => {
+      const option = document.createElement('option')
+      option.value = (group as Group).id
+      option.textContent = (group as Group).name
+      groupSelect.appendChild(option)
+    })
+}
+
+async function editGroup(groupId: string) {
+  const storage = await getStorage()
+  const group = storage.groups?.[groupId]
+
+  if (!group) return
+
+  // Close the manage groups modal first
+  modal.close()
+
+  const result = await modal.show('Edit Group', {
+    content: `
+      <div style="margin-bottom: 15px;">
+        <input type="text" id="editGroupName" value="${
+          group.name
+        }" placeholder="Group name" style="width: 100%; margin-bottom: 10px; padding: 8px;" />
+        <input type="text" id="editGroupDescription" value="${
+          group.description || ''
+        }" placeholder="Description (optional)" style="width: 100%; padding: 8px;" />
+      </div>
+    `,
+    confirmText: 'Save Changes',
+    cancelText: 'Cancel'
+  })
+
+  if (result) {
+    const nameInput = document.getElementById('editGroupName') as HTMLInputElement
+    const descInput = document.getElementById('editGroupDescription') as HTMLInputElement
+
+    if (nameInput?.value) {
+      await updateGroup(groupId, nameInput.value, descInput?.value || '')
+    }
+  }
+}
+
+async function updateGroup(groupId: string, name: string, description: string) {
+  const storage = await getStorage()
+
+  const existingGroup = Object.values(storage.groups || {}).find(
+    (group: any) =>
+      group.id !== groupId && group.name.toLowerCase() === name.toLowerCase()
+  )
+
+  if (existingGroup) {
+    toast.show('Group with this name already exists', 'error')
+    return
+  }
+
+  if (storage.groups?.[groupId]) {
+    storage.groups[groupId] = {
+      ...storage.groups[groupId],
+      name,
+      description
+    }
+
+    await saveStorage(storage)
+    await loadGroups()
+    groupFilter?.refresh()
+    showManageGroupsModal() // Refresh the modal content
+    toast.show('Group updated successfully')
+  }
+}
+
+async function deleteGroup(groupId: string) {
+  const storage = await getStorage()
+  const group = storage.groups?.[groupId]
+
+  if (!group) return
+
+  // Close the manage groups modal first
+  modal.close()
+
+  const confirmed = await modal.show(`Delete group "${group.name}"?`, {
+    content: 'This action cannot be undone.',
+    confirmText: 'Delete',
+    cancelText: 'Cancel',
+    confirmClass: 'btn-danger'
+  })
+
+  if (confirmed && storage.groups?.[groupId]) {
+    delete storage.groups[groupId]
+    await saveStorage(storage)
+    await loadGroups()
+    groupFilter?.refresh()
+    showManageGroupsModal() // Refresh the modal content
+    toast.show('Group deleted successfully')
+  } else {
+    // If user cancels deletion, show manage groups modal again
+    showManageGroupsModal()
+  }
+}
+
+async function showManageGroupsModal() {
+  const storage = await getStorage()
+  const groups = storage.groups || {}
+
+  let groupsHtml = '<div class="groups-list" id="groupsList">'
+  Object.values(groups)
+    .sort((a: any, b: any) => a.order - b.order)
+    .forEach((group: any) => {
+      groupsHtml += `
+        <div class="group-item" data-group-id="${group.id}">
+          <div class="group-info">
+            <div class="group-name">${group.name}</div>
+            ${
+              group.description
+                ? `<div class="group-desc">${group.description}</div>`
+                : ''
+            }
+          </div>
+          <div class="group-actions">
+            <button class="edit-group-btn" data-group-id="${group.id}">Edit</button>
+            <button class="delete-group-btn" data-group-id="${group.id}">Delete</button>
+          </div>
+        </div>
+      `
+    })
+  groupsHtml += '</div>'
+
+  // Close any existing modal first
+  modal.close()
+
+  // Show the modal with content
+  modal.show('Manage Groups', {
+    content: groupsHtml,
+    confirmText: 'Close',
+    cancelText: ''
+  })
+
+  // Add event listeners immediately after setting content
+  console.log('Adding event listeners...')
+  const editButtons = document.querySelectorAll('.edit-group-btn')
+  const deleteButtons = document.querySelectorAll('.delete-group-btn')
+
+  console.log('Found buttons:', {
+    editButtons: editButtons.length,
+    deleteButtons: deleteButtons.length
+  })
+
+  editButtons.forEach(btn => {
+    btn.addEventListener('click', async e => {
+      console.log('Edit button clicked')
+      e.preventDefault()
+      e.stopPropagation()
+      const button = e.currentTarget as HTMLButtonElement
+      const groupId = button.dataset.groupId
+      if (groupId) {
+        await editGroup(groupId)
+      }
+    })
+  })
+
+  deleteButtons.forEach(btn => {
+    btn.addEventListener('click', async e => {
+      console.log('Delete button clicked')
+      e.preventDefault()
+      e.stopPropagation()
+      const button = e.currentTarget as HTMLButtonElement
+      const groupId = button.dataset.groupId
+      if (groupId) {
+        await deleteGroup(groupId)
+      }
+    })
+  })
+}
+
+function initializeGroupSelect() {
+  groupSelect = document.getElementById('scriptGroup') as HTMLSelectElement
+  const addGroupBtn = document.getElementById('addGroupBtn')
+  const manageGroupsBtn = document.getElementById('manageGroupsBtn')
+
+  manageGroupsBtn?.addEventListener('click', e => {
+    e.preventDefault()
+    e.stopPropagation()
+    showManageGroupsModal()
+  })
 
   async function addNewGroup(name: string, description: string = '') {
     const storage = await getStorage()
 
-    // Check if group with this name already exists
     const existingGroup = Object.values(storage.groups || {}).find(
       (group: any) => group.name.toLowerCase() === name.toLowerCase()
     )
@@ -127,10 +353,14 @@ function initializeGroupSelect() {
     })
 
     await loadGroups()
+    groupFilter?.refresh()
     groupSelect.value = groupId
   }
 
-  addGroupBtn?.addEventListener('click', async () => {
+  addGroupBtn?.addEventListener('click', async e => {
+    e.preventDefault()
+    e.stopPropagation()
+
     const result = await modal.show('Add New Group', {
       content: `
         <div style="margin-bottom: 15px;">
@@ -223,6 +453,7 @@ async function saveScript() {
   })
 
   await refreshScriptsList()
+  groupFilter?.refresh()
   form.clear()
   toast.show('Script saved successfully!')
 }
@@ -337,6 +568,7 @@ async function loadScript(name: string) {
 
 const groupFilter = createGroupFilter('filterContainer', {
   onChange: selectedGroups => {
+    currentSelectedGroups = selectedGroups
     refreshScriptsList(selectedGroups)
   },
   pageKey: 'scripts'
@@ -400,28 +632,39 @@ const groupedList = createGroupedList<UserScript & {name: string}>('scriptsList'
   }
 })
 
-async function refreshScriptsList(selectedGroups: string[] = []) {
+async function refreshScriptsList(selectedGroups?: string[]) {
   const storage = await getStorage()
-
   if (!groupedList) return
 
-  if (selectedGroups.length === 0) {
-    groupedList.render([], selectedGroups)
+  // If selectedGroups not provided, use current selection
+  const groupsToUse = selectedGroups ?? currentSelectedGroups
+
+  // If no groups selected, show nothing
+  if (!groupsToUse || groupsToUse.length === 0) {
+    groupedList.render([], [])
     return
   }
 
-  if (!storage.scripts || Object.keys(storage.scripts).length === 0) {
-    groupedList.render([], selectedGroups)
-    return
-  }
+  const scriptsWithGroups = Object.entries(storage.scripts || {})
+    .map(([name, script]) => ({
+      ...script,
+      name,
+      groupName: (script.groupId && storage.groups?.[script.groupId]?.name) || 'No Group'
+    }))
+    // Filter scripts to only show those in selected groups
+    .filter(script => {
+      // If script has no group and no-group is selected, show it
+      if (!script.groupId && groupsToUse.includes('no-group')) {
+        return true
+      }
+      // If script has a group and that group is selected, show it
+      if (script.groupId && groupsToUse.includes(script.groupId)) {
+        return true
+      }
+      return false
+    })
 
-  const scriptsWithGroups = Object.entries(storage.scripts).map(([name, script]) => ({
-    ...script,
-    name,
-    groupName: storage.groups[script.groupId || '']?.name || 'No Group'
-  }))
-
-  groupedList.render(scriptsWithGroups, selectedGroups)
+  groupedList.render(scriptsWithGroups, groupsToUse)
 }
 
 async function debugStorage(): Promise<void> {
