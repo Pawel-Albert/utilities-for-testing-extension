@@ -72,25 +72,29 @@
       }
 
       button {
-        padding: 6px 12px;
+        padding: 8px 16px;
         background: var(--primary);
         color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        margin-right: 10px;
-        font-size: 13px;
-        position: relative;
-        top: 0;
+        font-size: 14px;
+        min-width: 100px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
         transition: all 0.2s ease;
       }
 
       button:hover {
         background: #1976d2;
+        transform: translateY(-1px);
       }
 
       button:active {
-        transform: translateY(2px);
+        transform: translateY(1px);
       }
 
       .btn-success {
@@ -261,10 +265,16 @@
         position: sticky;
         bottom: -20px;
         background: white;
-        padding: 15px 0 0;
+        padding: 15px 20px;
         border-top: 1px solid var(--border);
         margin: 20px -20px -20px;
-        padding: 15px 20px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .modal-buttons button {
+        min-width: 100px;
       }
 
       .group-select-container {
@@ -290,10 +300,11 @@
 
       #addGroupBtn,
       #manageGroupsBtn {
-        padding: 6px 12px;
-        font-size: 0.9em;
-        height: 32px;
-        display: flex;
+        height: 36px;
+        min-width: 100px;
+        padding: 0 16px;
+        font-size: 14px;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 4px;
@@ -333,14 +344,106 @@
 
       .editor-sidebar .buttons-row {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
+        gap: 12px;
         margin-top: 20px;
       }
 
-      .editor-sidebar .buttons-row .left-buttons {
+      .editor-sidebar .buttons-row .group-buttons {
         display: flex;
-        gap: 10px;
+        gap: 8px;
+        justify-content: flex-start;
+      }
+
+      .editor-sidebar .buttons-row .action-buttons {
+        display: flex;
+        justify-content: center;
+      }
+
+      .editor-sidebar .buttons-row .debug-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+      }
+
+      #updateButton {
+        width: 100%;
+      }
+
+      #cancelButton {
+        flex: 1;
+      }
+
+      #debugButton {
+        flex: 1;
+      }
+
+      .group-header {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        background: #e0e0e0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .group-toggle {
+        background: none;
+        border: none;
+        padding: 0 8px;
+        cursor: pointer;
+        font-size: 16px;
+        color: #666;
+        min-width: auto;
+        height: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .group-toggle:hover {
+        background: none;
+        transform: none;
+      }
+
+      .group-toggle.collapsed {
+        transform: rotate(-90deg);
+      }
+
+      .group-content {
+        padding-left: 15px;
+      }
+
+      .buttons-row {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .debug-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+      }
+
+      #saveButton {
+        width: 100%;
+      }
+
+      #updateButton {
+        width: 100%;
+      }
+
+      #cancelButton,
+      #debugButton {
+        flex: 1;
       }
     </style>
   </head>
@@ -404,25 +507,27 @@
                   <select id="scriptGroup"></select>
                 </div>
                 <div class="group-buttons">
-                  <button id="addGroupBtn">Add Group</button>
-                  <button id="manageGroupsBtn">
-                    <span class="gear-icon"></span>Manage
+                  <button type="button" id="addGroupBtn">Add Group</button>
+                  <button type="button" id="manageGroupsBtn" class="gear-icon">
+                    Manage
                   </button>
                 </div>
               </div>
             </div>
 
             <div class="buttons-row">
-              <div class="left-buttons">
+              <div class="action-buttons">
                 <button type="button" id="saveButton" class="btn-success">
                   Save Script
                 </button>
                 <button type="button" id="updateButton" class="btn-success">
                   Update Script
                 </button>
-                <button type="button" id="cancelButton">Cancel</button>
               </div>
-              <button type="button" id="debugStorage">Debug</button>
+              <div class="debug-buttons">
+                <button type="button" id="cancelButton">Cancel</button>
+                <button type="button" id="debugButton">Debug</button>
+              </div>
             </div>
           </div>
         </div>
