@@ -160,12 +160,15 @@ async function editGroup(groupId: string) {
   const result = await modal.show('Edit Group', {
     content: `
       <div style="margin-bottom: 15px;">
+        <label for="editGroupName" style="display: block; margin-bottom: 5px; font-weight: bold; color: #666; font-size: 14px;">Name</label>
         <input type="text" id="editGroupName" value="${
           group.name
-        }" placeholder="Group name" style="width: 100%; margin-bottom: 10px; padding: 8px;" />
+        }" style="width: 100%; margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
+        
+        <label for="editGroupDescription" style="display: block; margin-bottom: 5px; font-weight: bold; color: #666; font-size: 14px;">Description</label>
         <input type="text" id="editGroupDescription" value="${
           group.description || ''
-        }" placeholder="Description (optional)" style="width: 100%; padding: 8px;" />
+        }" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
       </div>
     `,
     confirmText: 'Save Changes',
@@ -361,11 +364,14 @@ function initializeGroupSelect() {
     e.preventDefault()
     e.stopPropagation()
 
-    const result = await modal.show('Add New Group', {
+    const result = await modal.show('Add Group', {
       content: `
         <div style="margin-bottom: 15px;">
-          <input type="text" id="newGroupName" placeholder="Group name" style="width: 100%; margin-bottom: 10px; padding: 8px;" />
-          <input type="text" id="newGroupDescription" placeholder="Description (optional)" style="width: 100%; padding: 8px;" />
+          <label for="groupName" style="display: block; margin-bottom: 5px; font-weight: bold; color: #666; font-size: 14px;">Name</label>
+          <input type="text" id="groupName" style="width: 100%; margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
+          
+          <label for="groupDescription" style="display: block; margin-bottom: 5px; font-weight: bold; color: #666; font-size: 14px;">Description</label>
+          <input type="text" id="groupDescription" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
         </div>
       `,
       confirmText: 'Add Group',
@@ -373,8 +379,8 @@ function initializeGroupSelect() {
     })
 
     if (result) {
-      const nameInput = document.getElementById('newGroupName') as HTMLInputElement
-      const descInput = document.getElementById('newGroupDescription') as HTMLInputElement
+      const nameInput = document.getElementById('groupName') as HTMLInputElement
+      const descInput = document.getElementById('groupDescription') as HTMLInputElement
       if (nameInput?.value) {
         await addNewGroup(nameInput.value, descInput?.value)
       }
@@ -667,11 +673,12 @@ async function refreshScriptsList(selectedGroups?: string[]) {
   groupedList.render(scriptsWithGroups, groupsToUse)
 }
 
-async function debugStorage(): Promise<void> {
-  console.group('Chrome Storage Debug Info')
+async function debugStorage() {
+  console.group('Scripts Storage Debug Info')
   try {
     const storage = await getStorage()
-    console.log('Current storage state:', storage)
+    console.log('Scripts:', storage.scripts)
+    console.log('Groups:', storage.groups)
 
     chrome.storage.local.getBytesInUse(null, bytes => {
       console.log(`Storage size: ${bytes} bytes (${(bytes / 1024 / 1024).toFixed(2)} MB)`)
@@ -689,7 +696,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const saveButton = document.getElementById('saveButton')
   const updateButton = document.getElementById('updateButton')
   const cancelButton = document.getElementById('cancelButton')
-  const debugStorageButton = document.getElementById('debugStorage')
+  const debugButton = document.getElementById('debugButton')
 
   if (saveButton) {
     saveButton.addEventListener('click', saveScript)
@@ -705,7 +712,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     })
   }
 
-  if (debugStorageButton) {
-    debugStorageButton.addEventListener('click', debugStorage)
+  if (debugButton) {
+    debugButton.addEventListener('click', debugStorage)
   }
 })
