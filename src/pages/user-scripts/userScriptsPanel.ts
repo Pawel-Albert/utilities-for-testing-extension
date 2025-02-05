@@ -32,6 +32,7 @@ const groupedList = createGroupedList<UserScript & {name: string}>('userScriptsL
   renderItem: script => {
     const scriptContainer = document.createElement('div')
     scriptContainer.className = 'script-container'
+    scriptContainer.setAttribute('data-script-name', script.name)
 
     const leftColumn = document.createElement('div')
     leftColumn.className = 'script-left-column'
@@ -69,7 +70,10 @@ const groupedList = createGroupedList<UserScript & {name: string}>('userScriptsL
     scriptContainer.appendChild(rightColumn)
 
     toggle.onchange = async () => {
-      if (toggle.checked) {
+      // Prevent immediate state reset
+      const newState = toggle.checked
+
+      if (newState) {
         const scriptId = `script-${sanitizeId(script.name)}-${Date.now()}`
         try {
           await chrome.userScripts.register([
@@ -91,7 +95,8 @@ const groupedList = createGroupedList<UserScript & {name: string}>('userScriptsL
             }
           ])
           console.log(`Script "${script.name}" registered with ID: ${scriptId}`)
-          await refreshPanel(locationInfo)
+          // Update registeredScripts immediately
+          registeredScripts = await chrome.userScripts.getScripts()
         } catch (err) {
           console.error('Failed to register script:', err)
           toggle.checked = false
@@ -110,9 +115,11 @@ const groupedList = createGroupedList<UserScript & {name: string}>('userScriptsL
             console.log('Unregistered script:', script.id)
           } catch (err) {
             console.error('Failed to unregister script:', script.id, err)
+            toggle.checked = true
           }
         }
-        await refreshPanel(locationInfo)
+        // Update registeredScripts immediately
+        registeredScripts = await chrome.userScripts.getScripts()
       }
     }
 
@@ -138,13 +145,11 @@ async function refreshPanel(info: typeof locationInfo, selectedGroups: string[] 
 
   if (!groupedList) return
 
-  if (!info.tabId) {
-    groupedList.render([], selectedGroups)
-    return
-  }
-
-  if (selectedGroups.length === 0) {
-    groupedList.render([], selectedGroups)
+  if (!info.tabId || selectedGroups.length === 0) {
+    // Only clear if we really need to show nothing
+    if (document.querySelector('.script-container')) {
+      groupedList.render([], selectedGroups)
+    }
     return
   }
 
@@ -159,7 +164,33 @@ async function refreshPanel(info: typeof locationInfo, selectedGroups: string[] 
       }
     })
 
-  groupedList.render(scriptsWithGroups, selectedGroups)
+  // Only re-render if the content has actually changed
+  const currentScripts = Array.from(document.querySelectorAll('.script-name'))
+    .map(el => el.textContent)
+    .sort()
+  const newScripts = scriptsWithGroups.map(s => s.name).sort()
+
+  if (JSON.stringify(currentScripts) !== JSON.stringify(newScripts)) {
+    groupedList.render(scriptsWithGroups, selectedGroups)
+  } else {
+    // Just update toggles state if needed
+    scriptsWithGroups.forEach(script => {
+      const toggle = document.querySelector(
+        `[data-script-name="${script.name}"] .script-toggle`
+      ) as HTMLInputElement
+      if (toggle) {
+        const isRegistered = registeredScripts.some(s => {
+          const expectedId = `script-${sanitizeId(script.name)}`
+          return (
+            s.id.startsWith(expectedId) && s.id.slice(expectedId.length).match(/^-\d+$/)
+          )
+        })
+        if (toggle.checked !== isRegistered) {
+          toggle.checked = isRegistered
+        }
+      }
+    })
+  }
 }
 
 async function initializeScripts() {
@@ -168,6 +199,15 @@ async function initializeScripts() {
   })
 }
 
+// Throttle panel refresh to reduce flickering
+let lastRefreshTime = 0
+const REFRESH_INTERVAL = 2000 // 2 seconds
+
 initializeScripts()
-// Update initializeLocationChecker to use currentSelectedGroups
-initializeLocationChecker(info => refreshPanel(info, currentSelectedGroups))
+initializeLocationChecker(info => {
+  const now = Date.now()
+  if (now - lastRefreshTime >= REFRESH_INTERVAL) {
+    lastRefreshTime = now
+    refreshPanel(info, currentSelectedGroups)
+  }
+})
