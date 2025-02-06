@@ -425,12 +425,198 @@ async function saveStorage(data: Storage): Promise<void> {
   }
 }
 
+// Add pattern validation functions at the top
+const URL_MAX_LENGTH = 2048
+const ALLOWED_SCHEMES = ['http:', 'https:', '*:']
+const FORBIDDEN_CHARS = /[<>|{}"]/
+const FORBIDDEN_UNICODE_RANGES = /[\uff00-\uffef]/ // Full-width Unicode characters
+
+function isValidDomain(domain: string): boolean {
+  // Basic domain validation
+  if (!domain || domain.length < 1) return false
+  if (domain.startsWith('.') || domain.endsWith('.')) return false
+  if (domain.includes('..')) return false
+  if (FORBIDDEN_CHARS.test(domain)) return false
+  if (FORBIDDEN_UNICODE_RANGES.test(domain)) return false
+
+  // Allow IP addresses
+  const ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/
+  if (ipPattern.test(domain)) return true
+
+  // Must have at least one dot for TLD, unless it's a wildcard
+  if (!domain.includes('.') && !domain.includes('*')) return false
+
+  return true
+}
+
+function normalizePattern(pattern: string): {pattern: string; error?: string} {
+  pattern = pattern.trim()
+
+  if (!pattern || pattern === '*') {
+    return {pattern: '*://*/*'}
+  }
+
+  try {
+    const patterns = pattern.split('|').map(p => {
+      p = p.trim()
+
+      if (/^[\/]+$/.test(p)) {
+        return {error: 'Invalid pattern. Pattern cannot consist of only slashes.'}
+      }
+      if (p.length > URL_MAX_LENGTH) {
+        return {
+          error: `Pattern too long. Maximum length is ${URL_MAX_LENGTH} characters.`
+        }
+      }
+
+      if (FORBIDDEN_CHARS.test(p)) {
+        return {error: 'Pattern contains forbidden characters.'}
+      }
+
+      if (/@/.test(p) && /:/.test(p.split('@')[0])) {
+        return {error: 'Pattern cannot contain authentication credentials.'}
+      }
+
+      p = p.replace(/\s+/g, '')
+
+      p = p.replace(/([^:])\/+/g, '$1/')
+
+      if (p.startsWith('//')) {
+        if (p === '//') {
+          return {error: 'Invalid pattern. Missing domain after //'}
+        }
+        return {pattern: ['https:', 'http:'].map(scheme => `${scheme}${p}`).join('|')}
+      }
+
+      let scheme = '*:'
+      if (p.includes('://')) {
+        const [schemepart] = p.split('://')
+        scheme = schemepart + ':'
+        if (!ALLOWED_SCHEMES.includes(scheme)) {
+          return {error: 'Invalid protocol. Use http://, https://, or *://'}
+        }
+        p = p.substring(scheme.length + 2)
+      } else if (p.includes(':')) {
+        return {error: 'Invalid protocol. Use http://, https://, or *://'}
+      }
+
+      if (p.startsWith('/')) {
+        return {error: 'Invalid pattern. Missing domain.'}
+      }
+
+      let [domain, ...pathParts] = p.split('/')
+      let path = pathParts.length > 0 ? `/${pathParts.join('/')}` : '/*'
+
+      if (domain.startsWith('www.')) {
+        domain = domain.substring(4)
+      }
+
+      if (!isValidDomain(domain)) {
+        return {error: 'Invalid domain format.'}
+      }
+
+      if (path.includes('??')) {
+        return {error: 'Invalid query string format.'}
+      }
+
+      if (path.includes('@')) {
+        return {error: '@ character is not allowed in path.'}
+      }
+
+      return {pattern: `${scheme}//${domain}${path}`}
+    })
+
+    const error = patterns.find(p => p.error)
+    if (error) {
+      return {pattern: '', error: error.error}
+    }
+
+    return {
+      pattern: [...new Set(patterns.map(p => p.pattern))].join('|')
+    }
+  } catch (error) {
+    return {
+      pattern: '',
+      error: error instanceof Error ? error.message : 'Invalid pattern format.'
+    }
+  }
+}
+
+function validatePattern(pattern: string): {isValid: boolean; error?: string} {
+  if (!pattern) {
+    return {isValid: true} // Empty pattern will be replaced with default
+  }
+
+  const result = normalizePattern(pattern)
+  if (result.error) {
+    return {
+      isValid: false,
+      error: result.error
+    }
+  }
+
+  const patterns = result.pattern.split('|')
+  for (const p of patterns) {
+    const trimmed = p.trim()
+    if (!trimmed) continue
+
+    // Basic pattern structure validation
+    if (!trimmed.includes('/')) {
+      return {
+        isValid: false,
+        error: 'Pattern must include at least one forward slash after host.'
+      }
+    }
+
+    // Extract scheme and rest
+    const [scheme, rest] = trimmed.split('//')
+    if (!rest) {
+      return {
+        isValid: false,
+        error: 'Invalid pattern format. Use scheme://host/path format.'
+      }
+    }
+
+    // Validate scheme
+    if (!ALLOWED_SCHEMES.includes(scheme)) {
+      return {
+        isValid: false,
+        error: 'Invalid protocol. Use http://, https://, or *://'
+      }
+    }
+
+    // Extract domain and path
+    const [domain] = rest.split('/')
+    if (!isValidDomain(domain)) {
+      return {
+        isValid: false,
+        error: 'Invalid domain format.'
+      }
+    }
+  }
+
+  return {isValid: true}
+}
+
 async function saveScript() {
   const {name, pattern, description, code} = form.getValues()
   const groupId = groupManager.getSelectedGroup()
 
   if (!name || name.length < 3) {
     toast.show('Script name must be at least 3 characters long', 'error')
+    return
+  }
+
+  // Validate pattern
+  const normalized = normalizePattern(pattern)
+  if (normalized.error) {
+    toast.show(normalized.error, 'error')
+    return
+  }
+
+  const {isValid, error} = validatePattern(normalized.pattern)
+  if (!isValid) {
+    toast.show(error || 'Invalid pattern format', 'error')
     return
   }
 
@@ -446,7 +632,7 @@ async function saveScript() {
   scripts[name] = {
     id: scriptId,
     code,
-    pattern: pattern || '*://*/*',
+    pattern: normalized.pattern,
     description,
     enabled: true,
     created: new Date().toISOString(),
@@ -473,6 +659,19 @@ async function updateScript() {
     return
   }
 
+  // Validate pattern
+  const normalized = normalizePattern(pattern)
+  if (normalized.error) {
+    toast.show(normalized.error, 'error')
+    return
+  }
+
+  const {isValid, error} = validatePattern(normalized.pattern)
+  if (!isValid) {
+    toast.show(error || 'Invalid pattern format', 'error')
+    return
+  }
+
   if (!editingId) {
     toast.show('Cannot identify script to update', 'error')
     return
@@ -493,7 +692,7 @@ async function updateScript() {
   const updatedScript: UserScript = {
     ...scripts[oldName],
     code,
-    pattern: pattern || '*://*/*',
+    pattern: normalized.pattern,
     description,
     groupId,
     updated: new Date().toISOString()
