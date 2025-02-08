@@ -150,17 +150,37 @@ export function createGroupFilter(containerId: string, config: GroupFilterConfig
 
   async function refreshGroups() {
     const result = await chrome.storage.local.get(['groups'])
-    groupsData = result.groups || {}
+    const newGroupsData = result.groups || {}
 
-    // Always add No Group option first
-    groups = ['', ...Object.values(groupsData).map((g: any) => g.id)]
-    updatePills()
+    // Check if groups have changed
+    const currentGroupIds = Object.keys(groupsData).sort().join(',')
+    const newGroupIds = Object.keys(newGroupsData).sort().join(',')
+
+    if (currentGroupIds !== newGroupIds) {
+      groupsData = newGroupsData
+      // Always add No Group option first
+      groups = ['', ...Object.values(groupsData).map((g: any) => g.id)]
+      updatePills()
+
+      // Ensure selected groups still exist
+      selectedGroups = selectedGroups.filter(g => groups.includes(g))
+      if (selectedGroups.length === 0) {
+        selectedGroups = [...groups] // Select all by default if current selection is invalid
+      }
+      await saveFilterState(selectedGroups)
+      config.onChange(selectedGroups)
+    }
   }
 
   async function init() {
     await refreshGroups()
     const savedGroups = await loadFilterState()
     config.onChange(savedGroups)
+
+    // Add auto-refresh if pageKey is not 'scripts'
+    if (config.pageKey !== 'scripts') {
+      setInterval(() => refreshGroups(), 5000)
+    }
   }
 
   init()
