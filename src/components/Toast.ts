@@ -1,21 +1,27 @@
-export function createToast(elementId: string) {
-  const element = document.getElementById(elementId)
+export const createToast = (elementId: string, duration: number = 3000) => {
+  const toastElement = document.getElementById(elementId)
 
-  function show(message: string, type = 'success'): void {
-    if (!element) return
-
-    element.textContent = message
-    element.className = `toast ${type}`
-
-    void element.offsetWidth
-
-    element.classList.add('show')
-    setTimeout(() => {
-      element.classList.remove('show')
-    }, 2000)
+  if (!toastElement) {
+    console.error('Toast element not found')
+    return {
+      show: () => {}
+    }
   }
 
-  return {
-    show
+  let timeoutId: number
+
+  const show = (message: string, type: 'success' | 'error' = 'success') => {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+
+    toastElement.textContent = message
+    toastElement.className = `toast ${type} show`
+
+    timeoutId = window.setTimeout(() => {
+      toastElement.className = 'toast'
+    }, duration)
   }
+
+  return {show}
 }

@@ -1,21 +1,38 @@
-export type UserScript = {
+export interface UserScript {
   id: string
-  enabled: boolean
-  pattern: string
   code: string
-  description?: string
+  pattern: string
+  description: string
+  enabled: boolean
   created?: string
   updated?: string
+  groupId?: string
 }
 
-export type UserScripts = {
+export interface Group {
+  id: string
+  name: string
+  description?: string
+  order: number
+}
+
+export interface UserScripts {
   [key: string]: UserScript
 }
 
-export type ExecuteResult = {
+export interface Groups {
+  [key: string]: Group
+}
+
+export interface UserScriptsStorage {
+  scripts: UserScripts
+  groups: Groups
+}
+
+export interface ExecuteResult {
   success: boolean
-  logs: [string, ...any[]][]
   error?: string
+  logs: [string, ...any[]][]
 }
 
 export type ConsoleLogType = 'log' | 'error' | 'warn'
