@@ -12,7 +12,8 @@ type Storage = {
   groups: Groups
 }
 
-const toast = createToast('toast')
+const TOAST_DURATION = 5000
+const toast = createToast('toast', TOAST_DURATION)
 const modal = createModal({
   modalId: 'confirmModal',
   messageId: 'modalMessage',
@@ -213,6 +214,13 @@ async function updateGroup(groupId: string, name: string, description: string) {
   }
 }
 
+async function getScriptsInGroup(groupId: string): Promise<[string, UserScript][]> {
+  const storage = await getStorage()
+  return Object.entries(storage.scripts).filter(
+    ([_, script]) => script.groupId === groupId
+  )
+}
+
 async function deleteGroup(groupId: string) {
   const storage = await getStorage()
   const group = storage.groups?.[groupId]
@@ -222,51 +230,118 @@ async function deleteGroup(groupId: string) {
   // Close the manage groups modal first
   modal.close()
 
-  const confirmed = await modal.show(`Delete group "${group.name}"?`, {
-    content: 'This action cannot be undone.',
-    confirmText: 'Delete',
-    cancelText: 'Cancel',
-    confirmClass: 'btn-danger'
-  })
+  // Check if group has any scripts
+  const scriptsInGroup = await getScriptsInGroup(groupId)
 
-  if (confirmed && storage.groups?.[groupId]) {
-    delete storage.groups[groupId]
-    await saveStorage(storage)
-    await loadGroups()
-    groupFilter?.refresh()
-    showManageGroupsModal() // Refresh the modal content
-    toast.show('Group deleted successfully')
-  } else {
-    // If user cancels deletion, show manage groups modal again
+  // Check if this is the default "No Group"
+  if (groupId === '') {
+    toast.show('Cannot delete the default "No Group"', 'error')
     showManageGroupsModal()
+    return
   }
+
+  if (scriptsInGroup.length > 0) {
+    // Show warning modal with options
+    const confirmed = await modal.show(
+      `Warning: Group "${group.name}" has ${scriptsInGroup.length} script${
+        scriptsInGroup.length > 1 ? 's' : ''
+      } assigned to it.`,
+      {
+        content: `
+          <p>The following scripts are in this group:</p>
+          <ul>
+            ${scriptsInGroup.map(([name]) => `<li>${name}</li>`).join('')}
+          </ul>
+          <p>Do you want to move these scripts to "No Group" and delete the group?</p>
+        `,
+        confirmText: 'Move Scripts & Delete Group',
+        cancelText: 'Cancel',
+        confirmClass: 'btn-danger'
+      }
+    )
+
+    if (!confirmed) {
+      showManageGroupsModal() // Return to manage groups modal
+      return
+    }
+
+    // Move all scripts to "No Group"
+    for (const [name, script] of scriptsInGroup) {
+      storage.scripts[name] = {
+        ...script,
+        groupId: '' // Use empty string for "No Group"
+      }
+    }
+  } else {
+    // If no scripts, just confirm deletion
+    const confirmed = await modal.show(`Delete group "${group.name}"?`, {
+      content: 'This group has no scripts assigned to it.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      confirmClass: 'btn-danger'
+    })
+
+    if (!confirmed) {
+      showManageGroupsModal()
+      return
+    }
+  }
+
+  // Delete the group
+  delete storage.groups[groupId]
+  await saveStorage(storage)
+  await loadGroups()
+  groupFilter?.refresh()
+  await refreshScriptsList()
+  showManageGroupsModal()
+
+  const message =
+    scriptsInGroup.length > 0
+      ? `Group deleted and ${scriptsInGroup.length} script${
+          scriptsInGroup.length > 1 ? 's' : ''
+        } moved to "No Group"`
+      : 'Group deleted successfully'
+
+  toast.show(message)
 }
 
 async function showManageGroupsModal() {
   const storage = await getStorage()
   const groups = storage.groups || {}
+  const groupsArray = Object.values(groups)
 
   let groupsHtml = '<div class="groups-list" id="groupsList">'
-  Object.values(groups)
-    .sort((a: any, b: any) => a.order - b.order)
-    .forEach((group: any) => {
-      groupsHtml += `
-        <div class="group-item" data-group-id="${group.id}">
-          <div class="group-info">
-            <div class="group-name">${group.name}</div>
-            ${
-              group.description
-                ? `<div class="group-desc">${group.description}</div>`
-                : ''
-            }
+
+  if (groupsArray.length === 0) {
+    groupsHtml += `
+      <div style="text-align: center; padding: 20px;">
+        <strong>No custom groups found.</strong>
+        <p style="margin-top: 10px; color: #666;">
+          Click "Add Group" to create your first group for organizing scripts.
+        </p>
+      </div>`
+  } else {
+    groupsArray
+      .sort((a: any, b: any) => a.order - b.order)
+      .forEach((group: any) => {
+        groupsHtml += `
+          <div class="group-item" data-group-id="${group.id}">
+            <div class="group-info">
+              <div class="group-name">${group.name}</div>
+              ${
+                group.description
+                  ? `<div class="group-desc">${group.description}</div>`
+                  : ''
+              }
+            </div>
+            <div class="group-actions">
+              <button class="edit-group-btn" data-group-id="${group.id}">Edit</button>
+              <button class="delete-group-btn" data-group-id="${group.id}">Delete</button>
+            </div>
           </div>
-          <div class="group-actions">
-            <button class="edit-group-btn" data-group-id="${group.id}">Edit</button>
-            <button class="delete-group-btn" data-group-id="${group.id}">Delete</button>
-          </div>
-        </div>
-      `
-    })
+        `
+      })
+  }
   groupsHtml += '</div>'
 
   // Close any existing modal first
@@ -854,20 +929,10 @@ async function refreshScriptsList(selectedGroups?: string[]) {
     .map(([name, script]) => ({
       ...script,
       name,
-      groupName: (script.groupId && storage.groups?.[script.groupId]?.name) || 'No Group'
+      groupName: script.groupId ? storage.groups?.[script.groupId]?.name : 'No Group',
+      groupId: script.groupId || '' // Ensure empty string for no group
     }))
-    // Filter scripts to only show those in selected groups
-    .filter(script => {
-      // If script has no group and no-group is selected, show it
-      if (!script.groupId && groupsToUse.includes('no-group')) {
-        return true
-      }
-      // If script has a group and that group is selected, show it
-      if (script.groupId && groupsToUse.includes(script.groupId)) {
-        return true
-      }
-      return false
-    })
+    .filter(script => groupsToUse.includes(script.groupId))
 
   groupedList.render(scriptsWithGroups, groupsToUse)
 }

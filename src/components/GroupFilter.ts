@@ -97,12 +97,14 @@ export function createGroupFilter(containerId: string, config: GroupFilterConfig
       const pill = document.createElement('div')
       pill.className = `group-pill${selectedGroups.includes(group) ? ' selected' : ''}`
 
-      if (group === 'no-group') {
-        pill.textContent = 'No Group'
+      let label
+      if (group === '') {
+        label = 'No Group'
       } else {
-        const groupData = groupsData[group]
-        pill.textContent = groupData?.name || group
+        label = groupsData[group]?.name || group
       }
+
+      pill.textContent = label
 
       pill.addEventListener('click', async () => {
         if (selectedGroups.includes(group)) {
@@ -151,7 +153,7 @@ export function createGroupFilter(containerId: string, config: GroupFilterConfig
     groupsData = result.groups || {}
 
     // Always add No Group option first
-    groups = ['no-group', ...Object.values(groupsData).map((g: any) => g.id)]
+    groups = ['', ...Object.values(groupsData).map((g: any) => g.id)]
     updatePills()
   }
 

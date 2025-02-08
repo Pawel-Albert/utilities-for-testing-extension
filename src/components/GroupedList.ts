@@ -53,7 +53,7 @@ export function createGroupedList<T extends GroupedItem>(
         ? Object.entries(groupedItems).filter(
             ([groupId]) =>
               selectedGroups.includes(groupId) ||
-              (groupId === '' && selectedGroups.includes('no-group'))
+              (groupId === '' && selectedGroups.includes(''))
           )
         : Object.entries(groupedItems)
 

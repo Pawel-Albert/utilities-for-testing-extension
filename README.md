@@ -288,6 +288,52 @@ The extension now uses a more robust storage system:
 - Better script injection timing control
 - Improved error handling and logging
 
+### Version 0.4.2 Updates
+
+#### Script Panels Improvements
+
+- Unified location checking for chrome:// and chrome-extension:// URLs
+- Removed duplicate warnings and inline scripts
+- Improved CSP compliance
+- Added better descriptions for Execute/User Scripts differences
+- Simplified button hover and click effects
+- Added pattern display to buttons
+- Improved button layout with flexbox
+
+#### Group Management & Filtering
+
+- Added comprehensive group management functionality (add/edit/delete groups)
+- Implemented group filter component with collapsible panel
+- Added filter state persistence in chrome.storage
+- Replaced select with pills for better UX
+- Added Select All and Clear buttons
+- Added proper handling of scripts without groups
+- Added descriptive labels to group modals
+- Improved group names display (showing name instead of ID)
+- Persisted filter state per panel type
+
+#### Performance & UX Improvements
+
+- Eliminated flickering in User Scripts Panel toggle operations
+- Added throttling to panel refresh (2s interval)
+- Optimized toggle state management
+- Improved script list rendering with content comparison
+- Enhanced error handling for toggle state restoration
+- Added better debug information and storage info display
+
+#### URL Pattern Validation
+
+- Implemented comprehensive URL pattern validation with user-friendly messages
+- Added pattern normalization for common cases
+- Added validation for:
+  - Protocol/scheme (http://, https://, \*://)
+  - Domain format and TLD
+  - Path structure
+  - Special characters and security checks
+  - Length limits
+- Replaced console errors with toast notifications
+- Improved error handling in pattern processing
+
 ## Todo
 
 - [x] Form auto filler with random data
