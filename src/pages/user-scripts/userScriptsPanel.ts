@@ -28,6 +28,22 @@ function sanitizeId(name: string): string {
 // Keep track of selected groups
 let currentSelectedGroups: string[] = []
 
+/**
+ * Creates and initializes a self-bootstrapping group filter component.
+ * This component is self-contained and manages its own lifecycle through DOM events,
+ * storage listeners, and interval timers.
+ *
+ * @type {import('../../components/GroupFilter').GroupFilter | null}
+ * @description Uses the Self-Initializing Component pattern where the component:
+ * - Creates and manages its own UI elements
+ * - Sets up its own event listeners
+ * - Handles its own state management
+ * - Maintains storage synchronization
+ * - Performs automatic refresh every 5 seconds
+ *
+ * The component remains active through side effects even though
+ * the returned reference isn't used directly.
+ */
 const groupFilter = createGroupFilter('filterContainer', {
   onChange: selectedGroups => {
     currentSelectedGroups = selectedGroups
