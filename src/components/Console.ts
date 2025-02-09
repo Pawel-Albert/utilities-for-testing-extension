@@ -8,9 +8,36 @@ export function createConsole(options: ConsoleOptions) {
   const container = document.getElementById(options.containerId)!
   const content = document.getElementById(options.contentId)!
   const clearButton = document.getElementById(options.clearButtonId)!
+  const header = container.querySelector('.console-header')!
+  const title = container.querySelector('.console-title')!
+
+  const toggle = document.createElement('span')
+  toggle.className = 'console-toggle'
+  toggle.textContent = '▼'
+  title.insertBefore(toggle, title.firstChild)
+
+  let isCollapsed = false
 
   function setupEventListeners() {
-    clearButton.addEventListener('click', () => clear())
+    clearButton.addEventListener('click', e => {
+      e.stopPropagation()
+      clear()
+    })
+
+    header.addEventListener('click', () => {
+      isCollapsed = !isCollapsed
+      container.classList.toggle('collapsed', isCollapsed)
+
+      localStorage.setItem('console-collapsed', String(isCollapsed))
+    })
+  }
+
+  function restoreState() {
+    const savedState = localStorage.getItem('console-collapsed')
+    if (savedState === 'true') {
+      isCollapsed = true
+      container.classList.add('collapsed')
+    }
   }
 
   function interceptConsole() {
@@ -39,6 +66,10 @@ export function createConsole(options: ConsoleOptions) {
     console.error = (...args) => {
       log('error', ...args)
       originalConsole.error.apply(console, args)
+      if (isCollapsed) {
+        isCollapsed = false
+        container.classList.remove('collapsed')
+      }
     }
   }
 
@@ -74,10 +105,15 @@ export function createConsole(options: ConsoleOptions) {
   }
 
   setupEventListeners()
+  restoreState()
   interceptConsole()
 
   return {
     log,
-    clear
+    clear,
+    toggle: () => {
+      isCollapsed = !isCollapsed
+      container.classList.toggle('collapsed')
+    }
   }
 }

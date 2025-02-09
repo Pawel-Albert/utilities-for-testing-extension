@@ -1,7 +1,7 @@
 export const consoleStyles = `
   .console-container {
     height: var(--console-height);
-    min-height: var(--console-height);
+    min-height: 32px;
     flex-shrink: 0;
     background: #242424;
     color: #fff;
@@ -10,6 +10,11 @@ export const consoleStyles = `
     border-top: 1px solid #444;
     display: flex;
     flex-direction: column;
+    transition: height 0.3s ease;
+  }
+
+  .console-container.collapsed {
+    height: 32px;
   }
 
   .console-header {
@@ -19,11 +24,30 @@ export const consoleStyles = `
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #444;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .console-header:hover {
+    background: #3a3a3a;
   }
 
   .console-title {
     font-weight: bold;
     color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .console-toggle {
+    display: inline-block;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+  }
+
+  .console-container.collapsed .console-toggle {
+    transform: rotate(-90deg);
   }
 
   .console-actions {
