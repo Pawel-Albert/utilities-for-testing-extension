@@ -5,12 +5,20 @@ import {initializeLocationChecker} from '../../utils/locationChecker'
 import {createGroupFilter} from '../../components/GroupFilter'
 import {createGroupedList} from '../../components/GroupedList'
 import {groupStyles} from '../../components/styles'
+import {createConsole} from '../../components/Console'
+import {consoleStyles} from '../../components/styles/consoleStyles'
 
 createPanelSelector(document.body)
 
 const style = document.createElement('style')
-style.textContent = groupStyles
+style.textContent = `${groupStyles}${consoleStyles}`
 document.head.appendChild(style)
+
+createConsole({
+  containerId: 'consoleContainer',
+  contentId: 'consoleContent',
+  clearButtonId: 'clearConsole'
+})
 
 // Keep track of selected groups
 let currentSelectedGroups: string[] = []
@@ -44,18 +52,50 @@ const groupedList = createGroupedList<UserScript & {name: string}>('userScriptsL
         const results = await executeUserScript(script, locationInfo.tabId!)
         const result = results[0].result as ExecuteResult
 
+        // Log script output first
         result.logs.forEach(([type, ...args]) => {
-          ;(console as any)[type]('Script output:', ...args)
+          switch (type) {
+            case 'log':
+              console.log('Script output:', ...args)
+              break
+            case 'info':
+              console.info('Script output:', ...args)
+              break
+            case 'warn':
+              console.warn('Script output:', ...args)
+              break
+            case 'error':
+              console.error('Script execution error:', ...args)
+              break
+          }
         })
 
+        // Then handle execution status
         if (!result.success) {
-          throw new Error(result.error)
+          const error = result.error
+          const errorDetails =
+            typeof error === 'object' && error !== null
+              ? {
+                  message: String((error as {message?: unknown}).message || error),
+                  stack: String((error as {stack?: unknown}).stack || '')
+                }
+              : String(error)
+
+          console.error('Script execution failed:', {
+            name: script.name,
+            error: errorDetails
+          })
+          throw error
         }
 
         console.log(`Script "${script.name}" executed successfully`)
       } catch (err) {
-        console.error('Failed to execute script:', err)
-        alert(`Failed to execute script: ${(err as Error).message}`)
+        const error = err as Error
+        console.error('Failed to execute script:', {
+          name: script.name,
+          error: error.message,
+          stack: error.stack
+        })
       }
     }
 

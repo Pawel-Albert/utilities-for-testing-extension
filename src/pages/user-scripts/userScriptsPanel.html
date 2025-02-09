@@ -6,16 +6,38 @@
       :root {
         --border: #e0e0e0;
         --primary: #2196f3;
+        --console-height: 200px;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
       }
 
       body {
-        margin: 0;
-        padding: 15px;
         font-family: system-ui, -apple-system, sans-serif;
         min-width: 0;
         max-width: 100%;
         box-sizing: border-box;
-        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .scripts-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        min-height: 0;
       }
 
       .scripts-section {
@@ -49,23 +71,6 @@
 
       .script-item:hover {
         opacity: 0.9;
-      }
-
-      .beta-notice {
-        background: #fff3cd;
-        padding: 10px;
-        border-radius: 4px;
-        margin-bottom: 15px;
-        font-size: 14px;
-      }
-
-      .error-notice {
-        background: #ffebee;
-        color: #c62828;
-        padding: 10px;
-        border-radius: 4px;
-        margin-bottom: 15px;
-        font-size: 14px;
       }
 
       /* Kontener dla skryptu */
@@ -178,7 +183,11 @@
 
       /* Beta notice */
       .beta-notice {
-        margin-bottom: 20px;
+        background: #fff3cd;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-size: 14px;
       }
 
       .script-pattern {
@@ -229,33 +238,51 @@
     </style>
   </head>
   <body>
-    <div class="beta-notice">
-      This feature is in BETA. Some functionality may be incomplete or change in future
-      updates.
-    </div>
+    <div class="main-content">
+      <div class="scripts-content">
+        <div class="beta-notice">
+          This feature is in BETA. Some functionality may be incomplete or change in
+          future updates.
+        </div>
 
-    <div id="locationWarning" class="location-warning">
-      Scripts cannot be executed on chrome:// or chrome-extension:// pages
-      <div id="currentUrl" class="current-url"></div>
-    </div>
+        <div id="locationWarning" class="location-warning">
+          Scripts cannot be executed on chrome:// or chrome-extension:// pages
+          <div id="currentUrl" class="current-url"></div>
+        </div>
 
-    <p class="description">
-      <small>
-        User Scripts are persistent scripts that add buttons to pages matching their
-        patterns. Unlike Execution Scripts, they remain on the page and can be triggered
-        multiple times. Use these for recurring operations on specific sites. <br /><br />
-        <strong>Note:</strong> These scripts can bypass Content Security Policy (CSP)
-        restrictions on most websites.
-      </small>
-    </p>
+        <p class="description">
+          <small>
+            User Scripts are persistent scripts that add buttons to pages matching their
+            patterns. Unlike Execution Scripts, they remain on the page and can be
+            triggered multiple times. Use these for recurring operations on specific
+            sites. <br /><br />
+            <strong>Note:</strong> These scripts can bypass Content Security Policy (CSP)
+            restrictions on most websites.
+          </small>
+        </p>
 
-    <div id="filterContainer" class="filter-container">
-      <!-- Group filter will be injected here -->
-    </div>
+        <div id="filterContainer" class="filter-container">
+          <!-- Group filter will be injected here -->
+        </div>
 
-    <div class="scripts-section">
-      <h3>User Scripts</h3>
-      <div id="userScriptsList" class="script-grid"></div>
+        <div class="scripts-section">
+          <h3>User Scripts</h3>
+          <div id="userScriptsList" class="script-grid"></div>
+        </div>
+      </div>
+
+      <!-- Console Panel -->
+      <div id="consoleContainer" class="console-container">
+        <div class="console-header">
+          <span class="console-title">Console</span>
+          <div class="console-actions">
+            <button class="console-action" id="clearConsole">Clear</button>
+          </div>
+        </div>
+        <div class="console-content" id="consoleContent">
+          <!-- Console messages will be injected here -->
+        </div>
+      </div>
     </div>
 
     <script src="userScriptsPanel.ts" type="module"></script>

@@ -5,13 +5,21 @@ import {initializeLocationChecker} from '../../utils/locationChecker'
 import {createGroupFilter} from '../../components/GroupFilter'
 import {createGroupedList} from '../../components/GroupedList'
 import {groupStyles} from '../../components/styles'
+import {createConsole} from '../../components/Console'
+import {consoleStyles} from '../../components/styles/consoleStyles'
 import {UserScript} from '../../types/userScripts'
 
 createPanelSelector(document.body)
 
 const style = document.createElement('style')
-style.textContent = groupStyles
+style.textContent = `${groupStyles}${consoleStyles}`
 document.head.appendChild(style)
+
+createConsole({
+  containerId: 'consoleContainer',
+  contentId: 'consoleContent',
+  clearButtonId: 'clearConsole'
+})
 
 function sanitizeId(name: string): string {
   return name.replace(/[^a-zA-Z0-9-_]/g, '_')
@@ -98,7 +106,12 @@ const groupedList = createGroupedList<UserScript & {name: string}>('userScriptsL
           // Update registeredScripts immediately
           registeredScripts = await chrome.userScripts.getScripts()
         } catch (err) {
-          console.error('Failed to register script:', err)
+          const error = err as Error
+          console.error('Failed to register script:', {
+            name: script.name,
+            error: error.message,
+            stack: error.stack
+          })
           toggle.checked = false
         }
       } else {
@@ -114,7 +127,12 @@ const groupedList = createGroupedList<UserScript & {name: string}>('userScriptsL
             await chrome.userScripts.unregister({ids: [script.id]})
             console.log('Unregistered script:', script.id)
           } catch (err) {
-            console.error('Failed to unregister script:', script.id, err)
+            const error = err as Error
+            console.error('Failed to unregister script:', {
+              id: script.id,
+              error: error.message,
+              stack: error.stack
+            })
             toggle.checked = true
           }
         }
