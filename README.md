@@ -334,6 +334,14 @@ The extension now uses a more robust storage system:
 - Replaced console errors with toast notifications
 - Improved error handling in pattern processing
 
+### Version 0.4.3 Updates
+
+#### Console & Build Improvements
+
+- Added collapsible console panel with state persistence
+- Improved build process with automatic dist cleanup
+- Enhanced console error handling and auto-expand on errors
+
 ## Todo
 
 - [x] Form auto filler with random data
@@ -347,7 +355,7 @@ The extension now uses a more robust storage system:
   - [ ] Add script import/export
   - [ ] Add script versioning
   - [ ] Add script dependencies
-- [ ] Implement Chrome Side Panel integration
+- [x] Implement Chrome Side Panel integration
 - [ ] Add more configuration options based on user feedback
 - [ ] Implement more "quality of life" improvements based on user requests
 
