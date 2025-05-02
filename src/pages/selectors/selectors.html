@@ -126,6 +126,130 @@
         font-size: 13px;
         color: #666;
       }
+
+      .custom-selectors-section {
+        background: white;
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      .form-group textarea {
+        min-height: 150px;
+        font-family: monospace;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      button.secondary {
+        background: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+      }
+
+      .custom-site-item {
+        background: var(--background);
+        margin-bottom: 10px;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .custom-site-header {
+        background: #f5f5f5;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .site-name {
+        font-weight: bold;
+      }
+
+      .site-actions {
+        display: flex;
+        gap: 5px;
+      }
+
+      .site-actions button {
+        padding: 4px 8px;
+        font-size: 12px;
+      }
+
+      .site-content {
+        padding: 10px;
+        margin: 0;
+        font-family: monospace;
+        font-size: 12px;
+        white-space: pre-wrap;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .status {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .status.success {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .status.error {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .example-code {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+        margin-bottom: 15px;
+        white-space: pre-wrap;
+      }
     </style>
   </head>
   <body>
@@ -134,6 +258,65 @@
       <div class="preview-notice">
         This is a preview feature. The interface may change in future updates.
       </div>
+
+      <div class="custom-selectors-section">
+        <h3>Custom Site Selectors</h3>
+        <p class="help-text">
+          Add your own site selectors for form filling. These will be used instead of the
+          built-in ones when matched.
+        </p>
+
+        <div id="statusMessage" class="status"></div>
+
+        <div class="form-group">
+          <label for="sitePattern"
+            >Site Pattern (e.g., "example.com|*.example.org")</label
+          >
+          <input type="text" id="sitePattern" placeholder="Enter site domain pattern" />
+        </div>
+
+        <div class="form-group">
+          <label for="selectorsJson">Selectors JSON</label>
+          <textarea
+            id="selectorsJson"
+            placeholder='Example:
+{
+  "email": {
+    "selector": "input[name=email]",
+    "type": "input",
+    "data": "test@example.com"
+  },
+  "password": {
+    "selector": "input[name=password]",
+    "type": "input",
+    "data": "Test123!"
+  }
+}'
+          ></textarea>
+        </div>
+
+        <div class="button-group">
+          <button id="addCustomSite">Add Custom Site</button>
+          <button id="exportCustomSites" class="secondary">Export All</button>
+          <button id="importCustomSites" class="secondary">Import</button>
+          <input type="file" id="importFile" accept=".json" style="display: none" />
+        </div>
+
+        <h4>Available Field Types Reference</h4>
+        <div class="example-code">
+          - input: Regular input field - inputShadow: Input within shadow DOM -
+          checkCheckbox: Checkbox to check - simpleClick: Element to click -
+          dispatchedClick: Element to click using dispatched event - multiStep: Multiple
+          operations in sequence
+        </div>
+
+        <h4>Your Custom Sites</h4>
+        <div id="customSitesList">
+          <!-- Custom sites will be displayed here -->
+          <p class="help-text" id="noCustomSites">No custom sites added yet.</p>
+        </div>
+      </div>
+
       <div id="siteSelectors"></div>
     </div>
 

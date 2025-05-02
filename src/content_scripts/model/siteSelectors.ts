@@ -2,7 +2,8 @@ import {SiteDataType} from '../../types/formFiller'
 import {fakeDataPL, fakeDataSb} from './fakeDataPL'
 import {fakeDataRO} from './fakeDataRO'
 
-export function getSiteData(): SiteDataType {
+// This function returns the built-in site data
+export function getBuiltInSiteData(): SiteDataType {
   // This is company specific code, later we will also ad fully customizable site selectors
   // Get domain from session storage and current host to determine the country
   const domain = sessionStorage.getItem('__DOMAIN__')
@@ -67,90 +68,90 @@ export function getSiteData(): SiteDataType {
       }
     },
 
-    'www.qa.lendi.pl|www.lendi.pl|lendi.pl|qa.lendi.pl|localhost|lendi-b2c-*': {
-      firstName: {
-        selector: '[data-cy=lead-card-firstname-input] input',
-        type: 'inputShadow',
-        data: commonData.firstName
-      },
-      lastName: {
-        selector: '[data-cy=lead-card-lastname-input] input',
-        type: 'inputShadow',
-        data: commonData.lastName
-      },
-      email: {
-        selector: '[data-cy=lead-card-email-input] input',
-        type: 'inputShadow',
-        data: commonData.email
-      },
-      phone: {
-        selector: '[data-cy=lead-card-phone-input] input:not([disabled])',
-        type: 'inputShadow',
-        data: commonData.mobile
-      },
-      consultCheckbox: {
-        selector: '[data-cy="lead-card-data-process-checkbox"] input',
-        type: 'checkCheckbox'
-      },
-      checkAll: {
-        selector: '[id^=checkbox]',
-        type: 'checkCheckbox',
-        index: 0
-      },
-      mortagePeriod: {
-        selector: 'input[pattern="[0-9]*"][min="5"][max="35"]',
-        type: 'input',
-        data: commonData.mortagePeriod
-      },
-      incomeAmmount: {
-        selector: 'input[pattern="[0-9]*"][min="0"]',
-        type: 'input',
-        data: commonData.incomeAmmount,
-        index: 1
-      },
-      incomePeriod: {
-        selector: '[draggable="false"]',
-        type: 'simpleClick',
-        index: 0
-      },
-      anyCreditsFalse: {
-        selector: '[draggable="false"]',
-        type: 'simpleClick',
-        index: 3
-      },
-      anyCardsFalse: {
-        selector: '[draggable="false"]',
-        type: 'simpleClick',
-        index: 5
-      },
-      yearOfBearth: {
-        selector: 'input[pattern="[0-9]*"][min="1940"]',
-        type: 'input',
-        data: commonData.yearOfBearth
-      },
-      householdExpenses: {
-        selector: 'input[pattern="[0-9]*"][data-mask-raw-value]',
-        type: 'input',
-        data: commonData.householdExpenses,
-        index: 2
-      },
-      mobileGeneral: {
-        selector: '[type=tel]:not([disabled])',
-        type: 'input',
-        data: commonData.mobile
-      },
-      SOI: {
-        selector: 'input[inputmode="none"]',
-        type: 'dispatchedClick',
-        index: 4
-      },
-      SOIPicker: {
-        selector:
-          '[target="[object HTMLDivElement]"] [role="listbox"] [data-no-activator]',
-        type: 'dispatchedClick',
-        index: 2
-      }
-    },
+    // 'www.qa.lendi.pl|www.lendi.pl|lendi.pl|qa.lendi.pl|localhost|lendi-b2c-*': {
+    //   firstName: {
+    //     selector: '[data-cy=lead-card-firstname-input] input',
+    //     type: 'inputShadow',
+    //     data: commonData.firstName
+    //   },
+    //   lastName: {
+    //     selector: '[data-cy=lead-card-lastname-input] input',
+    //     type: 'inputShadow',
+    //     data: commonData.lastName
+    //   },
+    //   email: {
+    //     selector: '[data-cy=lead-card-email-input] input',
+    //     type: 'inputShadow',
+    //     data: commonData.email
+    //   },
+    //   phone: {
+    //     selector: '[data-cy=lead-card-phone-input] input:not([disabled])',
+    //     type: 'inputShadow',
+    //     data: commonData.mobile
+    //   },
+    //   consultCheckbox: {
+    //     selector: '[data-cy="lead-card-data-process-checkbox"] input',
+    //     type: 'checkCheckbox'
+    //   },
+    //   checkAll: {
+    //     selector: '[id^=checkbox]',
+    //     type: 'checkCheckbox',
+    //     index: 0
+    //   },
+    //   mortagePeriod: {
+    //     selector: 'input[pattern="[0-9]*"][min="5"][max="35"]',
+    //     type: 'input',
+    //     data: commonData.mortagePeriod
+    //   },
+    //   incomeAmmount: {
+    //     selector: 'input[pattern="[0-9]*"][min="0"]',
+    //     type: 'input',
+    //     data: commonData.incomeAmmount,
+    //     index: 1
+    //   },
+    //   incomePeriod: {
+    //     selector: '[draggable="false"]',
+    //     type: 'simpleClick',
+    //     index: 0
+    //   },
+    //   anyCreditsFalse: {
+    //     selector: '[draggable="false"]',
+    //     type: 'simpleClick',
+    //     index: 3
+    //   },
+    //   anyCardsFalse: {
+    //     selector: '[draggable="false"]',
+    //     type: 'simpleClick',
+    //     index: 5
+    //   },
+    //   yearOfBearth: {
+    //     selector: 'input[pattern="[0-9]*"][min="1940"]',
+    //     type: 'input',
+    //     data: commonData.yearOfBearth
+    //   },
+    //   householdExpenses: {
+    //     selector: 'input[pattern="[0-9]*"][data-mask-raw-value]',
+    //     type: 'input',
+    //     data: commonData.householdExpenses,
+    //     index: 2
+    //   },
+    //   mobileGeneral: {
+    //     selector: '[type=tel]:not([disabled])',
+    //     type: 'input',
+    //     data: commonData.mobile
+    //   },
+    //   SOI: {
+    //     selector: 'input[inputmode="none"]',
+    //     type: 'dispatchedClick',
+    //     index: 4
+    //   },
+    //   SOIPicker: {
+    //     selector:
+    //       '[target="[object HTMLDivElement]"] [role="listbox"] [data-no-activator]',
+    //     type: 'dispatchedClick',
+    //     index: 2
+    //   }
+    // }
 
     'platforma.qa.lendi.pl|fincrm-frontend|platforma.qa.finance.imobiliare.ro': {
       clientFirstName: {
@@ -245,4 +246,9 @@ export function getSiteData(): SiteDataType {
       }
     }
   }
+}
+
+// This is the main synchronous function that most parts of the codebase will use
+export function getSiteData(): SiteDataType {
+  return getBuiltInSiteData()
 }

@@ -1,5 +1,5 @@
 import {fillForm} from './model/formFiller'
-import {getSiteData} from './model/siteSelectors'
+import {getSiteDataAsync} from './model/siteSelectorAsync'
 import {updateEmailFields} from '../utils/emailHelper'
 
 async function fillCustomForm() {
@@ -8,7 +8,8 @@ async function fillCustomForm() {
     console.log('Loaded config:', config)
 
     const currentHost = window.location.host
-    const siteData = getSiteData()
+
+    const siteData = await getSiteDataAsync()
     let currentSiteKey: string | undefined
 
     if (currentHost.startsWith('lendi-b2c-')) {
