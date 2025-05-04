@@ -8,6 +8,7 @@ import {generateCnp} from '../content_scripts/custom_generators_logic/ro/cnpGene
 import {generateCui} from '../content_scripts/custom_generators_logic/ro/cuiGenerator'
 import {generateRoPhone} from '../content_scripts/custom_generators_logic/ro/phoneGenerator'
 import {generatePolishMobile as generatePolishMobileCore} from '../content_scripts/custom_generators_logic/generatePolishMobile'
+import {faker} from '@faker-js/faker'
 
 /**
  * This file contains all data generators available in the global scope
@@ -17,15 +18,20 @@ import {generatePolishMobile as generatePolishMobileCore} from '../content_scrip
  * in formFiller.ts using the notation dataGenerator: "generatePolishMobile:48"
  */
 
-// Basic data generators
-window.generateRandomName = function () {
-  const names = ['Anna', 'Jan', 'Maria', 'Piotr', 'Katarzyna', 'Tomasz']
-  return names[Math.floor(Math.random() * names.length)]
-}
+// Set default locale - can be changed dynamically
+faker.setLocale('pl')
 
-window.generateRandomLastName = function () {
-  const names = ['Kowalski', 'Nowak', 'Wiśniewska', 'Wójcik', 'Kowalczyk', 'Kamińska']
-  return names[Math.floor(Math.random() * names.length)]
+// Function to get localized faker instance
+window.fakerLocalized = function (locale = 'pl') {
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+
+  const result = faker
+  setTimeout(() => {
+    faker.setLocale(originalLocale)
+  }, 0)
+
+  return result
 }
 
 window.generateRandomEmail = function () {
@@ -33,30 +39,10 @@ window.generateRandomEmail = function () {
 }
 
 window.generatePolishMobile = function (prefix?: number) {
-  // Use the proper Polish mobile number generator
   if (prefix) {
     return String(prefix) + generatePolishMobileCore().substring(2)
   }
   return generatePolishMobileCore()
-}
-
-window.generateMortagePeriod = function (min = 5, max = 35) {
-  return String(Math.floor(Number(min) + Math.random() * (Number(max) - Number(min) + 1)))
-}
-
-window.generateIncomeAmount = function (min = 3000, max = 10000) {
-  return String(Math.floor(Number(min) + Math.random() * (Number(max) - Number(min) + 1)))
-}
-
-// Removing generateHouseholdExpenses as it's just a simple number generator
-
-window.generateYearOfBirth = function (min = 1940, max = 1990) {
-  return String(Math.floor(Number(min) + Math.random() * (Number(max) - Number(min) + 1)))
-}
-
-// Generic number generator
-window.generateRandomNumber = function (min = 1, max = 100) {
-  return String(Math.floor(Number(min) + Math.random() * (Number(max) - Number(min) + 1)))
 }
 
 // Document generators - PL
@@ -122,18 +108,193 @@ window.generateRandomDate = function (minAge = 18, maxAge = 60) {
   return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
 }
 
+// Faker-based generators with optional locale parameter
+window.fakerFirstName = function (locale?: string) {
+  if (!locale) return faker.name.firstName()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.name.firstName()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerLastName = function (locale?: string) {
+  if (!locale) return faker.name.lastName()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.name.lastName()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerFullName = function (locale?: string) {
+  if (!locale) return faker.name.fullName()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.name.fullName()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerEmail = function (locale?: string) {
+  if (!locale) return faker.internet.email()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.internet.email()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerCompanyName = function (locale?: string) {
+  if (!locale) return faker.company.name()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.company.name()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerStreetName = function (locale?: string) {
+  if (!locale) return faker.address.street()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.address.street()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerBuildingNumber = function (locale?: string) {
+  if (!locale) return faker.address.buildingNumber()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.address.buildingNumber()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerZipCode = function (format?: string, locale?: string) {
+  if (!locale)
+    return format ? faker.address.zipCode(format) : faker.address.zipCode('##-###')
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = format ? faker.address.zipCode(format) : faker.address.zipCode('##-###')
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerCity = function (locale?: string) {
+  if (!locale) return faker.address.city()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.address.city()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerPhoneNumber = function (format?: string, locale?: string) {
+  if (!locale) return format ? faker.phone.number(format) : faker.phone.number()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = format ? faker.phone.number(format) : faker.phone.number()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerJobTitle = function (locale?: string) {
+  if (!locale) return faker.name.jobTitle()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.name.jobTitle()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerCompanyDescription = function (locale?: string) {
+  if (!locale) return faker.company.catchPhrase()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.company.catchPhrase()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+window.fakerIban = function (locale?: string) {
+  if (!locale) return faker.finance.iban()
+
+  const originalLocale = faker.locale
+  faker.setLocale(locale)
+  const result = faker.finance.iban()
+  faker.setLocale(originalLocale)
+  return result
+}
+
+// Advanced direct access to faker
+/**
+ * Direct access to any Faker.js function using dot notation path
+ * @param path - Dot notation path to Faker function (e.g., 'commerce.product', 'date.month')
+ * @param locale - Optional locale to use (e.g., 'en', 'de', 'fr')
+ * @param args - Optional arguments to pass to the Faker function
+ *
+ * Examples:
+ * - fakerRaw:commerce.product:en - random product name in English
+ * - fakerRaw:date.month:de - month name in German
+ * - fakerRaw:finance.amount:pl:0:100:2 - amount between 0-100 with 2 decimal places in Polish format
+ * - fakerRaw:lorem.paragraph:en:5 - 5 sentences of lorem ipsum in English
+ */
+window.fakerRaw = function (path: string, locale?: string, ...args: any[]) {
+  const originalLocale = locale ? faker.locale : null
+  if (locale) faker.setLocale(locale)
+
+  try {
+    // Split path by dots and access nested properties
+    const parts = path.split('.')
+    let current: any = faker
+
+    // Navigate through the path
+    for (const part of parts) {
+      if (current[part] === undefined) {
+        throw new Error(`Part "${part}" not found in faker path: ${path}`)
+      }
+      current = current[part]
+    }
+
+    // Check if we found a function
+    if (typeof current !== 'function') {
+      throw new Error(`Found ${typeof current} instead of function at path: ${path}`)
+    }
+
+    // Call the function with provided arguments
+    const result = current(...args)
+
+    // Reset locale if needed
+    if (originalLocale) faker.setLocale(originalLocale)
+
+    return result
+  } catch (error) {
+    console.error(`Error using fakerRaw with path "${path}":`, error)
+    if (originalLocale) faker.setLocale(originalLocale)
+    return `Error: ${(error as Error).message}`
+  }
+}
+
 // Global interface for TypeScript
 declare global {
   interface Window {
     // Basic data generators
-    generateRandomName: () => string
-    generateRandomLastName: () => string
     generateRandomEmail: () => string
     generatePolishMobile: (prefix?: number) => string
-    generateMortagePeriod: (min?: number, max?: number) => string
-    generateIncomeAmount: (min?: number, max?: number) => string
-    generateRandomNumber: (min?: number, max?: number) => string
-    generateYearOfBirth: (min?: number, max?: number) => string
 
     // Document generators - PL
     generatePeselMale: (minAge?: number, maxAge?: number) => string
@@ -153,6 +314,25 @@ declare global {
 
     // Generic generators
     generateRandomDate: (minAge?: number, maxAge?: number) => string
+
+    // Faker-based generators
+    fakerFirstName: (locale?: string) => string
+    fakerLastName: (locale?: string) => string
+    fakerFullName: (locale?: string) => string
+    fakerEmail: (locale?: string) => string
+    fakerCompanyName: (locale?: string) => string
+    fakerStreetName: (locale?: string) => string
+    fakerBuildingNumber: (locale?: string) => string
+    fakerZipCode: (format?: string, locale?: string) => string
+    fakerCity: (locale?: string) => string
+    fakerPhoneNumber: (format?: string, locale?: string) => string
+    fakerJobTitle: (locale?: string) => string
+    fakerCompanyDescription: (locale?: string) => string
+    fakerIban: (locale?: string) => string
+
+    // Advanced faker access
+    fakerLocalized: (locale?: string) => typeof faker
+    fakerRaw: (path: string, locale?: string, ...args: any[]) => any
   }
 }
 export {}
