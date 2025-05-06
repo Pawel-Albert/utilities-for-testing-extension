@@ -9,6 +9,37 @@
         --background: #fafafa;
       }
 
+      pre {
+        background-color: #282c34;
+        color: #abb2bf;
+        border-radius: 6px;
+        padding: 1em;
+        margin: 1em 0;
+        overflow: auto;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      code {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 0.85em;
+        padding: 0.2em 0.4em;
+        margin: 0;
+        border-radius: 3px;
+        background-color: rgba(27, 31, 35, 0.05);
+      }
+
+      .tooltip-content {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 12px;
+        background-color: #282c34 !important;
+        color: #abb2bf !important;
+        padding: 10px !important;
+        border-radius: 6px !important;
+        white-space: pre-wrap !important;
+      }
+
       body {
         padding: 20px;
         font-family: 'Segoe UI', Arial, sans-serif;
@@ -126,6 +157,354 @@
         font-size: 13px;
         color: #666;
       }
+
+      .custom-selectors-section {
+        background: white;
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      .form-group textarea {
+        min-height: 150px;
+        font-family: monospace;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      button.secondary {
+        background: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+      }
+
+      .btn-primary {
+        background-color: #2196f3;
+        color: white;
+        border: none;
+      }
+
+      .btn-secondary {
+        background-color: #757575;
+        color: white;
+        border: none;
+      }
+
+      .custom-site-item {
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .custom-site-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .site-name {
+        font-weight: bold;
+        font-size: 16px;
+        color: #495057;
+      }
+
+      .site-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .site-actions button {
+        padding: 4px 10px;
+        border-radius: 4px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.2s;
+      }
+
+      .btn-edit {
+        background: #6c757d;
+        color: white;
+      }
+
+      .btn-edit:hover {
+        background: #5a6268;
+      }
+
+      .btn-delete {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-delete:hover {
+        background: #c82333;
+      }
+
+      .site-content {
+        padding: 16px;
+        background: white;
+        overflow-x: auto;
+        margin: 0;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        white-space: pre;
+        line-height: 1.4;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      #yourCustomSitesSection {
+        margin-top: 30px;
+      }
+
+      /* Status messages */
+      .status {
+        padding: 12px;
+        margin-bottom: 16px;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .status.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .status.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .grid-item {
+        padding: 8px;
+      }
+      .grid-item strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+      div.grid-item p {
+        margin: 0;
+      }
+
+      /* Collapsible sections */
+      .collapsible-header {
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        margin-top: 20px;
+        margin-bottom: 0;
+        transition: background-color 0.2s;
+      }
+
+      .collapsible-header:hover {
+        background-color: #e9ecef;
+      }
+
+      .collapsible-header .toggle-icon {
+        transition: transform 0.3s;
+        display: inline-block;
+        font-size: 16px;
+      }
+
+      .collapsible-header.collapsed .toggle-icon {
+        transform: rotate(-90deg);
+      }
+
+      .collapsible-content {
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        border: 1px solid #f8f9fa;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        padding: 15px;
+      }
+
+      .collapsible-content.collapsed {
+        display: none;
+      }
+
+      /* Utility classes */
+      .mt-3 {
+        margin-top: 15px;
+      }
+
+      /* Field types grid */
+      .field-types-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .field-type-item {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        position: relative;
+        z-index: 1;
+      }
+
+      .field-type-item:hover {
+        z-index: 100;
+      }
+
+      .field-type-item strong {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+      }
+
+      .field-type-item code {
+        display: block;
+        margin-top: 5px;
+        background: #f1f1f1;
+        padding: 5px;
+        border-radius: 3px;
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative;
+        transition: background-color 0.2s;
+        cursor: help;
+      }
+
+      .field-type-item code:hover {
+        background: #e0e0e0;
+      }
+
+      .field-type-item .tooltip-content {
+        display: none;
+        position: absolute;
+        top: -10px;
+        transform: translateY(-100%);
+        left: 50%;
+        margin-left: -120px;
+        width: 240px;
+        background: rgba(40, 40, 40, 0.95);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 4px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        font-size: 13px;
+        font-family: monospace;
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 1.4;
+        text-align: center;
+      }
+
+      .field-type-item .tooltip-content::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        margin-left: -5px;
+        bottom: -5px;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid rgba(40, 40, 40, 0.95);
+      }
+
+      .field-type-item:hover .tooltip-content {
+        display: block;
+      }
+
+      /* Adjust tooltip position for items near the right edge */
+      @media (min-width: 768px) {
+        .field-type-item:nth-child(3n) .tooltip-content,
+        .field-type-item:nth-child(3n-1) .tooltip-content {
+          left: auto;
+          right: 0;
+        }
+
+        .field-type-item:nth-child(3n) .tooltip-content::after,
+        .field-type-item:nth-child(3n-1) .tooltip-content::after {
+          left: auto;
+          right: 20px;
+        }
+      }
+
+      /* On small screens, always position from the left */
+      @media (max-width: 767px) {
+        .field-type-item code::after {
+          left: 0;
+          right: auto;
+          max-width: 250px;
+        }
+      }
+
+      /* Custom sites styling */
+      .field-type {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .field-type-name {
+        font-weight: bold;
+      }
+
+      .field-type-desc {
+        font-size: 12px;
+        color: #666;
+      }
     </style>
   </head>
   <body>
@@ -134,6 +513,568 @@
       <div class="preview-notice">
         This is a preview feature. The interface may change in future updates.
       </div>
+
+      <div class="custom-selectors-section">
+        <h3>Custom Site Selectors</h3>
+        <p class="help-text">
+          Add your own site selectors for form filling. These will be used instead of the
+          built-in ones when matched.
+        </p>
+
+        <div id="statusMessage" class="status"></div>
+
+        <div class="form-group">
+          <label for="sitePattern">Site Pattern (e.g., example.com|*.example.org)</label>
+          <input type="text" id="sitePattern" placeholder="Enter site domain pattern" />
+        </div>
+
+        <div class="form-group">
+          <label for="selectorsJson">Selectors JSON</label>
+          <textarea
+            id="selectorsJson"
+            placeholder="Paste your JSON selectors here. See examples below for reference."
+          ></textarea>
+          <div style="margin-top: 10px; font-size: 12px; color: #666">
+            <p><strong>Example format:</strong></p>
+            <pre
+              style="
+                background: #f5f5f5;
+                padding: 10px;
+                border-radius: 4px;
+                overflow: auto;
+                max-height: 150px;
+              "
+            >
+{
+  "firstName": {
+    "selector": "[data-cy=lead-card-firstname-input] input",
+    "type": "inputShadow",
+    "dataType": "function",
+    "dataGenerator": "generateRandomName"
+  },
+  "email": {
+    "selector": "#email",
+    "type": "input",
+    "dataType": "function", 
+    "dataGenerator": "generateRandomEmail"
+  },
+  "complexLogin": {
+    "type": "multiStep",
+    "timeout": 500,
+    "steps": [
+      {
+        "selector": "#username",
+        "type": "input",
+        "dataType": "function",
+        "dataGenerator": "generateRandomEmail"
+      },
+      {
+        "selector": "#password",
+        "type": "input",
+        "data": "Password123!"
+      },
+      {
+        "selector": "button[type=submit]",
+        "type": "simpleClick"
+      }
+    ]
+  }
+}</pre
+            >
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button id="addCustomSite" class="btn-primary">Add Custom Site</button>
+          <button id="exportCustomSites" class="btn-secondary">Export All</button>
+          <button id="importCustomSites" class="btn-secondary">Import</button>
+          <input type="file" id="importFile" accept=".json" style="display: none" />
+        </div>
+
+        <h4 class="collapsible-header">
+          Available Field Types Reference <span class="toggle-icon">&dtrif;</span>
+        </h4>
+        <div id="available-field-types" class="mt-3 collapsible-content">
+          <h5>Available Field Types Reference:</h5>
+          <div class="field-types-grid">
+            <div class="field-type-item">
+              <strong>input</strong> - standard input field
+              <code>"type": "input"</code>
+              <div class="tooltip-content">"type": "input"</div>
+            </div>
+            <div class="field-type-item">
+              <strong>inputShadow</strong> - for Shadow DOM inputs
+              <code>"type": "inputShadow"</code>
+              <div class="tooltip-content">"type": "inputShadow"</div>
+            </div>
+            <div class="field-type-item">
+              <strong>simpleClick</strong> - element click
+              <code>"type": "simpleClick"</code>
+              <div class="tooltip-content">"type": "simpleClick"</div>
+            </div>
+            <div class="field-type-item">
+              <strong>dispatchedClick</strong> - simulated click event
+              <code>"type": "dispatchedClick"</code>
+              <div class="tooltip-content">"type": "dispatchedClick"</div>
+            </div>
+            <div class="field-type-item">
+              <strong>checkCheckbox</strong> - checkbox selection
+              <code>"type": "checkCheckbox"</code>
+              <div class="tooltip-content">"type": "checkCheckbox"</div>
+            </div>
+            <div class="field-type-item">
+              <strong>multiStep</strong> - multi-stage action sequence
+              <code>"type": "multiStep", "steps": [...]</code>
+              <div class="tooltip-content">"type": "multiStep", "steps": [...]</div>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="collapsible-header">
+          Data Generation Types <span class="toggle-icon">&dtrif;</span>
+        </h4>
+        <div id="data-generation-types" class="mt-3 collapsible-content">
+          <h5>Data Generation Types:</h5>
+          <div class="field-types-grid">
+            <div class="field-type-item">
+              <strong>static</strong> - static value (default)
+              <code>"dataType": "static", "data": "value"</code>
+              <div class="tooltip-content">"dataType": "static", "data": "value"</div>
+            </div>
+            <div class="field-type-item">
+              <strong>function</strong> - using a data generator function
+              <code>"dataType": "function", "dataGenerator": "functionName"</code>
+              <div class="tooltip-content">
+                "dataType": "function", "dataGenerator": "functionName"
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="collapsible-header">
+          Parameter Passing to Data Generators <span class="toggle-icon">&dtrif;</span>
+        </h4>
+        <div id="parameter-passing" class="mt-3 collapsible-content">
+          <p>
+            You can pass parameters to data generator functions to customize the data they
+            produce. This is especially useful for creating appropriate test data for
+            different form scenarios.
+          </p>
+
+          <h5>Parameter syntax:</h5>
+          <p><code>functionName:param1:param2:param3</code></p>
+
+          <h5>Examples:</h5>
+          <div class="example-code">
+            <pre>
+{
+  "incomeField": {
+    "selector": "#income",
+    "type": "input",
+    "dataType": "function",
+    "dataGenerator": "generateIncomeAmount:3000:10000"  // Min: 3000, Max: 10000
+  },
+  "birthYearField": {
+    "selector": "#birthYear",
+    "type": "input",
+    "dataType": "function",
+    "dataGenerator": "generateYearOfBirth:1960:2000"    // Min year: 1960, Max year: 2000
+  },
+  "ageRangeField": {
+    "selector": "#ageRange",
+    "type": "input",
+    "dataType": "function",
+    "dataGenerator": "generateRandomNumber:18:65"       // Number between 18 and 65
+  }
+}</pre
+            >
+          </div>
+
+          <h5>Available generator functions with parameters:</h5>
+          <p>If parameters are not provided, default values will be used.</p>
+          <div class="generator-functions">
+            <div class="field-type-item">
+              <code data-full="generatePolishMobile:prefix"
+                >generatePolishMobile:prefix</code
+              >
+              <div class="tooltip-content">
+                Generates a Polish mobile number with optional prefix.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="generatePeselMale:minAge:maxAge"
+                >generatePeselMale:minAge:maxAge</code
+              >
+              <div class="tooltip-content">
+                Generates a male PESEL number for a person aged between minAge and maxAge.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="generatePeselFemale:minAge:maxAge"
+                >generatePeselFemale:minAge:maxAge</code
+              >
+              <div class="tooltip-content">
+                Generates a female PESEL number for a person aged between minAge and
+                maxAge.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="generatePesel:minAge:maxAge"
+                >generatePesel:minAge:maxAge</code
+              >
+              <div class="tooltip-content">
+                Generates a PESEL number for a person aged between minAge and maxAge.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="generateCnpMale:minAge:maxAge"
+                >generateCnpMale:minAge:maxAge</code
+              >
+              <div class="tooltip-content">
+                Generates a male CNP (Romanian ID) number for a person aged between minAge
+                and maxAge.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="generateCnpFemale:minAge:maxAge"
+                >generateCnpFemale:minAge:maxAge</code
+              >
+              <div class="tooltip-content">
+                Generates a female CNP (Romanian ID) number for a person aged between
+                minAge and maxAge.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="generateCui:isVatPayer">generateCui:isVatPayer</code>
+              <div class="tooltip-content">
+                Generates a CUI (Romanian tax ID), set to true for VAT payer.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="generateRoPhone:internationalFormat"
+                >generateRoPhone:internationalFormat</code
+              >
+              <div class="tooltip-content">
+                Generates a Romanian phone number, set to true for international format.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="generateRandomDate:minAge:maxAge"
+                >generateRandomDate:minAge:maxAge</code
+              >
+              <div class="tooltip-content">
+                Generates a random date for a person aged between minAge and maxAge.
+              </div>
+            </div>
+
+            <!-- Faker-based generators -->
+            <div class="field-type-item">
+              <code data-full="fakerFirstName">fakerFirstName</code>
+              <div class="tooltip-content">
+                Generates a realistic random first name using Faker.js.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerLastName">fakerLastName</code>
+              <div class="tooltip-content">
+                Generates a realistic random last name using Faker.js.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerFullName">fakerFullName</code>
+              <div class="tooltip-content">
+                Generates a full name (first and last name) using Faker.js.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerEmail">fakerEmail</code>
+              <div class="tooltip-content">
+                Generates a realistic random email address using Faker.js.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerCompanyName">fakerCompanyName</code>
+              <div class="tooltip-content">
+                Generates a realistic company name using Faker.js.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerStreetName">fakerStreetName</code>
+              <div class="tooltip-content">
+                Generates a realistic street name using Faker.js.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerBuildingNumber">fakerBuildingNumber</code>
+              <div class="tooltip-content">
+                Generates a realistic building number using Faker.js.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerZipCode">fakerZipCode</code>
+              <div class="tooltip-content">
+                Generates a Polish-format postal code (XX-XXX) using Faker.js.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerCity:locale">fakerCity:locale</code>
+              <div class="tooltip-content">
+                Generates a realistic city name using Faker.js. Optional parameter: locale
+                (e.g., 'en', 'de', 'fr')
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerPhoneNumber:format:locale"
+                >fakerPhoneNumber:format:locale</code
+              >
+              <div class="tooltip-content">
+                Generates a realistic phone number using Faker.js. Optional parameters:
+                format and locale (e.g., '###-###-###', 'en')
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerJobTitle:locale">fakerJobTitle:locale</code>
+              <div class="tooltip-content">
+                Generates a realistic job title using Faker.js. Optional parameter: locale
+                (e.g., 'en', 'de', 'fr')
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerCompanyDescription:locale"
+                >fakerCompanyDescription:locale</code
+              >
+              <div class="tooltip-content">
+                Generates a realistic company catchphrase or description using Faker.js.
+                Optional parameter: locale (e.g., 'en', 'de', 'fr')
+              </div>
+            </div>
+            <div class="field-type-item">
+              <code data-full="fakerIban:locale">fakerIban:locale</code>
+              <div class="tooltip-content">
+                Generates a valid IBAN (International Bank Account Number) using Faker.js.
+                Optional parameter: locale (e.g., 'en', 'de', 'fr')
+              </div>
+            </div>
+
+            <!-- Advanced Faker access -->
+            <div class="field-type-item">
+              <code data-full="fakerRaw:path:locale:arg1:arg2:..."
+                >fakerRaw:path:locale:arg1:arg2:...</code
+              >
+              <div class="tooltip-content">
+                Direct access to any Faker.js function using dot notation path. Example:
+                "fakerRaw:commerce.product:en" generates a random product name in English.
+              </div>
+            </div>
+          </div>
+
+          <h3>Examples with locale parameter:</h3>
+          <p>
+            All Faker functions accept an optional locale parameter which changes the
+            language for that specific call:
+          </p>
+
+          <div class="examples-container">
+            <div class="example-item">
+              <code>fakerFirstName:en</code> - English first name
+            </div>
+            <div class="example-item"><code>fakerCity:de</code> - German city name</div>
+            <div class="example-item">
+              <code>fakerJobTitle:fr</code> - French job title
+            </div>
+            <div class="example-item">
+              <code>fakerRaw:commerce.product:en</code> - English product name
+            </div>
+            <div class="example-item">
+              <code>fakerRaw:date.month:de</code> - German month name
+            </div>
+          </div>
+
+          <p>Default locale is 'pl' if not specified.</p>
+        </div>
+
+        <h4 class="collapsible-header">
+          MultiStep Selectors Reference <span class="toggle-icon">&dtrif;</span>
+        </h4>
+        <div id="multistep-reference" class="mt-3 collapsible-content">
+          <p>
+            MultiStep selectors allow you to perform a sequence of actions in a specific
+            order with controlled timing. This is useful for complex interactions like:
+          </p>
+          <ul>
+            <li>Filling a multi-page form</li>
+            <li>Working with dynamic elements that appear after user interaction</li>
+            <li>Interacting with complex UI components (dropdowns, modals, etc.)</li>
+          </ul>
+
+          <div class="example-code">
+            <pre>
+{
+  "loginSequence": {
+    "type": "multiStep",
+    "timeout": 500,  // Milliseconds to wait between steps
+    "steps": [
+      {
+        "selector": "#username",
+        "type": "input",
+        "dataType": "function",
+        "dataGenerator": "generateRandomEmail"
+      },
+      {
+        "selector": "#password", 
+        "type": "input",
+        "data": "Password123!"
+      },
+      {
+        "selector": "#loginButton",
+        "type": "simpleClick"
+      }
+    ]
+  }
+}</pre
+            >
+          </div>
+
+          <h5>Key properties for multiStep:</h5>
+          <ul>
+            <li>
+              <strong>timeout</strong>: Time in milliseconds to wait between steps
+              (default: 1000)
+            </li>
+            <li><strong>steps</strong>: Array of steps to execute in sequence</li>
+          </ul>
+
+          <h5>Each step can include:</h5>
+          <ul>
+            <li>
+              All properties available for regular selectors (selector, type, data,
+              dataType, dataGenerator, index)
+            </li>
+            <li>Steps execute in the order they are defined in the array</li>
+            <li>The timeout is applied between each step</li>
+          </ul>
+
+          <h5>Common multiStep patterns:</h5>
+
+          <p><strong>Dropdown with dynamic content:</strong></p>
+          <div class="example-code">
+            <pre>
+{
+  "selectDropdownOption": {
+    "type": "multiStep",
+    "timeout": 300,
+    "steps": [
+      {
+        "selector": ".dropdown-toggle",  // Click to open dropdown
+        "type": "simpleClick"
+      },
+      {
+        "selector": ".dropdown-item",    // Select the 3rd option
+        "type": "simpleClick",
+        "index": 2
+      }
+    ]
+  }
+}</pre
+            >
+          </div>
+
+          <p><strong>Modal interaction:</strong></p>
+          <div class="example-code">
+            <pre>
+{
+  "completeModal": {
+    "type": "multiStep",
+    "timeout": 500,
+    "steps": [
+      {
+        "selector": "#openModal",        // Open modal
+        "type": "simpleClick"
+      },
+      {
+        "selector": "#modalInput",       // Fill input in modal
+        "type": "input",
+        "data": "Test data"
+      },
+      {
+        "selector": "#modalSubmit",      // Submit modal
+        "type": "simpleClick"
+      }
+    ]
+  }
+}</pre
+            >
+          </div>
+        </div>
+
+        <h4 class="collapsible-header">
+          Importing and Exporting Site Configurations
+          <span class="toggle-icon">&dtrif;</span>
+        </h4>
+        <div id="import-export-reference" class="mt-3 collapsible-content">
+          <p>
+            You can import and export site configurations to share them between browsers
+            or with colleagues:
+          </p>
+
+          <h5>Exporting:</h5>
+          <ol>
+            <li>
+              Click the <strong>Export All</strong> button to download a JSON file
+              containing all your custom site configurations.
+            </li>
+            <li>
+              The file will be saved with a name like
+              <code>site_selectors_backup_YYYY-MM-DD.json</code>.
+            </li>
+          </ol>
+
+          <h5>Importing:</h5>
+          <ol>
+            <li>
+              Click the <strong>Import</strong> button and select a previously exported
+              JSON file.
+            </li>
+            <li>
+              The imported configurations will be merged with your existing ones
+              (duplicates will be overwritten).
+            </li>
+            <li>A success message will appear if the import was successful.</li>
+          </ol>
+
+          <h5>Example export file structure:</h5>
+          <div class="example-code">
+            <pre>
+{
+  "example.com": {
+    "firstName": { ... },
+    "lastName": { ... },
+    "email": { ... }
+  },
+  "banking.example.org": {
+    "username": { ... },
+    "password": { ... },
+    "loginButton": { ... }
+  }
+}</pre
+            >
+          </div>
+
+          <p>
+            <strong>Note:</strong> Importing will not delete your existing configurations,
+            only add new ones or update existing ones.
+          </p>
+        </div>
+
+        <h4 id="yourCustomSitesHeader" class="collapsible-header">
+          Your Custom Sites <span class="toggle-icon">&dtrif;</span>
+        </h4>
+        <div id="yourCustomSitesSection" class="collapsible-content">
+          <div id="statusMessage" class="status"></div>
+          <div id="customSites"></div>
+        </div>
+      </div>
+
       <div id="siteSelectors"></div>
     </div>
 

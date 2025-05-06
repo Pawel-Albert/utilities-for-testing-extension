@@ -1,19 +1,62 @@
-import {ActionType, SelectorType, StepType} from '../../types/formFiller'
+import {
+  ActionType,
+  DataGeneratorType,
+  SelectorType,
+  StepType
+} from '../../types/formFiller'
 import {action} from './utilis'
+
+function getDataValue(fieldData: SelectorType | StepType): string | number {
+  const dataType = fieldData.dataType || 'static'
+  if (dataType === 'static' || !fieldData.dataGenerator) {
+    return fieldData.data || ''
+  }
+
+  try {
+    // For function data generators, try to call the function from global context
+    if (dataType === 'function') {
+      // Handle parameters: "generateIncomeAmount:3000:10000"
+      const [funcName, ...args] = fieldData.dataGenerator.split(':')
+      const fn = window[funcName as keyof Window]
+      if (typeof fn === 'function') {
+        // Convert parameters to appropriate types
+        const convertedArgs = args.map(arg => {
+          if (arg.toLowerCase() === 'true') return true
+          if (arg.toLowerCase() === 'false') return false
+          if (!isNaN(Number(arg))) return Number(arg)
+          return arg
+        })
+        // Pass parameters to the function
+        return fn(...convertedArgs)
+      }
+      console.error(`Function "${funcName}" not found in global scope`)
+      return fieldData.data || ''
+    }
+
+    // If we reached here, unsupported data generator type
+    console.warn(`Unsupported dataType: ${dataType}`)
+    return fieldData.data || '' // Fallback to static data
+  } catch (error) {
+    console.error(`Error generating data:`, error)
+    return fieldData.data || '' // Fallback to static data
+  }
+}
 
 function executeAction(
   element: HTMLElement | null,
   type: ActionType,
-  data?: string | number
+  fieldData: SelectorType | StepType
 ) {
   if (!element) return
 
+  const data = getDataValue(fieldData)
+
   switch (type) {
     case 'input':
-      action.inputFiller(element, data!)
+      action.inputFiller(element, data)
       break
     case 'inputShadow':
-      action.inputFillerShadow(element, data!)
+      action.inputFillerShadow(element, data)
       break
     case 'simpleClick':
       action.simpleClick(element)
@@ -39,7 +82,7 @@ function getElement(selector: string, index?: number): HTMLElement | null {
 
 async function executeStep(step: StepType) {
   const element = getElement(step.selector, step.index)
-  executeAction(element, step.type, step.data)
+  executeAction(element, step.type, step)
 }
 
 async function executeMultiStep(fieldData: SelectorType) {
@@ -78,7 +121,7 @@ export function fillForm(
         )
       } else {
         const element = getElement(fieldData.selector, fieldData.index)
-        executeAction(element, fieldData.type, fieldData.data)
+        executeAction(element, fieldData.type, fieldData)
       }
     })
   } catch (error) {

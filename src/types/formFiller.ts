@@ -6,28 +6,30 @@ export type ActionType =
   | 'checkCheckbox'
   | 'multiStep'
 
-export type SelectorType = {
-  selector: string
-  type: ActionType
-  data?: string | number
-  index?: number
-  timeout?: number
-  steps?: StepType[]
-  [key: string]: any
-}
+export type DataGeneratorType = 'static' | 'function'
 
 export type StepType = {
   selector: string
   type: ActionType
-  data?: string | number
   index?: number
+  timeout?: number
+  data?: string | number
+  dataType?: DataGeneratorType
+  dataGenerator?: string
 }
 
-export type SiteDataType = {
-  [key: string]: {
-    [key: string]: SelectorType
-  }
+export type SelectorType = {
+  selector: string
+  type: ActionType
+  index?: number
+  timeout?: number
+  data?: string | number
+  dataType?: DataGeneratorType
+  dataGenerator?: string
+  steps?: StepType[]
 }
+
+export type SiteDataType = Record<string, Record<string, SelectorType>>
 
 export type ActionFunctions = {
   inputFiller: (element: HTMLElement, data: string | number) => void
