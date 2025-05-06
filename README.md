@@ -63,62 +63,67 @@ All features are available in the context menu, organized into logical groups. A
 - "Simple form filler - default site" - Auto-fills forms on default site (Alt+2)
 - "Simple form filler - custom sites" - Auto-fills forms on custom sites (Alt+3)
 
-To configure form fillers for your sites, you can extend the `siteSelectors` configuration. Here's an example:
+To configure form fillers for your sites, you can now use the Custom Site Selectors feature. This provides a user-friendly interface for adding and managing your site configurations without having to modify the code.
+
+#### Custom Site Selectors
+
+The extension now offers a dedicated UI for managing custom site selectors accessible through the options page. You can:
+
+1. **Add new site configurations** with a simple JSON editor
+2. **Import/export** configurations to share them between browsers or with colleagues
+3. **View and edit** existing configurations
+4. **Test and preview** your selectors
+
+Here's an example of the new JSON configuration format:
 
 ```javascript
-const mySiteData = {
-  // Configuration for specific site
-  'mySite1.com': {
-    username: {
-      selector: 'input[name=username]',
-      type: 'input',
-      data: myFakeData.username
-    },
-    password: {
-      selector: 'input[name=password]',
-      type: 'input',
-      data: myFakeData.password
-    }
-    // Add more fields as needed
+{
+  "email": {
+    "selector": "input[name='email']",
+    "type": "input",
+    "dataType": "function",
+    "dataGenerator": "generateRandomEmail"
   },
-
-  // Configuration for another site
-  'mySite2.com': {
-    email: {
-      selector: 'input[name=email]',
-      type: 'input',
-      data: myFakeData.email
-    },
-    password: {
-      selector: 'input[name=password]',
-      type: 'input',
-      data: myFakeData.password
-    }
-    // Add more fields as needed
+  "password": {
+    "selector": "input[type='password']",
+    "type": "input",
+    "data": "SecurePassword123!"
   },
-
-  // Default configuration used when no specific site match
-  default: {
-    username: {
-      selector: 'input[name=username]',
-      type: 'input',
-      data: myFakeData.username
-    },
-    password: {
-      selector: 'input[name=password]',
-      type: 'input',
-      data: myFakeData.password
-    }
-    // Add more fields as needed
+  "firstName": {
+    "selector": "input[name='firstName']",
+    "type": "input",
+    "dataType": "function",
+    "dataGenerator": "fakerFirstName"
+  },
+  "dropdown": {
+    "type": "multiStep",
+    "selector": ".dropdown",
+    "timeout": 500,
+    "steps": [
+      {
+        "selector": ".dropdown-toggle",
+        "type": "simpleClick"
+      },
+      {
+        "selector": ".dropdown-item",
+        "type": "simpleClick",
+        "index": 2
+      }
+    ]
   }
 }
 ```
 
-Each field configuration requires:
+Key features of the new system:
 
-- `selector`: CSS selector to find the element
-- `type`: Type of element ('input' for input fields)
-- `data`: Data to be inserted (can use predefined fake data or custom values)
+- **Multiple domain support** with pipe separator: `example.com|test.org`
+- **Wildcard matching** for subdomains: `*.example.com`
+- **Dynamic data generators** with parameters: `fakerZipCode:##-###:pl`
+- **Multi-step interactions** for complex forms
+- **Support for shadow DOM** and other complex UI elements
+- **Multiple action types**: input, click, checkbox, and more
+
+For detailed documentation, visit the Site Selectors page in the extension options.
 
 ### Console Tools
 
