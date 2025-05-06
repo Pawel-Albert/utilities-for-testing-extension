@@ -342,6 +342,61 @@ The extension now uses a more robust storage system:
 - Improved build process with automatic dist cleanup
 - Enhanced console error handling and auto-expand on errors
 
+### Version 0.5.0 Updates
+
+#### Custom Site Selectors Configuration UI
+
+- Added comprehensive UI for managing custom site selectors
+  - New dedicated interface for adding, editing, and deleting custom site configurations
+  - JSON-based configuration with live preview and validation
+  - Import/export functionality for sharing configurations
+  - Detailed documentation and examples directly in the UI
+- Enhanced pattern matching for site URLs:
+  - Support for multiple domains with pipe separator (e.g., `example.com|test.com`)
+  - Wildcard support for subdomains and paths
+  - Improved regex-based URL matching algorithm
+- Completely redesigned site selector structure for better customization
+  - Simple syntax for defining form fields and their selectors
+  - Support for complex multi-step interactions and workflows
+  - Detailed field configuration options with comprehensive documentation
+
+#### Enhanced Data Generators
+
+- Added new data generators:
+  - Random Integer generator with configurable min/max range
+  - License Plate generator with support for multiple countries (Poland, Germany, UK, US, Romania)
+- Improved structure for custom data generators with dedicated core logic modules
+- Better type safety and error handling for all data generators
+
+#### Form Filler Improvements
+
+- Completely refactored form filling logic for better reliability
+- Support for dynamically configured fields through the custom site selector UI
+- Advanced field interaction types:
+  - Regular input fields
+  - Shadow DOM elements
+  - Checkboxes and radio buttons
+  - Dropdowns and select elements
+  - Multi-step interactions for complex forms
+- Added support for dynamic data generation with parameters
+  - Format specification (e.g., `fakerZipCode:##-###:pl`)
+  - Multiple parameters (format, locale)
+- Field detection with robust selector strategies
+
+#### Advanced Faker.js Integration
+
+- Added direct access to any Faker.js function using dot notation
+- Added locale support for all data generators
+- Implemented safe locale handling with fallback mechanisms
+- Extended data generator functions with comprehensive documentation
+
+#### Code Quality & Structure
+
+- Improved code organization with functional programming approach
+- Enhanced TypeScript type definitions and interfaces
+- Better error handling and logging
+- Removed company-specific code in favor of generic templates
+
 ## Todo
 
 - [x] Form auto filler with random data
