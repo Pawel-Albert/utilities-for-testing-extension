@@ -1,3 +1,4 @@
+import {faker} from '@faker-js/faker'
 import {generatePesel} from '../content_scripts/custom_generators_logic/pesel_core'
 import {generateNip} from '../content_scripts/custom_generators_logic/nip_core'
 import {generateRegon} from '../content_scripts/custom_generators_logic/regon_core'
@@ -8,7 +9,8 @@ import {generateCnp} from '../content_scripts/custom_generators_logic/ro/cnpGene
 import {generateCui} from '../content_scripts/custom_generators_logic/ro/cuiGenerator'
 import {generateRoPhone} from '../content_scripts/custom_generators_logic/ro/phoneGenerator'
 import {generatePolishMobile as generatePolishMobileCore} from '../content_scripts/custom_generators_logic/generatePolishMobile'
-import {faker} from '@faker-js/faker'
+import {generateRandomInt} from '../content_scripts/custom_generators_logic/randomInt_core'
+import {generateLicensePlate} from '../content_scripts/custom_generators_logic/licensePlate_core'
 
 /**
  * This file contains all data generators available in the global scope
@@ -23,15 +25,23 @@ faker.setLocale('pl')
 
 // Function to get localized faker instance
 window.fakerLocalized = function (locale = 'pl') {
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
+  try {
+    // Save current locale
+    const originalLocale = faker.locale
 
-  const result = faker
-  setTimeout(() => {
-    faker.setLocale(originalLocale)
-  }, 0)
+    // Try to set the requested locale
+    faker.setLocale(locale)
 
-  return result
+    // Schedule restore of original locale after this execution context
+    setTimeout(() => {
+      faker.setLocale(originalLocale)
+    }, 0)
+
+    return faker
+  } catch (error) {
+    console.warn(`Locale ${locale} not available, falling back to default locale`, error)
+    return faker
+  }
 }
 
 window.generateRandomEmail = function () {
@@ -108,136 +118,83 @@ window.generateRandomDate = function (minAge = 18, maxAge = 60) {
   return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
 }
 
+// Generic function for using faker with safe locale handling
+function useLocale(callback: (localFaker: typeof faker) => any, locale?: string): any {
+  if (!locale) return callback(faker)
+
+  // Save current locale
+  const originalLocale = faker.locale
+
+  try {
+    // Try to set the requested locale
+    faker.setLocale(locale)
+    return callback(faker)
+  } catch (error) {
+    console.warn(
+      `Locale ${locale} not supported in Faker, falling back to ${originalLocale}`,
+      error
+    )
+    return callback(faker)
+  } finally {
+    // Always restore original locale
+    faker.setLocale(originalLocale)
+  }
+}
+
 // Faker-based generators with optional locale parameter
 window.fakerFirstName = function (locale?: string) {
-  if (!locale) return faker.name.firstName()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.name.firstName()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.name.firstName(), locale)
 }
 
 window.fakerLastName = function (locale?: string) {
-  if (!locale) return faker.name.lastName()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.name.lastName()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.name.lastName(), locale)
 }
 
 window.fakerFullName = function (locale?: string) {
-  if (!locale) return faker.name.fullName()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.name.fullName()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.name.fullName(), locale)
 }
 
 window.fakerEmail = function (locale?: string) {
-  if (!locale) return faker.internet.email()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.internet.email()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.internet.email(), locale)
 }
 
 window.fakerCompanyName = function (locale?: string) {
-  if (!locale) return faker.company.name()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.company.name()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.company.name(), locale)
 }
 
 window.fakerStreetName = function (locale?: string) {
-  if (!locale) return faker.address.street()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.address.street()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.address.street(), locale)
 }
 
 window.fakerBuildingNumber = function (locale?: string) {
-  if (!locale) return faker.address.buildingNumber()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.address.buildingNumber()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.address.buildingNumber(), locale)
 }
 
 window.fakerZipCode = function (format?: string, locale?: string) {
-  if (!locale)
-    return format ? faker.address.zipCode(format) : faker.address.zipCode('##-###')
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = format ? faker.address.zipCode(format) : faker.address.zipCode('##-###')
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(
+    f => (format ? f.address.zipCode(format) : f.address.zipCode('##-###')),
+    locale
+  )
 }
 
 window.fakerCity = function (locale?: string) {
-  if (!locale) return faker.address.city()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.address.city()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.address.city(), locale)
 }
 
 window.fakerPhoneNumber = function (format?: string, locale?: string) {
-  if (!locale) return format ? faker.phone.number(format) : faker.phone.number()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = format ? faker.phone.number(format) : faker.phone.number()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => (format ? f.phone.number(format) : f.phone.number()), locale)
 }
 
 window.fakerJobTitle = function (locale?: string) {
-  if (!locale) return faker.name.jobTitle()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.name.jobTitle()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.name.jobTitle(), locale)
 }
 
 window.fakerCompanyDescription = function (locale?: string) {
-  if (!locale) return faker.company.catchPhrase()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.company.catchPhrase()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.company.catchPhrase(), locale)
 }
 
 window.fakerIban = function (locale?: string) {
-  if (!locale) return faker.finance.iban()
-
-  const originalLocale = faker.locale
-  faker.setLocale(locale)
-  const result = faker.finance.iban()
-  faker.setLocale(originalLocale)
-  return result
+  return useLocale(f => f.finance.iban(), locale)
 }
 
 // Advanced direct access to faker
@@ -254,39 +211,84 @@ window.fakerIban = function (locale?: string) {
  * - fakerRaw:lorem.paragraph:en:5 - 5 sentences of lorem ipsum in English
  */
 window.fakerRaw = function (path: string, locale?: string, ...args: any[]) {
-  const originalLocale = locale ? faker.locale : null
-  if (locale) faker.setLocale(locale)
+  return useLocale(localFaker => {
+    try {
+      // Split path by dots and access nested properties
+      const parts = path.split('.')
+      let current: any = localFaker
 
-  try {
-    // Split path by dots and access nested properties
-    const parts = path.split('.')
-    let current: any = faker
-
-    // Navigate through the path
-    for (const part of parts) {
-      if (current[part] === undefined) {
-        throw new Error(`Part "${part}" not found in faker path: ${path}`)
+      // Navigate through the path
+      for (const part of parts) {
+        if (current[part] === undefined) {
+          throw new Error(`Part "${part}" not found in faker path: ${path}`)
+        }
+        current = current[part]
       }
-      current = current[part]
+
+      // Check if we found a function
+      if (typeof current !== 'function') {
+        throw new Error(`Found ${typeof current} instead of function at path: ${path}`)
+      }
+
+      // Call the function with provided arguments
+      return current(...args)
+    } catch (error) {
+      console.error(`Error using fakerRaw with path "${path}":`, error)
+      return `Error: ${(error as Error).message}`
+    }
+  }, locale)
+}
+
+/**
+ * Generates a random integer within the specified range.
+ * @param min - Minimum value (inclusive, default: 1)
+ * @param max - Maximum value (inclusive, default: 1000)
+ * @returns Random integer between min and max (inclusive)
+ *
+ * Examples:
+ * - fakerRandomInt - random number between 1 and 1000
+ * - fakerRandomInt:1:100 - random number between 1 and 100
+ */
+window.fakerRandomInt = function (min: number = 1, max: number = 1000) {
+  // Use our core implementation for the random integer generation
+  return generateRandomInt(min, max)
+}
+
+/**
+ * Generates a vehicle license plate number.
+ * @param country - Country code for license plate format (default: 'pl')
+ * @param locale - Optional locale to use for faker
+ * @returns License plate number in the specified country format
+ *
+ * Supported countries:
+ * - 'pl' - Poland: Format 'XX NNNNN' or 'XXX NNNNN' where X=letter, N=digit
+ * - 'de' - Germany: Format 'XX XX NNN' where X=letter, N=digit
+ * - 'uk' - United Kingdom: Format 'XX NN XXX' where X=letter, N=digit
+ * - 'us' - United States: Format 'XXX NNNN' (varies by state, simplified format)
+ * - 'ro' - Romania: Format 'XX NN XXX' where X=letter, N=digit
+ *
+ * Examples:
+ * - fakerLicensePlate - Polish license plate (default)
+ * - fakerLicensePlate:de - German license plate
+ * - fakerLicensePlate:uk:en - UK license plate with English locale
+ */
+window.fakerLicensePlate = function (country: string = 'pl', locale?: string) {
+  return useLocale(localFaker => {
+    // Try to use Faker's built-in vehicle.licensePlate function if available
+    try {
+      if (
+        localFaker['vehicle'] &&
+        typeof (localFaker['vehicle'] as any)['licensePlate'] === 'function'
+      ) {
+        return (localFaker['vehicle'] as any)['licensePlate'](country)
+      }
+    } catch (error) {
+      console.warn(`Error using faker.vehicle.licensePlate: ${error}`)
     }
 
-    // Check if we found a function
-    if (typeof current !== 'function') {
-      throw new Error(`Found ${typeof current} instead of function at path: ${path}`)
-    }
-
-    // Call the function with provided arguments
-    const result = current(...args)
-
-    // Reset locale if needed
-    if (originalLocale) faker.setLocale(originalLocale)
-
-    return result
-  } catch (error) {
-    console.error(`Error using fakerRaw with path "${path}":`, error)
-    if (originalLocale) faker.setLocale(originalLocale)
-    return `Error: ${(error as Error).message}`
-  }
+    // Use our core implementation as a fallback
+    return generateLicensePlate(country)
+  }, locale)
 }
 
 // Global interface for TypeScript
@@ -314,6 +316,8 @@ declare global {
 
     // Generic generators
     generateRandomDate: (minAge?: number, maxAge?: number) => string
+    fakerRandomInt: (min?: number, max?: number, locale?: string) => number
+    fakerLicensePlate: (country?: string, locale?: string) => string
 
     // Faker-based generators
     fakerFirstName: (locale?: string) => string
