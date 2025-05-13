@@ -402,6 +402,21 @@ The extension now uses a more robust storage system:
 - Better error handling and logging
 - Removed company-specific code in favor of generic templates
 
+### Version 0.5.1 Updates
+
+#### Testing Library-like Selectors
+
+- Added a powerful selector system inspired by Testing Library for more semantic and resilient element selection
+- Implemented four new selector types:
+  - **Role-based selectors**: Find elements by ARIA role (button, textbox, checkbox, etc.)
+  - **Label-based selectors**: Find form elements by associated label text
+  - **Text-based selectors**: Find elements containing specific text
+  - **TestID-based selectors**: Find elements by data-testid attribute
+- Added advanced selector options:
+  - **Index selection**: Choose specific element when multiple matches are found
+  - **Exact matching**: Control whether text matching is exact or partial
+- Created helper functions to simplify selector creation with comprehensive documentation
+
 ## Todo
 
 - [x] Form auto filler with random data

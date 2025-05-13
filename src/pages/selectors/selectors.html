@@ -592,6 +592,137 @@
         </div>
 
         <h4 class="collapsible-header">
+          Testing Library-like Selectors <span class="toggle-icon">&dtrif;</span>
+        </h4>
+        <div class="mt-3 collapsible-content">
+          <h5>Enhanced Selector Types:</h5>
+          <p>
+            The extension now supports Testing Library-inspired selectors that make tests
+            more robust and semantic. These selectors focus on finding elements the way
+            users would interact with them, targeting an element's accessible role, label,
+            or text content.
+          </p>
+
+          <div class="field-types-grid">
+            <div class="field-type-item">
+              <strong>Role-based selectors</strong>
+              <code>"queryType": "role", "queryOptions": {"name": "Login"}</code>
+              <div class="tooltip-content">
+                Finds elements by their ARIA role (button, textbox, checkbox, etc.) with
+                optional name or other properties to narrow selection.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>Label-based selectors</strong>
+              <code>"queryType": "label", "selector": "Email address"</code>
+              <div class="tooltip-content">
+                Finds form elements by their associated label text. Perfect for input
+                fields with proper labeling.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>Text-based selectors</strong>
+              <code
+                >"queryType": "text", "selector": "Submit", "queryOptions": {"exact":
+                false}</code
+              >
+              <div class="tooltip-content">
+                Finds elements containing the specified text. Useful for buttons, links,
+                and other text elements.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>TestID-based selectors</strong>
+              <code>"queryType": "testId", "selector": "submit-button"</code>
+              <div class="tooltip-content">
+                Finds elements by data-testid attribute. Useful when semantic selectors
+                aren't applicable.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>Index selection</strong>
+              <code>"queryOptions": {"index": 2}</code>
+              <div class="tooltip-content">
+                When multiple elements match the selector, use the index option to select
+                a specific one (zero-based).
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>Exact matching</strong>
+              <code>"queryOptions": {"exact": true}</code>
+              <div class="tooltip-content">
+                For text and label queries, controls whether to match exactly or
+                partially. Default is true for exact matching.
+              </div>
+            </div>
+          </div>
+
+          <h5>Example Usage:</h5>
+          <pre>
+{
+  "email": {
+    "selector": "Email address",
+    "queryType": "label",
+    "type": "input",
+    "dataType": "function",
+    "dataGenerator": "generateRandomEmail"
+  },
+  "password": {
+    "selector": "textbox",
+    "queryType": "role",
+    "queryOptions": {
+      "name": "Password"
+    },
+    "type": "input",
+    "data": "SecurePassword123!"
+  },
+  "agreeTerms": {
+    "selector": "checkbox",
+    "queryType": "role",
+    "queryOptions": {
+      "name": "I agree to terms"
+    },
+    "type": "checkCheckbox"
+  },
+  "submitButton": {
+    "selector": "Submit",
+    "queryType": "text",
+    "type": "simpleClick"
+  },
+  "firstOfMultipleLabels": {
+    "selector": "Username",
+    "queryType": "label",
+    "queryOptions": {
+      "index": 0
+    },
+    "type": "input",
+    "data": "user123"
+  }
+}</pre
+          >
+
+          <h5>Helper Functions for Enhanced Selectors:</h5>
+          <p>
+            The extension also provides helper functions to create these selectors more
+            easily:
+          </p>
+
+          <pre>
+// Role-based selector for a submit button
+getByRoleSelector("button", { name: "Submit" }, "simpleClick")
+
+// Label-based selector for email input  
+getByLabelSelector("Email address", {}, "input", "", "function", "generateRandomEmail")
+
+// Text-based selector for a button
+getByTextSelector("Click me", { exact: true }, "simpleClick")
+
+// TestID-based selector
+getByTestIdSelector("login-form-submit", "simpleClick")</pre
+          >
+        </div>
+
+        <h4 class="collapsible-header">
           Available Field Types Reference <span class="toggle-icon">&dtrif;</span>
         </h4>
         <div id="available-field-types" class="mt-3 collapsible-content">
