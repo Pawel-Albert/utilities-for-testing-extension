@@ -89,13 +89,20 @@
       </div>
     </div>
 
-    <h2>Running locally</h2>
+    <h2>Online Access</h2>
+    <p>These test pages are hosted on GitHub Pages and are accessible online at:</p>
+    <pre>https://pawel-albert.github.io/utilities-for-testing-extension/test-pages/</pre>
     <p>
-      These pages are designed to be served from a local web server. The simplest way to
-      run them is with:
+      You can directly use these pages to test the extension without setting up a local
+      server.
     </p>
-    <pre>npx http-server test-pages -p 5252</pre>
-    <p>Then access them at <a href="http://localhost:5252">http://localhost:5252</a></p>
+
+    <h2>Local Development</h2>
+    <p>
+      If you want to make changes or run these pages locally, you can clone the repository
+      and run:
+    </p>
+    <pre>cd test-pages && npx http-server -p 5252</pre>
 
     <div class="reference">
       <h3>Source Code</h3>

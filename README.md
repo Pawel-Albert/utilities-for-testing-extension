@@ -417,6 +417,41 @@ The extension now uses a more robust storage system:
   - **Exact matching**: Control whether text matching is exact or partial
 - Created helper functions to simplify selector creation with comprehensive documentation
 
+### Version 0.5.2 Updates
+
+#### Test Pages on GitHub Pages
+
+- Added set of test pages hosted on GitHub Pages for practicing with selectors:
+  - ARIA form - Demonstrates forms with ARIA roles and labels
+  - Label form - Forms with standard HTML labels
+  - Text form - Elements that can be selected by text content
+  - TestID form - Elements with data-testid attributes
+  - Shadow DOM form - Testing Shadow DOM components
+  - Multi-step form - For practicing step-by-step form filling
+  - Complex form - Combining multiple selection strategies
+- All test pages are now accessible online at https://pawel-albert.github.io/utilities-for-testing-extension/test-pages/
+
+#### Enhanced ARIA Role Support
+
+- Improved `getByRole` function with more resilient implementation:
+  - Support for `combobox` role (select elements)
+  - Better accessible name calculation following ARIA guidelines
+  - Support for input elements with associated labels through `for` attribute
+  - Enhanced name comparisons with exact matching option
+- Added diagnostic function `diagnosticLogAllElementsWithRoles` to help debug ARIA roles and accessible names
+
+#### Improved Date Fields Support
+
+- Enhanced role-based selectors for date inputs
+- Better handling of date-specific input types
+- Fixed issues with accessible name calculation for date fields
+
+#### Romanian Data Generators Enhancements
+
+- Improved CNP (Personal Numeric Code) generation with more robust validation
+- Better CUI (Company ID) formatting with optional RO prefix
+- Enhanced Romanian phone number generation with format options
+
 ## Todo
 
 - [x] Form auto filler with random data
