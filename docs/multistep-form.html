@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi-step Form - TesterUtilities</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      .form-step {
+        display: none;
+      }
+      .form-step.active {
+        display: block;
+      }
+      .steps-indicator {
+        display: flex;
+        margin-bottom: 30px;
+      }
+      .step-circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: var(--bg-secondary);
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        font-weight: bold;
+      }
+      .step-circle.active {
+        background-color: var(--primary-color);
+        color: white;
+      }
+      .step-circle.complete {
+        background-color: var(--success-color);
+        color: white;
+      }
+      .step-line {
+        flex-grow: 1;
+        height: 4px;
+        margin-top: 13px;
+        background-color: var(--bg-secondary);
+        margin-right: 10px;
+      }
+      .step-line.active {
+        background-color: var(--primary-color);
+      }
+      .step-summary {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: var(--bg-secondary);
+        border-radius: 8px;
+      }
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .summary-row:last-child {
+        border-bottom: none;
+      }
+      .summary-label {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="navigation-container"></div>
+
+    <div class="content">
+      <h1>Multi-step Form</h1>
+
+      <div class="explanation">
+        <h2>Working with Multi-step Forms</h2>
+        <p>Multi-step forms present unique challenges for automation because:</p>
+        <ul>
+          <li>Elements may not be in the DOM until a specific step is reached</li>
+          <li>You need to maintain state across multiple form screens</li>
+          <li>Navigation between steps requires specific actions</li>
+          <li>Validation may occur at each step or at the end</li>
+        </ul>
+        <p>
+          This example demonstrates how to use TesterUtilities to automate a multi-step
+          form by:
+        </p>
+        <ul>
+          <li>Using sequential field filling with step navigation</li>
+          <li>Implementing waitForElement and navigation actions</li>
+          <li>Handling conditional visibility of form elements</li>
+        </ul>
+      </div>
+
+      <div class="form-container">
+        <h2>Account Registration Wizard</h2>
+        <p>Complete the following steps to create your account.</p>
+
+        <!-- Steps indicator -->
+        <div class="steps-indicator">
+          <div class="step-circle active" data-step="1">1</div>
+          <div class="step-line"></div>
+          <div class="step-circle" data-step="2">2</div>
+          <div class="step-line"></div>
+          <div class="step-circle" data-step="3">3</div>
+          <div class="step-line"></div>
+          <div class="step-circle" data-step="4">4</div>
+        </div>
+
+        <form id="multistep-form" class="test-form">
+          <!-- Step 1: Account Details -->
+          <div class="form-step active" data-step="1" id="account-step">
+            <h3>Step 1: Account Details</h3>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required />
+            </div>
+
+            <div class="form-group">
+              <label for="confirm-password">Confirm Password</label>
+              <input
+                type="password"
+                id="confirm-password"
+                name="confirmPassword"
+                required
+              />
+            </div>
+
+            <div class="form-actions">
+              <button type="button" id="to-step-2" class="next-button" data-target="2">
+                Next: Personal Information
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: Personal Information -->
+          <div class="form-step" data-step="2" id="personal-step">
+            <h3>Step 2: Personal Information</h3>
+
+            <div class="form-group">
+              <label for="first-name">First Name</label>
+              <input type="text" id="first-name" name="firstName" required />
+            </div>
+
+            <div class="form-group">
+              <label for="last-name">Last Name</label>
+              <input type="text" id="last-name" name="lastName" required />
+            </div>
+
+            <div class="form-group">
+              <label for="birthdate">Date of Birth</label>
+              <input type="date" id="birthdate" name="birthdate" />
+            </div>
+
+            <div class="form-group">
+              <label>Gender</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="gender" value="male" />
+                  Male
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="gender" value="female" />
+                  Female
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="gender" value="other" />
+                  Other
+                </label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="back-button" data-target="1">Back</button>
+              <button type="button" id="to-step-3" class="next-button" data-target="3">
+                Next: Contact Information
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Contact Information -->
+          <div class="form-step" data-step="3" id="contact-step">
+            <h3>Step 3: Contact Information</h3>
+
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" />
+            </div>
+
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input type="text" id="address" name="address" />
+            </div>
+
+            <div class="form-group">
+              <label for="city">City</label>
+              <input type="text" id="city" name="city" />
+            </div>
+
+            <div class="form-group">
+              <label for="country">Country</label>
+              <select id="country" name="country">
+                <option value="">Select Country</option>
+                <option value="us">United States</option>
+                <option value="ca">Canada</option>
+                <option value="uk">United Kingdom</option>
+                <option value="au">Australia</option>
+                <option value="pl">Poland</option>
+                <option value="de">Germany</option>
+                <option value="fr">France</option>
+              </select>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="back-button" data-target="2">Back</button>
+              <button type="button" id="to-step-4" class="next-button" data-target="4">
+                Next: Review & Submit
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 4: Review & Submit -->
+          <div class="form-step" data-step="4" id="review-step">
+            <h3>Step 4: Review & Submit</h3>
+
+            <div class="step-summary" id="form-summary">
+              <!-- This will be filled dynamically in JavaScript -->
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="terms" id="terms" />
+                I agree to the Terms of Service and Privacy Policy
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="newsletter" id="newsletter" />
+                Subscribe to our newsletter
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="back-button" data-target="3">Back</button>
+              <button type="submit" id="submit-form">Create Account</button>
+            </div>
+          </div>
+        </form>
+
+        <div id="form-result"></div>
+      </div>
+
+      <div class="reference-section">
+        <h2>Multi-step Form JSON Configuration</h2>
+        <p>
+          Copy this JSON configuration to test the multi-step form with TesterUtilities
+          extension. It uses a sequence of selectors and actions to navigate through each
+          step of the form.
+        </p>
+
+        <div class="code-container">
+          <pre id="json-config">
+{
+  "registrationForm": {
+    "type": "multiStep",
+    "timeout": 500,
+    "steps": [
+      {
+        "selector": "Email Address",
+        "queryType": "label",
+        "type": "input",
+        "data": "test.user@example.com",
+        "dataType": "static"
+      },
+      {
+        "selector": "Password",
+        "queryType": "label",
+        "type": "input",
+        "data": "SecurePassword123!",
+        "dataType": "static"
+      },
+      {
+        "selector": "Confirm Password",
+        "queryType": "label",
+        "type": "input",
+        "data": "SecurePassword123!",
+        "dataType": "static"
+      },
+      {
+        "selector": "to-step-2",
+        "queryType": "testId",
+        "type": "simpleClick"
+      },
+      {
+        "selector": "First Name",
+        "queryType": "label",
+        "type": "input",
+        "data": "John",
+        "dataType": "static"
+      },
+      {
+        "selector": "Last Name",
+        "queryType": "label",
+        "type": "input",
+        "data": "Doe",
+        "dataType": "static"
+      },
+      {
+        "selector": "Date of Birth",
+        "queryType": "label",
+        "type": "input",
+        "data": "1990-01-15",
+        "dataType": "static"
+      },
+      {
+        "selector": "Male",
+        "queryType": "label",
+        "type": "checkCheckbox"
+      },
+      {
+        "selector": "to-step-3",
+        "queryType": "testId",
+        "type": "simpleClick"
+      },
+      {
+        "selector": "Phone Number",
+        "queryType": "label",
+        "type": "input",
+        "data": "+1 (555) 123-4567",
+        "dataType": "static"
+      },
+      {
+        "selector": "Address",
+        "queryType": "label",
+        "type": "input",
+        "data": "123 Main Street",
+        "dataType": "static"
+      },
+      {
+        "selector": "City",
+        "queryType": "label",
+        "type": "input",
+        "data": "New York",
+        "dataType": "static"
+      },
+      {
+        "selector": "Country",
+        "queryType": "label",
+        "type": "input", 
+        "data": "us",
+        "dataType": "static"
+      },
+      {
+        "selector": "to-step-4",
+        "queryType": "testId",
+        "type": "simpleClick"
+      },
+      {
+        "selector": "terms",
+        "queryType": "testId",
+        "type": "checkCheckbox"
+      },
+      {
+        "selector": "newsletter",
+        "queryType": "testId", 
+        "type": "checkCheckbox"
+      },
+      {
+        "selector": "submit-form",
+        "queryType": "testId",
+        "type": "simpleClick"
+      }
+    ]
+  }
+}</pre
+          >
+          <button class="copy-button" data-target="json-config">Copy JSON</button>
+        </div>
+
+        <h3>Multi-step Form Automation Challenges</h3>
+        <p>Automating multi-step forms comes with several challenges:</p>
+        <ul>
+          <li>
+            <strong>Dynamic Visibility</strong>: Elements may not be available until a
+            specific step is reached, which requires waiting for elements to appear.
+          </li>
+          <li>
+            <strong>State Management</strong>: The form state needs to be preserved
+            between steps, especially when validating input.
+          </li>
+          <li>
+            <strong>Sequential Actions</strong>: Actions must be performed in a specific
+            order to advance through the form.
+          </li>
+          <li>
+            <strong>Error Handling</strong>: If an error occurs at any step, the
+            automation should be able to recover and continue.
+          </li>
+        </ul>
+
+        <h3>Strategy for Multi-step Forms</h3>
+        <p>
+          TesterUtilities handles multi-step forms by using a sequential approach with
+          explicit navigation actions. The recommended strategy is:
+        </p>
+        <ol>
+          <li>Fill out fields in the current visible step</li>
+          <li>Use a click action on the navigation button to move to the next step</li>
+          <li>Wait for the next step to become visible</li>
+          <li>Continue with the next set of fields</li>
+          <li>Repeat until the final submission</li>
+        </ol>
+      </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+      // Initialize the page
+      document.addEventListener('DOMContentLoaded', () => {
+        // Set up navigation
+        initializeNavigation('multistep-form.html')
+
+        // Form state object to store all values
+        const formState = {}
+
+        // Function to update steps UI
+        function updateStepsUI(currentStep) {
+          // Update step circles
+          document.querySelectorAll('.step-circle').forEach(circle => {
+            const step = parseInt(circle.dataset.step)
+
+            if (step < currentStep) {
+              circle.classList.remove('active')
+              circle.classList.add('complete')
+            } else if (step === currentStep) {
+              circle.classList.add('active')
+              circle.classList.remove('complete')
+            } else {
+              circle.classList.remove('active', 'complete')
+            }
+          })
+
+          // Update connecting lines
+          document.querySelectorAll('.step-line').forEach((line, index) => {
+            if (index + 1 < currentStep) {
+              line.classList.add('active')
+            } else {
+              line.classList.remove('active')
+            }
+          })
+
+          // Show only the current step
+          document.querySelectorAll('.form-step').forEach(step => {
+            if (parseInt(step.dataset.step) === currentStep) {
+              step.classList.add('active')
+            } else {
+              step.classList.remove('active')
+            }
+          })
+        }
+
+        // Function to collect form data
+        function collectFormData() {
+          const form = document.getElementById('multistep-form')
+          const formData = new FormData(form)
+
+          formData.forEach((value, key) => {
+            formState[key] = value
+          })
+
+          // Handle radio buttons and checkboxes
+          document
+            .querySelectorAll('input[type="checkbox"], input[type="radio"]')
+            .forEach(input => {
+              if (input.checked) {
+                formState[input.name] = input.value || true
+              }
+            })
+
+          updateSummary()
+        }
+
+        // Function to update the summary
+        function updateSummary() {
+          const summaryElement = document.getElementById('form-summary')
+          let summaryHTML = ''
+
+          // Account details
+          summaryHTML += '<div class="summary-section"><h4>Account Details</h4>'
+          summaryHTML += `<div class="summary-row"><span class="summary-label">Email:</span> <span>${
+            formState.email || ''
+          }</span></div>`
+          summaryHTML += `<div class="summary-row"><span class="summary-label">Password:</span> <span>********</span></div>`
+          summaryHTML += '</div>'
+
+          // Personal information
+          summaryHTML += '<div class="summary-section"><h4>Personal Information</h4>'
+          summaryHTML += `<div class="summary-row"><span class="summary-label">Name:</span> <span>${
+            formState.firstName || ''
+          } ${formState.lastName || ''}</span></div>`
+          summaryHTML += `<div class="summary-row"><span class="summary-label">Birthdate:</span> <span>${
+            formState.birthdate || ''
+          }</span></div>`
+          summaryHTML += `<div class="summary-row"><span class="summary-label">Gender:</span> <span>${
+            formState.gender || ''
+          }</span></div>`
+          summaryHTML += '</div>'
+
+          // Contact information
+          summaryHTML += '<div class="summary-section"><h4>Contact Information</h4>'
+          summaryHTML += `<div class="summary-row"><span class="summary-label">Phone:</span> <span>${
+            formState.phone || ''
+          }</span></div>`
+          summaryHTML += `<div class="summary-row"><span class="summary-label">Address:</span> <span>${
+            formState.address || ''
+          }</span></div>`
+          summaryHTML += `<div class="summary-row"><span class="summary-label">City:</span> <span>${
+            formState.city || ''
+          }</span></div>`
+
+          // Get country name from select option
+          let countryName = ''
+          const countrySelect = document.getElementById('country')
+          if (countrySelect && formState.country) {
+            const selectedOption = countrySelect.querySelector(
+              `option[value="${formState.country}"]`
+            )
+            if (selectedOption) {
+              countryName = selectedOption.textContent
+            }
+          }
+
+          summaryHTML += `<div class="summary-row"><span class="summary-label">Country:</span> <span>${
+            countryName || ''
+          }</span></div>`
+          summaryHTML += '</div>'
+
+          summaryElement.innerHTML = summaryHTML
+        }
+
+        // Set up navigation buttons
+        document.querySelectorAll('.next-button, .back-button').forEach(button => {
+          button.addEventListener('click', () => {
+            const targetStep = parseInt(button.dataset.target)
+            collectFormData()
+            updateStepsUI(targetStep)
+          })
+        })
+
+        // Set up form submission
+        const form = document.getElementById('multistep-form')
+        const resultElement = document.getElementById('form-result')
+
+        form.addEventListener('submit', e => {
+          e.preventDefault()
+          collectFormData()
+
+          // Display the result
+          resultElement.innerHTML = `
+          <div class="result-container">
+            <h3>Account Created Successfully!</h3>
+            <p>Thank you for registering with us, ${formState.firstName || 'User'}!</p>
+            <pre>${JSON.stringify(formState, null, 2)}</pre>
+          </div>
+        `
+
+          // Reset the form and return to step 1
+          setTimeout(() => {
+            form.reset()
+            updateStepsUI(1)
+          }, 1000)
+        })
+      })
+    </script>
+  </body>
+</html>
