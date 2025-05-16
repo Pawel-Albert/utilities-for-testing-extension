@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Label Selectors - TesterUtilities</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div id="navigation-container"></div>
+
+    <div class="content">
+      <h1>Label Selectors</h1>
+
+      <div class="explanation">
+        <h2>What are Label Selectors?</h2>
+        <p>
+          Label selectors target form controls through their associated text labels. This
+          approach matches how users typically interact with forms, as they first read the
+          label to understand what information is required.
+        </p>
+        <p>
+          Using <code>getByLabel</code> is an excellent choice for form testing because:
+        </p>
+        <ul>
+          <li>It closely resembles how users find form fields</li>
+          <li>Labels rarely change even when the underlying implementation does</li>
+          <li>It encourages proper form accessibility with labeled controls</li>
+          <li>
+            It works with both explicit (<code>for</code> attribute) and implicit label
+            associations
+          </li>
+        </ul>
+      </div>
+
+      <div class="form-container">
+        <h2>Registration Form with Labels</h2>
+        <p>
+          This form demonstrates elements that can be targeted by their associated label
+          text.
+        </p>
+
+        <form id="registration-form" class="test-form">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input
+              type="password"
+              id="confirm-password"
+              name="confirmPassword"
+              required
+            />
+          </div>
+
+          <!-- Example with duplicate labels -->
+          <div class="form-group">
+            <label for="first-name">Name</label>
+            <input
+              type="text"
+              id="first-name"
+              name="firstName"
+              placeholder="First name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="last-name">Name</label>
+            <input type="text" id="last-name" name="lastName" placeholder="Last name" />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" />
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country</label>
+            <select id="country" name="country">
+              <option value="">Select Country</option>
+              <option value="us">United States</option>
+              <option value="ca">Canada</option>
+              <option value="uk">United Kingdom</option>
+              <option value="au">Australia</option>
+              <option value="pl">Poland</option>
+              <option value="de">Germany</option>
+              <option value="fr">France</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="birthdate">Date of Birth</label>
+            <input type="date" id="birthdate" name="birthdate" />
+          </div>
+
+          <!-- Example of implicit label (wrapped control) -->
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="newsletter" />
+              Subscribe to newsletter
+            </label>
+          </div>
+
+          <!-- Radio buttons with shared name attribute -->
+          <div class="form-group">
+            <span class="label-text">Gender</span>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="gender" value="male" />
+                Male
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="gender" value="female" />
+                Female
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="gender" value="other" />
+                Other
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="comments">Additional Comments</label>
+            <textarea id="comments" name="comments" rows="3"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="reset">Reset Form</button>
+            <button type="submit">Register</button>
+          </div>
+        </form>
+
+        <div id="form-result"></div>
+      </div>
+
+      <div class="reference-section">
+        <h2>Label Selectors JSON Configuration</h2>
+        <p>
+          Copy this JSON configuration to test the form with TesterUtilities extension. It
+          uses <code>getByLabel</code> selectors to target elements by their associated
+          label text.
+        </p>
+
+        <div class="code-container">
+          <pre id="json-config">
+{
+  "email": {
+    "selector": "Email Address",
+    "queryType": "label",
+    "type": "input",
+    "data": "test.user@example.com",
+    "dataType": "static"
+  },
+  "password": {
+    "selector": "Password",
+    "queryType": "label",
+    "type": "input",
+    "data": "SecurePassword123!",
+    "dataType": "static"
+  },
+  "confirmPassword": {
+    "selector": "Confirm Password",
+    "queryType": "label",
+    "type": "input",
+    "data": "SecurePassword123!",
+    "dataType": "static"
+  },
+  "firstName": {
+    "selector": "Name",
+    "queryType": "label",
+    "queryOptions": {
+      "index": 0
+    },
+    "type": "input",
+    "data": "John",
+    "dataType": "static"
+  },
+  "lastName": {
+    "selector": "Name",
+    "queryType": "label",
+    "queryOptions": {
+      "index": 1
+    },
+    "type": "input",
+    "data": "Doe",
+    "dataType": "static"
+  },
+  "phoneNumber": {
+    "selector": "Phone Number",
+    "queryType": "label",
+    "type": "input",
+    "data": "+1 (555) 123-4567",
+    "dataType": "static"
+  },
+  "country": {
+    "selector": "Country",
+    "queryType": "label",
+    "type": "input",
+    "data": "us",
+    "dataType": "static"
+  },
+  "birthdate": {
+    "selector": "Date of Birth",
+    "queryType": "label",
+    "type": "input",
+    "data": "1990-01-15",
+    "dataType": "static"
+  },
+  "newsletter": {
+    "selector": "Subscribe to newsletter",
+    "queryType": "label",
+    "type": "checkCheckbox"
+  },
+  "gender": {
+    "selector": "Male",
+    "queryType": "label",
+    "type": "checkCheckbox"
+  },
+  "comments": {
+    "selector": "Additional Comments",
+    "queryType": "label",
+    "type": "input",
+    "data": "This is a test comment using label selectors.",
+    "dataType": "static"
+  },
+  "register": {
+    "selector": "Register",
+    "queryType": "text",
+    "type": "simpleClick"
+  }
+}</pre
+          >
+          <button class="copy-button" data-target="json-config">Copy JSON</button>
+        </div>
+
+        <h3>How Label Selectors Work</h3>
+        <p>
+          In the TesterUtilities extension, label selectors use the
+          <code>getByLabel</code> function, which finds elements by their associated label
+          text. This works with explicit labels (using the <code>for</code>
+          attribute) and implicit labels (where the input is a child of the label).
+        </p>
+
+        <div class="code-container">
+          <pre id="code-example">
+// Example of how getByLabel works:
+function getByLabel(document, labelText, options = {}) {
+  const { exact = false, index = 0 } = options;
+  
+  // Find all label elements
+  const labels = Array.from(document.querySelectorAll('label'));
+  
+  // Filter labels by text content
+  const matchingLabels = labels.filter(label => {
+    const labelContent = label.textContent.trim();
+    return exact 
+      ? labelContent === labelText 
+      : labelContent.includes(labelText);
+  });
+  
+  // Get the target label based on index
+  const targetLabel = matchingLabels[index];
+  if (!targetLabel) return null;
+  
+  // Case 1: Label has 'for' attribute - find element by ID
+  const forAttribute = targetLabel.getAttribute('for');
+  if (forAttribute) {
+    return document.getElementById(forAttribute);
+  }
+  
+  // Case 2: Input is child of label (implicit label)
+  const inputElements = targetLabel.querySelectorAll('input, select, textarea');
+  if (inputElements.length > 0) {
+    return inputElements[0];
+  }
+  
+  return null;
+}</pre
+          >
+          <button class="copy-button" data-target="code-example">Copy Code</button>
+        </div>
+
+        <h3>Important Notes About Label Selectors</h3>
+        <ul>
+          <li>
+            <strong>Handling Duplicate Labels</strong>: When multiple elements share the
+            same label text, use the <code>index</code> parameter to specify which one to
+            target (0-based).
+          </li>
+          <li>
+            <strong>Exact Matching</strong>: By default, label matching is partial
+            (contains). Set <code>exact: true</code> to require an exact match.
+          </li>
+          <li>
+            <strong>Label Associations</strong>: This approach works with both explicit
+            labels (using the <code>for</code> attribute) and implicit labels (input
+            within label).
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+      // Initialize the page
+      document.addEventListener('DOMContentLoaded', () => {
+        // Set up navigation
+        initializeNavigation('label-form.html')
+
+        // Set up form submission handler
+        setupFormSubmitHandler('registration-form', 'form-result')
+      })
+    </script>
+  </body>
+</html>

@@ -1,6 +1,39 @@
 import {QueryType, QueryOptions} from '../types/enhancedSelectors'
 import {ActionType, DataGeneratorType} from '../types/formFiller'
 
+// Role mapping from HTML elements to ARIA roles
+const roleMapping: Record<string, string | Record<string, string>> = {
+  input: {
+    default: 'textbox',
+    checkbox: 'checkbox',
+    radio: 'radio',
+    button: 'button',
+    submit: 'button',
+    reset: 'button',
+    image: 'button',
+    color: 'textbox',
+    date: 'textbox',
+    'datetime-local': 'textbox',
+    email: 'textbox',
+    file: 'textbox',
+    hidden: 'textbox',
+    month: 'textbox',
+    number: 'spinbutton',
+    password: 'textbox',
+    range: 'slider',
+    search: 'searchbox',
+    tel: 'textbox',
+    text: 'textbox',
+    time: 'textbox',
+    url: 'textbox',
+    week: 'textbox'
+  },
+  select: 'combobox',
+  textarea: 'textbox',
+  button: 'button',
+  a: 'link'
+}
+
 /**
  * Get element by label text
  * @param container Parent container to search within
@@ -107,58 +140,120 @@ export function getByRole(
   role: string,
   options: QueryOptions = {}
 ): HTMLElement | null {
-  const index = options.index || 0
+  console.debug(`Looking for element with role "${role}" and options:`, options)
 
-  let selector = `[role="${role}"]`
+  const elements = Array.from(container.querySelectorAll('*')).filter(el => {
+    const explicitRole = el.getAttribute('role')
+    if (explicitRole === role) return true
 
-  // Handle common implicit roles
-  if (role === 'button') {
-    selector = `${selector}, button, [type="button"], [type="submit"], [type="reset"]`
-  } else if (role === 'textbox') {
-    selector = `${selector}, input:not([type]), input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], input[type="url"], input[type="search"], textarea`
-  } else if (role === 'checkbox') {
-    selector = `${selector}, input[type="checkbox"]`
-  } else if (role === 'radio') {
-    selector = `${selector}, input[type="radio"]`
-  }
+    const tagName = el.tagName.toLowerCase()
 
-  const elements = Array.from(container.querySelectorAll(selector)) as HTMLElement[]
-
-  const matchingElements = elements.filter(element => {
-    if (options.name) {
-      const accessibleName =
-        element.getAttribute('aria-label') ||
-        element.textContent?.trim() ||
-        element.getAttribute('placeholder') ||
-        element.getAttribute('alt') ||
-        element.getAttribute('title') ||
-        ''
-
-      return accessibleName.includes(options.name)
+    if (tagName === 'input') {
+      const inputType = (el as HTMLInputElement).type || 'text'
+      const inputMapping = roleMapping.input as Record<string, string>
+      const inputRole = inputMapping[inputType] || inputMapping.default
+      return inputRole === role
     }
 
-    return true
+    const implicitRole = roleMapping[tagName]
+    if (typeof implicitRole === 'string') {
+      return implicitRole === role
+    } else if (implicitRole && typeof implicitRole === 'object') {
+      return (implicitRole as Record<string, string>).default === role
+    }
+
+    return false
   })
 
-  if (matchingElements.length > 1) {
-    console.info(
-      `Found ${matchingElements.length} elements with role "${role}". Using index ${index}.`
-    )
-  } else if (matchingElements.length === 0) {
-    console.warn(`No elements found with role "${role}"`)
+  if (elements.length === 0) {
+    console.debug(`No elements found with role "${role}"`)
     return null
   }
 
-  if (!matchingElements[index]) {
-    console.warn(
-      `Requested role element index ${index} out of bounds (0-${
-        matchingElements.length - 1
-      })`
-    )
-    return matchingElements[0]
+  const filtered = elements.filter(el => {
+    for (const [key, value] of Object.entries(options)) {
+      if (key === 'name' && value) {
+        const accessibleName = getAccessibleName(el as HTMLElement)
+        const nameMatches =
+          options.exact === false
+            ? accessibleName.toLowerCase().includes(String(value).toLowerCase())
+            : accessibleName.toLowerCase() === String(value).toLowerCase()
+
+        if (!nameMatches) return false
+      }
+    }
+    return true
+  })
+
+  if (filtered.length === 0) {
+    console.debug(`No elements found with role "${role}" and name "${options.name}"`)
+    return null
   }
 
-  return matchingElements[index]
+  const index = options.index !== undefined ? options.index : 0
+  if (filtered.length > 1) {
+    console.info(
+      `Found ${filtered.length} elements with role "${role}" and name "${options.name}". Using index ${index}.`
+    )
+  }
+
+  return (filtered[index] as HTMLElement) || null
+}
+
+/**
+ * Gets the accessible name of an element using multiple methods
+ * Following the accessible name calculation algorithm
+ */
+function getAccessibleName(element: HTMLElement): string {
+  const ariaLabel = element.getAttribute('aria-label')
+  if (ariaLabel) return ariaLabel.trim()
+
+  const ariaLabelledBy = element.getAttribute('aria-labelledby')
+  if (ariaLabelledBy) {
+    const labelElements = ariaLabelledBy
+      .split(' ')
+      .map(id => document.getElementById(id))
+      .filter(Boolean)
+
+    if (labelElements.length) {
+      return labelElements
+        .map(el => el!.textContent || '')
+        .join(' ')
+        .trim()
+    }
+  }
+
+  if (element.id) {
+    const labels = document.querySelectorAll(`label[for="${element.id}"]`)
+    if (labels.length) {
+      return Array.from(labels)
+        .map(label => label.textContent || '')
+        .join(' ')
+        .trim()
+    }
+  }
+
+  const parentLabel = element.closest('label')
+  if (parentLabel) {
+    const clone = parentLabel.cloneNode(true) as HTMLElement
+    const elementsToRemove = clone.querySelectorAll('input, select, textarea')
+    elementsToRemove.forEach(el => el.parentNode?.removeChild(el))
+    return clone.textContent?.trim() || ''
+  }
+
+  const placeholder = element.getAttribute('placeholder')
+  if (placeholder) return placeholder.trim()
+
+  if (element.title) return element.title.trim()
+
+  if (
+    element.tagName.toLowerCase() === 'button' ||
+    element.tagName.toLowerCase() === 'a'
+  ) {
+    return element.textContent?.trim() || ''
+  }
+
+  return element.textContent?.trim() || ''
 }
 
 /**
@@ -363,4 +458,54 @@ export function getByTestIdSelector(
     dataType,
     dataGenerator
   }
+}
+
+/**
+ * Diagnostic function to help debug role selectors
+ * Logs all elements with their roles and accessible names
+ */
+export function diagnosticLogAllElementsWithRoles(container = document.body): void {
+  console.group('Diagnostic: All Elements with Roles')
+
+  const elements = Array.from(container.querySelectorAll('*'))
+
+  elements.forEach(el => {
+    const tagName = el.tagName.toLowerCase()
+    const id = el.id ? `#${el.id}` : ''
+    const explicitRole = el.getAttribute('role')
+
+    let type = ''
+    if (tagName === 'input') {
+      type = (el as HTMLInputElement).type || 'text'
+    }
+
+    const accessibleName = getAccessibleName(el as HTMLElement)
+
+    let implicitRole = ''
+    if (tagName === 'input') {
+      const inputMapping = roleMapping.input as Record<string, string>
+      implicitRole = inputMapping[type] || inputMapping.default
+    } else {
+      const mapping = roleMapping[tagName]
+      if (typeof mapping === 'string') {
+        implicitRole = mapping
+      } else if (mapping && typeof mapping === 'object') {
+        implicitRole = (mapping as Record<string, string>).default
+      }
+    }
+
+    const effectiveRole = explicitRole || implicitRole || 'none'
+
+    if (effectiveRole !== 'none' || accessibleName) {
+      console.log({
+        element: `${tagName}${id}${type ? `[type="${type}"]` : ''}`,
+        explicitRole,
+        implicitRole,
+        effectiveRole,
+        accessibleName
+      })
+    }
+  })
+
+  console.groupEnd()
 }

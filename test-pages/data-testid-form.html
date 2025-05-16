@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data TestID Selectors - TesterUtilities</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div id="navigation-container"></div>
+
+    <div class="content">
+      <h1>Data TestID Selectors</h1>
+
+      <div class="explanation">
+        <h2>What are TestID Selectors?</h2>
+        <p>
+          TestID selectors target elements using the <code>data-testid</code> attribute,
+          which is a common practice in modern web development for creating stable test
+          hooks. This approach decouples your test selectors from styling or structural
+          changes in your application.
+        </p>
+        <p>
+          Using <code>getByTestId</code> is generally considered the last resort when
+          other, more semantic selectors (like role, label, or text) aren't available or
+          practical.
+        </p>
+      </div>
+
+      <div class="form-container">
+        <h2>Registration Form with TestIDs</h2>
+        <p>
+          This form demonstrates elements with <code>data-testid</code> attributes for
+          direct targeting.
+        </p>
+
+        <form id="registration-form" class="test-form">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              data-testid="email-input"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              data-testid="password-input"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input
+              type="password"
+              id="confirm-password"
+              name="confirmPassword"
+              data-testid="confirm-password-input"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="first-name">First Name</label>
+            <input
+              type="text"
+              id="first-name"
+              name="firstName"
+              data-testid="first-name-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="last-name">Last Name</label>
+            <input
+              type="text"
+              id="last-name"
+              name="lastName"
+              data-testid="last-name-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" data-testid="phone-input" />
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country</label>
+            <select id="country" name="country" data-testid="country-select">
+              <option value="">Select Country</option>
+              <option value="us">United States</option>
+              <option value="ca">Canada</option>
+              <option value="uk">United Kingdom</option>
+              <option value="au">Australia</option>
+              <option value="pl">Poland</option>
+              <option value="de">Germany</option>
+              <option value="fr">France</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="birthdate">Date of Birth</label>
+            <input
+              type="date"
+              id="birthdate"
+              name="birthdate"
+              data-testid="birthdate-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                name="newsletter"
+                data-testid="newsletter-checkbox"
+              />
+              Subscribe to newsletter
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>Gender</label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  data-testid="gender-male-radio"
+                />
+                Male
+              </label>
+              <label class="radio-label">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="female"
+                  data-testid="gender-female-radio"
+                />
+                Female
+              </label>
+              <label class="radio-label">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="other"
+                  data-testid="gender-other-radio"
+                />
+                Other
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="comments">Additional Comments</label>
+            <textarea
+              id="comments"
+              name="comments"
+              rows="3"
+              data-testid="comments-textarea"
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="reset" data-testid="reset-button">Reset Form</button>
+            <button type="submit" data-testid="submit-button">Register</button>
+          </div>
+        </form>
+
+        <div id="form-result"></div>
+      </div>
+
+      <div class="reference-section">
+        <h2>TestID Selectors JSON Configuration</h2>
+        <p>
+          Copy this JSON configuration to test the form with TesterUtilities extension. It
+          uses <code>getByTestId</code> selectors to target elements by their test
+          identifiers.
+        </p>
+
+        <div class="code-container">
+          <pre id="json-config">
+{
+  "url": "(http://localhost:5252/data-testid-form.html|file:///.*data-testid-form.html)",
+  "formData": {
+    "registrationForm": {
+      "type": "form",
+      "timeout": 5000,
+      "fields": {
+        "email": {
+          "selector": "email-input",
+          "queryType": "testId",
+          "type": "input",
+          "data": "test.user@example.com",
+          "dataType": "static"
+        },
+        "password": {
+          "selector": "password-input",
+          "queryType": "testId",
+          "type": "input",
+          "data": "SecurePassword123!",
+          "dataType": "static"
+        },
+        "confirmPassword": {
+          "selector": "confirm-password-input",
+          "queryType": "testId",
+          "type": "input",
+          "data": "SecurePassword123!",
+          "dataType": "static"
+        },
+        "firstName": {
+          "selector": "first-name-input",
+          "queryType": "testId",
+          "type": "input",
+          "data": "John",
+          "dataType": "static"
+        },
+        "lastName": {
+          "selector": "last-name-input",
+          "queryType": "testId",
+          "type": "input",
+          "data": "Doe",
+          "dataType": "static"
+        },
+        "phoneNumber": {
+          "selector": "phone-input",
+          "queryType": "testId",
+          "type": "input",
+          "data": "+1 (555) 123-4567",
+          "dataType": "static"
+        },
+        "country": {
+          "selector": "country-select",
+          "queryType": "testId",
+          "type": "select",
+          "data": "us",
+          "dataType": "static"
+        },
+        "birthdate": {
+          "selector": "birthdate-input",
+          "queryType": "testId",
+          "type": "input",
+          "data": "1990-01-15",
+          "dataType": "static"
+        },
+        "newsletter": {
+          "selector": "newsletter-checkbox",
+          "queryType": "testId",
+          "type": "checkbox",
+          "data": true,
+          "dataType": "static"
+        },
+        "genderMale": {
+          "selector": "gender-male-radio",
+          "queryType": "testId",
+          "type": "radio",
+          "data": true,
+          "dataType": "static"
+        },
+        "comments": {
+          "selector": "comments-textarea",
+          "queryType": "testId",
+          "type": "textarea",
+          "data": "This is a test comment using data-testid selectors.",
+          "dataType": "static"
+        }
+      },
+      "submit": {
+        "selector": "submit-button",
+        "queryType": "testId",
+        "type": "click",
+        "data": null,
+        "dataType": null
+      }
+    }
+  }
+}</pre
+          >
+          <button class="copy-button" data-target="json-config">Copy JSON</button>
+        </div>
+
+        <h3>How TestID Selectors Work</h3>
+        <p>
+          In the TesterUtilities extension, TestID selectors use the
+          <code>getByTestId</code> function, which finds elements with the specified
+          <code>data-testid</code> attribute.
+        </p>
+
+        <div class="code-container">
+          <pre id="code-example">
+// Example of how getByTestId works internally:
+function getByTestId(document, id, options = {}) {
+  return document.querySelector(`[data-testid="${id}"]`);
+}</pre
+          >
+          <button class="copy-button" data-target="code-example">Copy Code</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+      // Initialize the page
+      document.addEventListener('DOMContentLoaded', () => {
+        // Set up navigation
+        initializeNavigation('data-testid-form.html')
+
+        // Highlight all elements with data-testid for visual reference
+        highlightTestIds()
+
+        // Set up form submission handler
+        setupFormSubmitHandler('registration-form', 'form-result')
+      })
+    </script>
+  </body>
+</html>

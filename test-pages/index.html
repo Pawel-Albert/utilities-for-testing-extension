@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TesterUtilities - Selector Test Pages</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <h1>TesterUtilities - Selector Test Pages</h1>
+
+    <div class="note">
+      <strong>Note:</strong> These pages serve as test environments for the
+      TesterUtilities Chrome extension. Each page demonstrates different types of
+      selectors and form structures to test the extension's capabilities.
+    </div>
+
+    <h2>What is this?</h2>
+    <p>
+      This is a collection of test pages designed to showcase all the selector types
+      supported by the TesterUtilities Chrome extension. Each page focuses on a specific
+      selector strategy and provides ready-to-use JSON configurations that you can copy
+      directly into the extension.
+    </p>
+
+    <h2>How to use these pages</h2>
+    <ol>
+      <li>Browse to the test page that demonstrates the selector type you want to use</li>
+      <li>Review the form structure and see how elements are marked up</li>
+      <li>Copy the provided JSON configuration</li>
+      <li>
+        Paste it into the TesterUtilities extension's Custom Site Selectors configuration
+      </li>
+      <li>Run the extension on the test page to see it in action</li>
+    </ol>
+
+    <h2>Available Test Pages</h2>
+
+    <div class="grid-container">
+      <div class="grid-item">
+        <h3>Data TestID Selectors</h3>
+        <p>
+          Form elements with <code>data-testid</code> attributes for direct targeting.
+        </p>
+        <p>Ideal for pages with explicit test identifiers.</p>
+        <a href="data-testid-form.html">View TestID Form →</a>
+      </div>
+
+      <div class="grid-item">
+        <h3>ARIA Role Selectors</h3>
+        <p>Form elements selected by their ARIA roles and accessible properties.</p>
+        <p>Great for accessibility-focused applications.</p>
+        <a href="aria-form.html">View ARIA Form →</a>
+      </div>
+
+      <div class="grid-item">
+        <h3>Label Selectors</h3>
+        <p>Form elements selected by their associated label text.</p>
+        <p>Perfect for standard forms with proper labels.</p>
+        <a href="label-form.html">View Label Form →</a>
+      </div>
+
+      <div class="grid-item">
+        <h3>Text Content Selectors</h3>
+        <p>Elements selected by their visible text content.</p>
+        <p>Useful for buttons, links, and other text elements.</p>
+        <a href="text-form.html">View Text Form →</a>
+      </div>
+
+      <div class="grid-item">
+        <h3>Shadow DOM Selectors</h3>
+        <p>Form elements inside Shadow DOM encapsulation.</p>
+        <p>For modern web components and frameworks.</p>
+        <a href="shadow-dom-form.html">View Shadow DOM Form →</a>
+      </div>
+
+      <div class="grid-item">
+        <h3>Multi-step Form</h3>
+        <p>Complex workflow with sequential steps and dynamic content.</p>
+        <p>For testing multi-stage interactions.</p>
+        <a href="multistep-form.html">View Multi-step Form →</a>
+      </div>
+
+      <div class="grid-item">
+        <h3>Complex Form</h3>
+        <p>Combines all selector types in a single comprehensive form.</p>
+        <p>For testing complex real-world scenarios.</p>
+        <a href="complex-form.html">View Complex Form →</a>
+      </div>
+    </div>
+
+    <h2>Running locally</h2>
+    <p>
+      These pages are designed to be served from a local web server. The simplest way to
+      run them is with:
+    </p>
+    <pre>npx http-server test-pages -p 5252</pre>
+    <p>Then access them at <a href="http://localhost:5252">http://localhost:5252</a></p>
+
+    <div class="reference">
+      <h3>Source Code</h3>
+      <p>
+        The source code for these test pages is available in the
+        <a
+          href="https://github.com/Pawel-Albert/utilities-for-testing-extension"
+          target="_blank"
+        >
+          TesterUtilities GitHub repository</a
+        >.
+      </p>
+    </div>
+
+    <script src="js/common.js"></script>
+  </body>
+</html>
