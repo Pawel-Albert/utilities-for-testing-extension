@@ -423,20 +423,13 @@
 
     <script src="js/common.js"></script>
     <script>
-      // Initialize the page
       document.addEventListener('DOMContentLoaded', () => {
-        // Set up navigation
         initializeNavigation('multistep-form.html')
-
-        // Form state object to store all values
         const formState = {}
 
-        // Function to update steps UI
         function updateStepsUI(currentStep) {
-          // Update step circles
           document.querySelectorAll('.step-circle').forEach(circle => {
             const step = parseInt(circle.dataset.step)
-
             if (step < currentStep) {
               circle.classList.remove('active')
               circle.classList.add('complete')
@@ -448,7 +441,6 @@
             }
           })
 
-          // Update connecting lines
           document.querySelectorAll('.step-line').forEach((line, index) => {
             if (index + 1 < currentStep) {
               line.classList.add('active')
@@ -457,7 +449,6 @@
             }
           })
 
-          // Show only the current step
           document.querySelectorAll('.form-step').forEach(step => {
             if (parseInt(step.dataset.step) === currentStep) {
               step.classList.add('active')
@@ -467,7 +458,6 @@
           })
         }
 
-        // Function to collect form data
         function collectFormData() {
           const form = document.getElementById('multistep-form')
           const formData = new FormData(form)
@@ -476,7 +466,6 @@
             formState[key] = value
           })
 
-          // Handle radio buttons and checkboxes
           document
             .querySelectorAll('input[type="checkbox"], input[type="radio"]')
             .forEach(input => {
@@ -488,12 +477,10 @@
           updateSummary()
         }
 
-        // Function to update the summary
         function updateSummary() {
           const summaryElement = document.getElementById('form-summary')
           let summaryHTML = ''
 
-          // Account details
           summaryHTML += '<div class="summary-section"><h4>Account Details</h4>'
           summaryHTML += `<div class="summary-row"><span class="summary-label">Email:</span> <span>${
             formState.email || ''
@@ -501,7 +488,6 @@
           summaryHTML += `<div class="summary-row"><span class="summary-label">Password:</span> <span>********</span></div>`
           summaryHTML += '</div>'
 
-          // Personal information
           summaryHTML += '<div class="summary-section"><h4>Personal Information</h4>'
           summaryHTML += `<div class="summary-row"><span class="summary-label">Name:</span> <span>${
             formState.firstName || ''
@@ -514,7 +500,6 @@
           }</span></div>`
           summaryHTML += '</div>'
 
-          // Contact information
           summaryHTML += '<div class="summary-section"><h4>Contact Information</h4>'
           summaryHTML += `<div class="summary-row"><span class="summary-label">Phone:</span> <span>${
             formState.phone || ''
@@ -526,7 +511,6 @@
             formState.city || ''
           }</span></div>`
 
-          // Get country name from select option
           let countryName = ''
           const countrySelect = document.getElementById('country')
           if (countrySelect && formState.country) {
@@ -546,7 +530,6 @@
           summaryElement.innerHTML = summaryHTML
         }
 
-        // Set up navigation buttons
         document.querySelectorAll('.next-button, .back-button').forEach(button => {
           button.addEventListener('click', () => {
             const targetStep = parseInt(button.dataset.target)
@@ -555,7 +538,6 @@
           })
         })
 
-        // Set up form submission
         const form = document.getElementById('multistep-form')
         const resultElement = document.getElementById('form-result')
 
@@ -563,7 +545,6 @@
           e.preventDefault()
           collectFormData()
 
-          // Display the result
           resultElement.innerHTML = `
           <div class="result-container">
             <h3>Account Created Successfully!</h3>
@@ -572,7 +553,6 @@
           </div>
         `
 
-          // Reset the form and return to step 1
           setTimeout(() => {
             form.reset()
             updateStepsUI(1)

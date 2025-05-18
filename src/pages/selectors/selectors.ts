@@ -5,6 +5,7 @@ import {
 } from '../../content_scripts/model/siteSelectorAsync'
 import {SelectorType} from '../../types/formFiller'
 import {initCollapsibleSections} from '../../content_scripts/model/collapsible'
+import {EnhancedSelectorType} from '../../types/enhancedSelectors'
 
 // Interface for custom site selectors stored in Chrome storage
 interface CustomSiteSelectors {
@@ -16,6 +17,10 @@ const STORAGE_KEY = 'customSiteSelectors'
 
 let isEditMode = false
 let editingPattern = ''
+
+let currentStep = 1
+let selectedElementType = ''
+let currentSelector: EnhancedSelectorType | null = null
 
 // Get combined site data (built-in + custom)
 // This function fetches both built-in and custom selectors
@@ -29,6 +34,471 @@ async function getCombinedSiteData(): Promise<
     console.error('Error getting combined site data:', error)
     // Fallback to built-in data if async loading fails
     return getBuiltInSiteData()
+  }
+}
+
+function initSelectorBuilder() {
+  const typeOptions = document.querySelectorAll('.type-option')
+  typeOptions.forEach(option => {
+    option.addEventListener('click', () => {
+      typeOptions.forEach(opt => opt.classList.remove('selected'))
+      option.classList.add('selected')
+      selectedElementType = option.getAttribute('data-type') || ''
+
+      preselectValues(selectedElementType)
+    })
+  })
+
+  const selectorMethod = document.getElementById('selectorMethod') as HTMLSelectElement
+  selectorMethod?.addEventListener('change', () => {
+    updateSelectorMethodOptions(selectorMethod.value)
+  })
+
+  const actionType = document.getElementById('actionType') as HTMLSelectElement
+  actionType?.addEventListener('change', () => {
+    updateActionOptions(actionType.value)
+  })
+
+  const dataType = document.getElementById('dataType') as HTMLSelectElement
+  dataType?.addEventListener('change', () => {
+    const isStatic = dataType.value === 'static'
+    const staticDataFields = document.getElementById('staticDataFields')
+    const functionDataFields = document.getElementById('functionDataFields')
+
+    if (staticDataFields) staticDataFields.classList.toggle('visible', isStatic)
+    if (functionDataFields) functionDataFields.classList.toggle('visible', !isStatic)
+  })
+
+  const prevButton = document.getElementById('prevButton')
+  const nextButton = document.getElementById('nextButton')
+
+  prevButton?.addEventListener('click', goToPrevStep)
+  nextButton?.addEventListener('click', goToNextStep)
+
+  const copyButton = document.getElementById('copyButton')
+  const addToJsonButton = document.getElementById('addToJsonButton')
+
+  copyButton?.addEventListener('click', copyToClipboard)
+  addToJsonButton?.addEventListener('click', addToJsonEditor)
+
+  if (selectorMethod) {
+    updateSelectorMethodOptions(selectorMethod.value)
+  }
+}
+
+function preselectValues(elementType: string) {
+  const selectorMethod = document.getElementById('selectorMethod') as HTMLSelectElement
+  const actionType = document.getElementById('actionType') as HTMLSelectElement
+
+  if (!selectorMethod || !actionType) return
+  switch (elementType) {
+    case 'input':
+      selectorMethod.value = 'label'
+      actionType.value = 'input'
+      break
+    case 'button':
+      selectorMethod.value = 'role'
+      const roleName = document.getElementById('roleName') as HTMLSelectElement
+      if (roleName) roleName.value = 'button'
+      actionType.value = 'simpleClick'
+      break
+    case 'checkbox':
+      selectorMethod.value = 'role'
+      const roleNameCb = document.getElementById('roleName') as HTMLSelectElement
+      if (roleNameCb) roleNameCb.value = 'checkbox'
+      actionType.value = 'checkCheckbox'
+      break
+    case 'dropdown':
+      selectorMethod.value = 'role'
+      const roleNameDd = document.getElementById('roleName') as HTMLSelectElement
+      if (roleNameDd) roleNameDd.value = 'combobox'
+      actionType.value = 'simpleClick'
+      break
+  }
+
+  updateSelectorMethodOptions(selectorMethod.value)
+  updateActionOptions(actionType.value)
+}
+
+function updateSelectorMethodOptions(method: string) {
+  const roleOptions = document.getElementById('roleOptions')
+  const exactMatchContainer = document.querySelector(
+    '.exact-match-container'
+  ) as HTMLElement
+
+  if (roleOptions) {
+    roleOptions.style.display = 'none'
+  }
+
+  if (exactMatchContainer) {
+    exactMatchContainer.style.display = 'none'
+  }
+
+  switch (method) {
+    case 'role':
+      if (roleOptions) {
+        roleOptions.style.display = 'block'
+      }
+      break
+    case 'label':
+    case 'text':
+      if (exactMatchContainer) {
+        exactMatchContainer.style.display = 'flex'
+      }
+      break
+  }
+}
+
+function updateActionOptions(action: string) {
+  const dataOptions = document.getElementById('dataOptions')
+
+  if (dataOptions) {
+    if (action === 'input') {
+      dataOptions.classList.add('visible')
+    } else {
+      dataOptions.classList.remove('visible')
+    }
+  }
+}
+
+function goToPrevStep() {
+  if (currentStep > 1) {
+    const currentStepEl = document.getElementById(`step${currentStep}`)
+    const prevStepEl = document.getElementById(`step${currentStep - 1}`)
+
+    if (currentStepEl && prevStepEl) {
+      currentStepEl.classList.remove('active')
+      prevStepEl.classList.add('active')
+      currentStep--
+
+      updateButtonStates()
+    }
+  }
+}
+
+function goToNextStep() {
+  if (currentStep < 3) {
+    if (validateCurrentStep()) {
+      const currentStepEl = document.getElementById(`step${currentStep}`)
+      const nextStepEl = document.getElementById(`step${currentStep + 1}`)
+
+      if (currentStepEl && nextStepEl) {
+        currentStepEl.classList.remove('active')
+        nextStepEl.classList.add('active')
+        currentStep++
+
+        const allFieldsReady = validateAllFields()
+        if (allFieldsReady) {
+          generateSelector()
+        }
+
+        updateButtonStates()
+      }
+    }
+  } else {
+    if (validateCurrentStep()) {
+      generateSelector()
+    }
+  }
+}
+
+function validateAllFields(): boolean {
+  if (!selectedElementType) {
+    return false
+  }
+
+  const fieldName = (
+    document.getElementById('fieldName') as HTMLInputElement
+  )?.value.trim()
+  const selectorValue = (
+    document.getElementById('selectorValue') as HTMLInputElement
+  )?.value.trim()
+
+  if (!fieldName || !selectorValue) {
+    return false
+  }
+
+  const actionType = (document.getElementById('actionType') as HTMLSelectElement)?.value
+
+  if (!actionType) {
+    return false
+  }
+  if (actionType === 'input') {
+    const dataType = (document.getElementById('dataType') as HTMLSelectElement)?.value
+
+    if (dataType === 'static') {
+      const staticDataValue = (
+        document.getElementById('staticDataValue') as HTMLInputElement
+      )?.value.trim()
+      if (!staticDataValue) {
+        return false
+      }
+    } else if (dataType === 'function') {
+      const dataGenerator = (
+        document.getElementById('dataGenerator') as HTMLSelectElement
+      )?.value
+      if (!dataGenerator) {
+        return false
+      }
+    }
+  }
+
+  return true
+}
+
+function updateButtonStates() {
+  const prevButton = document.getElementById('prevButton') as HTMLButtonElement
+  const nextButton = document.getElementById('nextButton') as HTMLButtonElement
+
+  if (prevButton) {
+    prevButton.disabled = currentStep === 1
+  }
+
+  if (nextButton) {
+    nextButton.textContent = currentStep < 3 ? 'Next' : 'Generate Selector'
+  }
+}
+
+function validateCurrentStep(): boolean {
+  if (currentStep === 1) {
+    if (!selectedElementType) {
+      showStatusBuilder('Please select an element type', 'error')
+      return false
+    }
+  } else if (currentStep === 2) {
+    const fieldName = (
+      document.getElementById('fieldName') as HTMLInputElement
+    )?.value.trim()
+    const selectorValue = (
+      document.getElementById('selectorValue') as HTMLInputElement
+    )?.value.trim()
+
+    if (!fieldName) {
+      showStatusBuilder('Please enter a field name', 'error')
+      return false
+    }
+
+    if (!selectorValue) {
+      showStatusBuilder('Please enter a selector value', 'error')
+      return false
+    }
+  }
+
+  return true
+}
+
+function generateSelector() {
+  try {
+    const fieldName = (
+      document.getElementById('fieldName') as HTMLInputElement
+    )?.value.trim()
+    const selectorMethod = (
+      document.getElementById('selectorMethod') as HTMLSelectElement
+    )?.value
+    const selectorValue = (
+      document.getElementById('selectorValue') as HTMLInputElement
+    )?.value.trim()
+    const exactMatch = (document.getElementById('exactMatch') as HTMLInputElement)
+      ?.checked
+    const index = parseInt(
+      (document.getElementById('indexOption') as HTMLInputElement)?.value || '0'
+    )
+    const actionType = (document.getElementById('actionType') as HTMLSelectElement)?.value
+
+    if (!fieldName || !selectorMethod || !selectorValue || !actionType) {
+      throw new Error('Missing required fields')
+    }
+
+    currentSelector = {
+      selector: selectorValue,
+      type: actionType as any,
+      ...(index > 0 ? {index} : {})
+    }
+
+    switch (selectorMethod) {
+      case 'label':
+        currentSelector.queryType = 'label'
+        currentSelector.queryOptions = {
+          exact: exactMatch
+        }
+        break
+      case 'role':
+        const roleName = (document.getElementById('roleName') as HTMLSelectElement)?.value
+        currentSelector.queryType = 'role'
+        currentSelector.queryOptions = {
+          name: selectorValue
+        }
+        currentSelector.selector = roleName || 'button'
+        break
+      case 'text':
+        currentSelector.queryType = 'text'
+        currentSelector.queryOptions = {
+          exact: exactMatch
+        }
+        break
+      case 'testId':
+        currentSelector.queryType = 'testId'
+        break
+      case 'css':
+        break
+    }
+
+    if (actionType === 'input' && currentSelector) {
+      const dataType = (document.getElementById('dataType') as HTMLSelectElement)?.value
+
+      if (dataType === 'static') {
+        currentSelector.data = (
+          document.getElementById('staticDataValue') as HTMLInputElement
+        )?.value
+      } else if (currentSelector) {
+        currentSelector.dataType = 'function'
+        currentSelector.dataGenerator = (
+          document.getElementById('dataGenerator') as HTMLSelectElement
+        )?.value
+      }
+    }
+
+    const previewCode = document.getElementById('previewCode')
+    const resultContainer = document.getElementById('resultContainer')
+
+    if (previewCode && resultContainer && currentSelector) {
+      const codePreview = JSON.stringify(currentSelector, null, 2)
+      previewCode.textContent = `"${fieldName}": ${codePreview}`
+
+      resultContainer.style.display = 'block'
+      showStatusBuilder('Selector generated successfully!', 'success')
+    }
+  } catch (error) {
+    console.error('Error generating selector:', error)
+    showStatusBuilder('Error generating selector: ' + (error as Error).message, 'error')
+  }
+}
+
+function copyToClipboard() {
+  const previewCode = document.getElementById('previewCode')
+
+  if (previewCode && previewCode.textContent) {
+    navigator.clipboard
+      .writeText(previewCode.textContent)
+      .then(() => {
+        showStatusBuilder('Copied to clipboard!', 'success')
+      })
+      .catch(err => {
+        console.error('Failed to copy:', err)
+        showStatusBuilder('Failed to copy to clipboard', 'error')
+      })
+  }
+}
+
+function addToJsonEditor() {
+  try {
+    const jsonTextarea = document.getElementById('selectorsJson') as HTMLTextAreaElement
+    const previewCode = document.getElementById('previewCode') as HTMLElement
+
+    if (!jsonTextarea || !previewCode) {
+      showStatusBuilder('Error: Could not find required elements.', 'error')
+      return
+    }
+
+    if (!previewCode.textContent) {
+      showStatusBuilder('Error: No selector configuration found.', 'error')
+      return
+    }
+
+    let newSelectorText = previewCode.textContent.trim()
+    if (!newSelectorText.startsWith('{')) {
+      newSelectorText = '{' + newSelectorText + '}'
+    }
+    const newSelector = JSON.parse(newSelectorText)
+    const selectorName = Object.keys(newSelector)[0]
+
+    if (!selectorName) {
+      showStatusBuilder('Invalid selector configuration: missing name.', 'error')
+      return
+    }
+
+    let existingJSON: Record<string, any> = {}
+
+    if (jsonTextarea.value.trim()) {
+      try {
+        existingJSON = JSON.parse(jsonTextarea.value)
+      } catch (error) {
+        showStatusBuilder('Invalid JSON in the editor. Cannot add selector.', 'error')
+        return
+      }
+    }
+
+    if (existingJSON[selectorName] !== undefined) {
+      if (
+        !confirm(
+          `UWAGA! Selektor "${selectorName}" już istnieje i zostanie nadpisany. Czy na pewno chcesz kontynuować?`
+        )
+      ) {
+        showStatusBuilder('Operacja anulowana przez użytkownika.', 'warning')
+        return
+      }
+    }
+
+    const updatedJSON = {...existingJSON}
+    updatedJSON[selectorName] = newSelector[selectorName]
+    const formattedJSON = JSON.stringify(updatedJSON, null, 2)
+
+    jsonTextarea.value = formattedJSON
+    jsonTextarea.dispatchEvent(new Event('input', {bubbles: true}))
+    jsonTextarea.dispatchEvent(new Event('change', {bubbles: true}))
+
+    showStatusBuilder(`Added selector "${selectorName}" to the JSON editor.`, 'success')
+
+    resetForm()
+  } catch (error) {
+    showStatusBuilder(
+      'Error adding selector to JSON: ' + (error as Error).message,
+      'error'
+    )
+  }
+}
+
+function resetForm() {
+  currentStep = 1
+  selectedElementType = ''
+  currentSelector = null
+
+  document.querySelectorAll('.step').forEach((step, index) => {
+    step.classList.toggle('active', index === 0)
+  })
+
+  document.querySelectorAll('.type-option').forEach(option => {
+    option.classList.remove('selected')
+  })
+
+  const fieldName = document.getElementById('fieldName') as HTMLInputElement
+  const selectorValue = document.getElementById('selectorValue') as HTMLInputElement
+  const staticDataValue = document.getElementById('staticDataValue') as HTMLInputElement
+  const resultContainer = document.getElementById('resultContainer')
+
+  if (fieldName) fieldName.value = ''
+  if (selectorValue) selectorValue.value = ''
+  if (staticDataValue) staticDataValue.value = ''
+  if (resultContainer) resultContainer.style.display = 'none'
+
+  updateButtonStates()
+}
+
+function showStatusBuilder(
+  message: string,
+  type: 'success' | 'error' | 'warning' = 'success'
+) {
+  const statusElement = document.getElementById('statusMessageBuilder')
+
+  if (statusElement) {
+    statusElement.textContent = message
+    statusElement.className = `status ${type}`
+
+    if (type === 'success') {
+      setTimeout(() => {
+        if (statusElement) statusElement.className = 'status'
+      }, 5000)
+    }
   }
 }
 
@@ -461,6 +931,17 @@ function setupEventListeners(): void {
       }
     })
   }
+
+  const selectorMethodSelect = document.getElementById(
+    'selectorMethod'
+  ) as HTMLSelectElement
+  if (selectorMethodSelect) {
+    selectorMethodSelect.addEventListener('change', () => {
+      updateSelectorMethodOptions(selectorMethodSelect.value)
+    })
+
+    updateSelectorMethodOptions(selectorMethodSelect.value)
+  }
 }
 
 // Initialize the page
@@ -469,8 +950,7 @@ async function init(): Promise<void> {
     await displayCustomSites()
     await displaySelectors()
     setupEventListeners()
-
-    // Initialize collapsible sections
+    initSelectorBuilder()
     initCollapsibleSections()
 
     showStatus('Loaded successfully')

@@ -145,7 +145,7 @@
         <div class="code-container">
           <pre id="json-config">
 {
-  "url": "(http://localhost:5252/text-form.html|file:///.*text-form.html)",
+  "url": "(https://pawel-albert.github.io/utilities-for-testing-extension/text-form.html|file:///.*text-form.html)",
   "formData": {
     "registrationForm": {
       "type": "form",
@@ -274,15 +274,10 @@ function getByText(document, text, options = {}) {
 
     <script src="js/common.js"></script>
     <script>
-      // Initialize the page
       document.addEventListener('DOMContentLoaded', () => {
-        // Set up navigation
         initializeNavigation('text-form.html')
-
-        // Set up form submission handler
         setupFormSubmitHandler('registration-form', 'form-result')
 
-        // Set up toggle button functionality
         document.querySelectorAll('.toggle-button').forEach(button => {
           button.addEventListener('click', () => {
             const currentState = button.textContent
@@ -290,7 +285,6 @@ function getByText(document, text, options = {}) {
           })
         })
 
-        // Set up card selection
         document.querySelectorAll('.card').forEach(card => {
           card.addEventListener('click', () => {
             document
@@ -300,7 +294,6 @@ function getByText(document, text, options = {}) {
           })
         })
 
-        // Set up preference button selection
         document.querySelectorAll('.preference-button').forEach(button => {
           button.addEventListener('click', () => {
             button.classList.toggle('selected')

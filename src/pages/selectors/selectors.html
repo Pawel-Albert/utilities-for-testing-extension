@@ -111,10 +111,149 @@
       }
 
       .step {
-        margin: 10px 0;
-        padding: 10px;
-        border-left: 2px solid var(--primary);
-        background: white;
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        background: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      .step.active {
+        border-color: #1976d2;
+        box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .step-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .step-number {
+        background: #1976d2;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+        font-weight: bold;
+        box-shadow: 0 2px 4px rgba(25, 118, 210, 0.3);
+      }
+
+      .step-title {
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .type-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .type-option {
+        padding: 15px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+
+      .type-option:hover {
+        background: #e9ecef;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .type-option.selected {
+        border-color: #1976d2;
+        background: rgba(25, 118, 210, 0.1);
+        box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .type-option .icon {
+        display: block;
+        font-size: 28px;
+        margin-bottom: 8px;
+        color: #1976d2;
+      }
+
+      .field-options {
+        display: none;
+      }
+
+      .field-options.visible {
+        display: block;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+      }
+
+      button {
+        padding: 10px 20px;
+        background: #1976d2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        background: #1565c0;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      button.secondary {
+        background: #546e7a;
+      }
+
+      button.secondary:hover {
+        background: #455a64;
+      }
+
+      button:disabled {
+        background: #b0bec5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      #resultContainer {
+        margin-top: 30px;
+        padding: 20px;
+        border: 1px solid #bbdefb;
+        border-radius: 8px;
+        background: #e3f2fd;
+      }
+
+      #previewCode {
+        background: #fff;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid #bbdefb;
+        font-family: monospace;
+        white-space: pre-wrap;
+        overflow-x: auto;
       }
 
       .steps {
@@ -194,25 +333,6 @@
         display: flex;
         gap: 10px;
         margin-bottom: 20px;
-      }
-
-      button {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-
-      button:hover {
-        opacity: 0.9;
-      }
-
-      button.secondary {
-        background: #f5f5f5;
-        color: #333;
-        border: 1px solid #ddd;
       }
 
       .btn-primary {
@@ -505,6 +625,128 @@
         font-size: 12px;
         color: #666;
       }
+
+      /* Form styling */
+      .form-control {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+
+      .form-control:focus {
+        border-color: #1976d2;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+      }
+
+      .form-control-sm {
+        padding: 5px 10px;
+        width: 80px;
+        font-size: 14px;
+      }
+
+      .option-group {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+      }
+
+      .checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .checkbox-wrapper label {
+        margin-left: 8px;
+        margin-bottom: 0;
+        font-weight: normal;
+      }
+
+      .checkbox-wrapper input[type='checkbox'] {
+        margin: 0;
+      }
+
+      .exact-match-container {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+        align-items: center;
+      }
+
+      .index-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .index-wrapper label {
+        margin-bottom: 0;
+        font-weight: normal;
+      }
+
+      /* Icon styling */
+      .custom-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .input-icon {
+        background-color: #e3f2fd;
+        color: #2196f3;
+      }
+      .input-icon::before {
+        content: 'I';
+      }
+
+      .button-icon {
+        background-color: #e8f5e9;
+        color: #4caf50;
+      }
+      .button-icon::before {
+        content: 'B';
+      }
+
+      .checkbox-icon {
+        background-color: #fff3e0;
+        color: #ff9800;
+      }
+      .checkbox-icon::before {
+        content: 'CB';
+        font-size: 16px;
+      }
+
+      .dropdown-icon {
+        background-color: #f3e5f5;
+        color: #9c27b0;
+      }
+      .dropdown-icon::before {
+        content: 'DD';
+        font-size: 16px;
+      }
+
+      .custom-icon-style {
+        background-color: #ffebee;
+        color: #f44336;
+      }
+      .custom-icon-style::before {
+        content: 'C';
+      }
     </style>
   </head>
   <body>
@@ -520,6 +762,193 @@
           Add your own site selectors for form filling. These will be used instead of the
           built-in ones when matched.
         </p>
+
+        <h4 class="collapsible-header">
+          Selector Builder - Step by Step <span class="toggle-icon">&dtrif;</span>
+        </h4>
+        <div class="mt-3 collapsible-content">
+          <div id="statusMessageBuilder" class="status"></div>
+
+          <div id="step1" class="step active">
+            <div class="step-header">
+              <div class="step-number">1</div>
+              <div class="step-title">Select Element Type</div>
+            </div>
+            <div class="type-options">
+              <div class="type-option" data-type="input">
+                <span class="custom-icon input-icon"></span>
+                <span>Input Field</span>
+              </div>
+              <div class="type-option" data-type="button">
+                <span class="custom-icon button-icon"></span>
+                <span>Button</span>
+              </div>
+              <div class="type-option" data-type="checkbox">
+                <span class="custom-icon checkbox-icon"></span>
+                <span>Checkbox</span>
+              </div>
+              <div class="type-option" data-type="dropdown">
+                <span class="custom-icon dropdown-icon"></span>
+                <span>Dropdown</span>
+              </div>
+              <div class="type-option" data-type="custom">
+                <span class="custom-icon custom-icon-style"></span>
+                <span>Custom</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="step2" class="step">
+            <div class="step-header">
+              <div class="step-number">2</div>
+              <div class="step-title">Configure Selector Method</div>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldName">Field Name (for identification):</label>
+              <input
+                type="text"
+                id="fieldName"
+                placeholder="e.g. emailField, submitButton"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="selectorMethod">Selector Method:</label>
+              <select id="selectorMethod" class="form-control">
+                <option value="label">Find by Label Text</option>
+                <option value="role">Find by ARIA Role</option>
+                <option value="text">Find by Element Text</option>
+                <option value="testId">Find by Test ID</option>
+                <option value="css">Find by CSS Selector</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="selectorValue">Selector Value:</label>
+              <input
+                type="text"
+                id="selectorValue"
+                placeholder="e.g. Email Address, #login-button"
+                class="form-control"
+              />
+            </div>
+
+            <div id="roleOptions" class="field-options">
+              <div class="form-group">
+                <label for="roleName">Role Name:</label>
+                <select id="roleName" class="form-control">
+                  <option value="button">Button</option>
+                  <option value="checkbox">Checkbox</option>
+                  <option value="combobox">Dropdown (combobox)</option>
+                  <option value="link">Link</option>
+                  <option value="textbox">Text Input</option>
+                  <option value="radio">Radio Button</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Advanced Options:</label>
+              <div class="option-group">
+                <div class="exact-match-container">
+                  <div class="checkbox-wrapper">
+                    <input type="checkbox" id="exactMatch" checked />
+                    <label for="exactMatch">Exact Match</label>
+                  </div>
+                </div>
+                <div class="index-wrapper">
+                  <label for="indexOption">Index (if multiple matches):</label>
+                  <input
+                    type="number"
+                    id="indexOption"
+                    value="0"
+                    min="0"
+                    class="form-control-sm"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="step3" class="step">
+            <div class="step-header">
+              <div class="step-number">3</div>
+              <div class="step-title">Action & Data</div>
+            </div>
+
+            <div class="form-group">
+              <label for="actionType">Action Type:</label>
+              <select id="actionType" class="form-control">
+                <option value="input">Fill Input Field</option>
+                <option value="simpleClick">Click Element</option>
+                <option value="checkCheckbox">Check Checkbox</option>
+                <option value="dispatchedClick">
+                  Dispatched Click (for certain elements)
+                </option>
+              </select>
+            </div>
+
+            <div id="dataOptions" class="field-options visible">
+              <div class="form-group">
+                <label for="dataType">Data Type:</label>
+                <select id="dataType" class="form-control">
+                  <option value="static">Static Value</option>
+                  <option value="function">Generated Value</option>
+                </select>
+              </div>
+
+              <div id="staticDataFields" class="field-options visible">
+                <div class="form-group">
+                  <label for="staticDataValue">Data Value:</label>
+                  <input
+                    type="text"
+                    id="staticDataValue"
+                    placeholder="e.g. test@example.com"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+              <div id="functionDataFields" class="field-options">
+                <div class="form-group">
+                  <label for="dataGenerator">Data Generator Function:</label>
+                  <select id="dataGenerator" class="form-control">
+                    <option value="generateRandomEmail">Random Email</option>
+                    <option value="fakerFirstName">First Name</option>
+                    <option value="fakerLastName">Last Name</option>
+                    <option value="fakerFullName">Full Name</option>
+                    <option value="fakerPhoneNumber">Phone Number</option>
+                    <option value="fakerCity">City Name</option>
+                    <option value="fakerZipCode">Zip Code</option>
+                    <option value="generatePesel">PESEL Number</option>
+                    <option value="generateNip">NIP Number</option>
+                    <option value="generateIban">IBAN Number</option>
+                    <option value="generateCnpMale">CNP Male (Romanian ID)</option>
+                    <option value="generateCnpFemale">CNP Female (Romanian ID)</option>
+                    <option value="generateRandomInt">Random Integer</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button id="prevButton" class="secondary" disabled>Previous</button>
+            <button id="nextButton">Next</button>
+          </div>
+
+          <div id="resultContainer" class="result-container" style="display: none">
+            <h3>Selector Configuration:</h3>
+            <div id="previewCode" class="preview"></div>
+
+            <div class="buttons" style="margin-top: 15px">
+              <button id="copyButton">Copy to Clipboard</button>
+              <button id="addToJsonButton">Add to JSON Editor</button>
+            </div>
+          </div>
+        </div>
 
         <div id="statusMessage" class="status"></div>
 
@@ -1194,6 +1623,132 @@ getByTestIdSelector("login-form-submit", "simpleClick")</pre
           <p>
             <strong>Note:</strong> Importing will not delete your existing configurations,
             only add new ones or update existing ones.
+          </p>
+        </div>
+
+        <h4 class="collapsible-header">
+          Test Pages for Learning & Testing
+          <span class="toggle-icon">&dtrif;</span>
+        </h4>
+        <div id="test-pages-reference" class="mt-3 collapsible-content">
+          <p>
+            The extension includes a set of test pages you can use to experiment with
+            selectors and practice form filling. These pages demonstrate various types of
+            forms and input elements.
+          </p>
+
+          <h5>Available Test Pages:</h5>
+          <div class="field-types-grid">
+            <div class="field-type-item">
+              <strong>ARIA Form</strong>
+              <a
+                href="https://pawel-albert.github.io/utilities-for-testing-extension/aria-form.html"
+                target="_blank"
+              >
+                aria-form.html
+              </a>
+              <div class="tooltip-content">
+                Demonstrates forms with ARIA roles and labels for accessibility-based
+                selection.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>Label Form</strong>
+              <a
+                href="https://pawel-albert.github.io/utilities-for-testing-extension/label-form.html"
+                target="_blank"
+              >
+                label-form.html
+              </a>
+              <div class="tooltip-content">
+                Form with standard labels for practicing label-based selection.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>Text Form</strong>
+              <a
+                href="https://pawel-albert.github.io/utilities-for-testing-extension/text-form.html"
+                target="_blank"
+              >
+                text-form.html
+              </a>
+              <div class="tooltip-content">
+                Form with elements that can be selected by their text content.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>TestID Form</strong>
+              <a
+                href="https://pawel-albert.github.io/utilities-for-testing-extension/data-testid-form.html"
+                target="_blank"
+              >
+                data-testid-form.html
+              </a>
+              <div class="tooltip-content">
+                Form using data-testid attributes for selection.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>Shadow DOM Form</strong>
+              <a
+                href="https://pawel-albert.github.io/utilities-for-testing-extension/shadow-dom-form.html"
+                target="_blank"
+              >
+                shadow-dom-form.html
+              </a>
+              <div class="tooltip-content">
+                Form with Shadow DOM components for testing Shadow DOM penetration.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>Multi-step Form</strong>
+              <a
+                href="https://pawel-albert.github.io/utilities-for-testing-extension/multistep-form.html"
+                target="_blank"
+              >
+                multistep-form.html
+              </a>
+              <div class="tooltip-content">
+                Multi-page form for practicing step-by-step form filling.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>Complex Form</strong>
+              <a
+                href="https://pawel-albert.github.io/utilities-for-testing-extension/complex-form.html"
+                target="_blank"
+              >
+                complex-form.html
+              </a>
+              <div class="tooltip-content">
+                Complex form combining multiple types of inputs and selection strategies.
+              </div>
+            </div>
+            <div class="field-type-item">
+              <strong>All Test Pages</strong>
+              <a
+                href="https://pawel-albert.github.io/utilities-for-testing-extension/"
+                target="_blank"
+              >
+                Index of Test Pages
+              </a>
+              <div class="tooltip-content">
+                Directory with all test pages for easy navigation.
+              </div>
+            </div>
+          </div>
+
+          <h5>How to Use Test Pages:</h5>
+          <ol>
+            <li>Visit any of the test pages using the links above</li>
+            <li>Experiment with different selector strategies</li>
+            <li>Create and test your custom site configurations</li>
+            <li>Use the browser's developer tools to inspect the page structure</li>
+          </ol>
+
+          <p>
+            <strong>Tip:</strong> These pages are perfect for learning how the different
+            selector types work before applying them to real-world forms.
           </p>
         </div>
 

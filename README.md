@@ -417,6 +417,58 @@ The extension now uses a more robust storage system:
   - **Exact matching**: Control whether text matching is exact or partial
 - Created helper functions to simplify selector creation with comprehensive documentation
 
+### Version 0.5.2 Updates
+
+#### Test Pages on GitHub Pages
+
+- Added set of test pages hosted on GitHub Pages for practicing with selectors:
+  - ARIA form - Demonstrates forms with ARIA roles and labels
+  - Label form - Forms with standard HTML labels
+  - Text form - Elements that can be selected by text content
+  - TestID form - Elements with data-testid attributes
+  - Shadow DOM form - Testing Shadow DOM components
+  - Multi-step form - For practicing step-by-step form filling
+  - Complex form - Combining multiple selection strategies
+- All test pages are now accessible online at https://pawel-albert.github.io/utilities-for-testing-extension/
+
+#### Enhanced ARIA Role Support
+
+- Improved `getByRole` function with more resilient implementation:
+  - Support for `combobox` role (select elements)
+  - Better accessible name calculation following ARIA guidelines
+  - Support for input elements with associated labels through `for` attribute
+  - Enhanced name comparisons with exact matching option
+- Added diagnostic function `diagnosticLogAllElementsWithRoles` to help debug ARIA roles and accessible names
+
+#### Improved Date Fields Support
+
+- Enhanced role-based selectors for date inputs
+- Better handling of date-specific input types
+- Fixed issues with accessible name calculation for date fields
+
+#### Romanian Data Generators Enhancements
+
+- Improved CNP (Personal Numeric Code) generation with more robust validation
+- Better CUI (Company ID) formatting with optional RO prefix
+- Enhanced Romanian phone number generation with format options
+
+### Version 0.5.3 Updates (Preview)
+
+#### Selector Builder UI
+
+- Added a visual selector builder in the Site Selectors page:
+  - Step-by-step interface for creating Testing Library-style selectors
+  - Support for all selector types (role, label, text, testId, CSS)
+  - Automatic generation of JSON configuration based on selections
+  - Preview functionality with copy to clipboard option
+  - "Add to JSON Editor" feature for direct integration with site configurations
+- Enhanced selector validation and error handling:
+  - Clear feedback for incomplete or invalid selectors
+  - Visual guidance for selector options
+  - Context-sensitive field display based on selector type
+- Improved exact match handling for text and label selectors
+- Fixed URL links to test pages for practicing with selectors
+
 ## Todo
 
 - [x] Form auto filler with random data
