@@ -85,7 +85,7 @@
         <div class="code-container">
           <pre id="json-config">
 {
-  "url": "(http://localhost:5252/shadow-dom-form.html|file:///.*shadow-dom-form.html)",
+  "url": "(https://pawel-albert.github.io/utilities-for-testing-extension/shadow-dom-form.html|file:///.*shadow-dom-form.html)",
   "formData": {
     "registrationForm": {
       "type": "form",
@@ -226,18 +226,12 @@ class CustomInput extends HTMLElement {
 
     <script src="js/common.js"></script>
     <script>
-      // Define custom elements
       class CustomInput extends HTMLElement {
         constructor() {
           super()
           const type = this.getAttribute('type') || 'text'
           const name = this.getAttribute('name')
-          const required = this.hasAttribute('required')
-
-          // Create shadow DOM
           this.attachShadow({mode: 'open'})
-
-          // Add content to shadow DOM
           this.shadowRoot.innerHTML = `
           <style>
             :host { display: block; }
@@ -266,11 +260,7 @@ class CustomInput extends HTMLElement {
         constructor() {
           super()
           const name = this.getAttribute('name')
-
-          // Create shadow DOM
           this.attachShadow({mode: 'open'})
-
-          // Add content to shadow DOM
           this.shadowRoot.innerHTML = `
           <style>
             :host { display: block; }
@@ -309,10 +299,8 @@ class CustomInput extends HTMLElement {
           super()
           const name = this.getAttribute('name')
 
-          // Create shadow DOM
           this.attachShadow({mode: 'open'})
 
-          // Add content to shadow DOM
           this.shadowRoot.innerHTML = `
           <style>
             :host { display: block; }
@@ -345,10 +333,7 @@ class CustomInput extends HTMLElement {
           super()
           const name = this.getAttribute('name')
 
-          // Create shadow DOM
           this.attachShadow({mode: 'open'})
-
-          // Add content to shadow DOM
           this.shadowRoot.innerHTML = `
           <style>
             :host { display: block; }
@@ -379,11 +364,7 @@ class CustomInput extends HTMLElement {
           super()
           const type = this.getAttribute('type') || 'button'
           const className = this.className
-
-          // Create shadow DOM
           this.attachShadow({mode: 'open'})
-
-          // Add content to shadow DOM
           this.shadowRoot.innerHTML = `
           <style>
             :host { display: inline-block; }
@@ -408,26 +389,20 @@ class CustomInput extends HTMLElement {
         }
       }
 
-      // Register custom elements
       customElements.define('custom-input', CustomInput)
       customElements.define('custom-select', CustomSelect)
       customElements.define('custom-checkbox', CustomCheckbox)
       customElements.define('custom-textarea', CustomTextarea)
       customElements.define('custom-button', CustomButton)
 
-      // Initialize the page
       document.addEventListener('DOMContentLoaded', () => {
-        // Set up navigation
         initializeNavigation('shadow-dom-form.html')
 
-        // Custom form submission handler for shadow DOM components
         const form = document.getElementById('registration-form')
         const resultElement = document.getElementById('form-result')
 
         form.addEventListener('submit', e => {
           e.preventDefault()
-
-          // Collect form data from shadow DOM components
           const formData = {
             email: form.querySelector('custom-input[name="email"]').value,
             password: form.querySelector('custom-input[name="password"]').value,
@@ -437,7 +412,6 @@ class CustomInput extends HTMLElement {
             comments: form.querySelector('custom-textarea[name="comments"]').value
           }
 
-          // Display the result
           resultElement.innerHTML = `
           <div class="result-container">
             <h3>Form Submitted</h3>

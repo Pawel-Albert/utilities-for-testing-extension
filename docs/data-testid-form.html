@@ -191,7 +191,7 @@
         <div class="code-container">
           <pre id="json-config">
 {
-  "url": "(http://localhost:5252/data-testid-form.html|file:///.*data-testid-form.html)",
+  "url": "(https://pawel-albert.github.io/utilities-for-testing-extension/data-testid-form.html|file:///.*data-testid-form.html)",
   "formData": {
     "registrationForm": {
       "type": "form",
@@ -310,15 +310,9 @@ function getByTestId(document, id, options = {}) {
 
     <script src="js/common.js"></script>
     <script>
-      // Initialize the page
       document.addEventListener('DOMContentLoaded', () => {
-        // Set up navigation
         initializeNavigation('data-testid-form.html')
-
-        // Highlight all elements with data-testid for visual reference
         highlightTestIds()
-
-        // Set up form submission handler
         setupFormSubmitHandler('registration-form', 'form-result')
       })
     </script>
