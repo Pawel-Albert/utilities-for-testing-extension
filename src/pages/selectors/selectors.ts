@@ -523,24 +523,50 @@ async function saveCustomSiteSelectors(data: CustomSiteSelectors): Promise<void>
   }
 }
 
-// Add or update a custom site
+/**
+ * Normalizes the site pattern by removing protocols, www prefix and trailing slashes
+ * @param pattern Site pattern to normalize
+ * @returns Normalized pattern
+ */
+function normalizeSitePattern(pattern: string): string {
+  if (!pattern) return pattern
+
+  const patterns = pattern.split('|')
+
+  const normalizedPatterns = patterns.map(p => {
+    let normalized = p.trim()
+    normalized = normalized.replace(/^(https?|ftp):\/\//, '')
+    normalized = normalized.replace(/^www\./, '')
+    normalized = normalized.replace(/\/+$/, '')
+
+    return normalized
+  })
+
+  return normalizedPatterns.join('|')
+}
+
 async function addCustomSite(pattern: string, selectorsJson: string): Promise<void> {
-  if (!pattern) {
-    throw new Error('Site pattern cannot be empty')
-  }
-
-  let selectorsObj: Record<string, SelectorType>
   try {
-    selectorsObj = JSON.parse(selectorsJson)
-  } catch (error: any) {
-    throw new Error('Invalid JSON format')
+    const normalizedPattern = normalizeSitePattern(pattern)
+
+    if (!normalizedPattern) {
+      throw new Error('Site pattern is required')
+    }
+
+    try {
+      JSON.parse(selectorsJson)
+    } catch (e) {
+      throw new Error('Invalid JSON format')
+    }
+
+    const customSelectors = await getCustomSiteSelectors()
+    customSelectors.sites[normalizedPattern] = JSON.parse(selectorsJson)
+
+    await saveCustomSiteSelectors(customSelectors)
+  } catch (error) {
+    console.error('Error adding custom site:', error)
+    throw error
   }
-
-  const customSelectors = await getCustomSiteSelectors()
-
-  customSelectors.sites[pattern] = selectorsObj
-
-  await saveCustomSiteSelectors(customSelectors)
 }
 
 // Delete a custom site
