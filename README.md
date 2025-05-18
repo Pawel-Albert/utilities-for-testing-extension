@@ -429,7 +429,7 @@ The extension now uses a more robust storage system:
   - Shadow DOM form - Testing Shadow DOM components
   - Multi-step form - For practicing step-by-step form filling
   - Complex form - Combining multiple selection strategies
-- All test pages are now accessible online at https://pawel-albert.github.io/utilities-for-testing-extension/test-pages/
+- All test pages are now accessible online at https://pawel-albert.github.io/utilities-for-testing-extension/
 
 #### Enhanced ARIA Role Support
 
@@ -451,6 +451,23 @@ The extension now uses a more robust storage system:
 - Improved CNP (Personal Numeric Code) generation with more robust validation
 - Better CUI (Company ID) formatting with optional RO prefix
 - Enhanced Romanian phone number generation with format options
+
+### Version 0.5.3 Updates (Preview)
+
+#### Selector Builder UI
+
+- Added a visual selector builder in the Site Selectors page:
+  - Step-by-step interface for creating Testing Library-style selectors
+  - Support for all selector types (role, label, text, testId, CSS)
+  - Automatic generation of JSON configuration based on selections
+  - Preview functionality with copy to clipboard option
+  - "Add to JSON Editor" feature for direct integration with site configurations
+- Enhanced selector validation and error handling:
+  - Clear feedback for incomplete or invalid selectors
+  - Visual guidance for selector options
+  - Context-sensitive field display based on selector type
+- Improved exact match handling for text and label selectors
+- Fixed URL links to test pages for practicing with selectors
 
 ## Todo
 
