@@ -85,63 +85,54 @@
         <div class="code-container">
           <pre id="json-config">
 {
-  "url": "(https://pawel-albert.github.io/utilities-for-testing-extension/shadow-dom-form.html|file:///.*shadow-dom-form.html)",
-  "formData": {
-    "registrationForm": {
-      "type": "form",
-      "timeout": 5000,
-      "fields": {
-        "email": {
-          "queryType": "shadowDOM",
-          "selector": "custom-input[name='email'] input",
-          "type": "input",
-          "data": "test.user@example.com",
-          "dataType": "static"
-        },
-        "password": {
-          "queryType": "shadowDOM",
-          "selector": "custom-input[name='password'] input",
-          "type": "input",
-          "data": "SecurePassword123!",
-          "dataType": "static"
-        },
-        "fullName": {
-          "queryType": "shadowDOM",
-          "selector": "custom-input[name='fullName'] input",
-          "type": "input",
-          "data": "John Doe",
-          "dataType": "static"
-        },
-        "country": {
-          "queryType": "shadowDOM",
-          "selector": "custom-select[name='country'] select",
-          "type": "select",
-          "data": "us",
-          "dataType": "static"
-        },
-        "newsletter": {
-          "queryType": "shadowDOM",
-          "selector": "custom-checkbox[name='newsletter'] input",
-          "type": "checkbox",
-          "data": true,
-          "dataType": "static"
-        },
-        "comments": {
-          "queryType": "shadowDOM",
-          "selector": "custom-textarea[name='comments'] textarea",
-          "type": "textarea",
-          "data": "This is a test comment using Shadow DOM selectors.",
-          "dataType": "static"
-        }
-      },
-      "submit": {
-        "queryType": "shadowDOM",
-        "selector": "custom-button button",
-        "type": "click",
-        "data": null,
-        "dataType": null
-      }
-    }
+  "email": {
+    "queryType": "shadowDOM",
+    "selector": "custom-input[name='email'] input",
+    "type": "input",
+    "data": "test.user@example.com",
+    "dataType": "static"
+  },
+  "password": {
+    "queryType": "shadowDOM",
+    "selector": "custom-input[name='password'] input", 
+    "type": "input",
+    "data": "SecurePassword123!",
+    "dataType": "static"
+  },
+  "fullName": {
+    "queryType": "shadowDOM",
+    "selector": "custom-input[name='fullName'] input",
+    "type": "input",
+    "data": "John Doe",
+    "dataType": "static"
+  },
+  "country": {
+    "queryType": "shadowDOM",
+    "selector": "custom-select[name='country'] select",
+    "type": "select",
+    "data": "us",
+    "dataType": "static"
+  },
+  "newsletter": {
+    "queryType": "shadowDOM",
+    "selector": "custom-checkbox[name='newsletter'] input",
+    "type": "checkbox",
+    "data": true,
+    "dataType": "static"
+  },
+  "comments": {
+    "queryType": "shadowDOM",
+    "selector": "custom-textarea[name='comments'] textarea",
+    "type": "textarea",
+    "data": "This is a test comment using Shadow DOM selectors.",
+    "dataType": "static"
+  },
+  "submit": {
+    "queryType": "shadowDOM",
+    "selector": "custom-button button",
+    "type": "click",
+    "data": null,
+    "dataType": null
   }
 }</pre
           >
