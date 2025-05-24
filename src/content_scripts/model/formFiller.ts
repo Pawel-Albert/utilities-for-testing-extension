@@ -143,7 +143,13 @@ async function executeStep(step: StepType | EnhancedStepType) {
 }
 
 async function executeMultiStep(fieldData: SelectorType | EnhancedSelectorType) {
-  const timeout = fieldData.timeout || 1000
+  let timeout = fieldData.timeout || 1000
+  const isInitialTimeout = timeout < 0
+
+  if (isInitialTimeout) {
+    timeout = Math.abs(timeout)
+    await new Promise(resolve => setTimeout(resolve, timeout))
+  }
 
   if (fieldData.steps) {
     for (let i = 0; i < fieldData.steps.length; i++) {
