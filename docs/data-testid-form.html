@@ -187,103 +187,101 @@
           uses <code>getByTestId</code> selectors to target elements by their test
           identifiers.
         </p>
+        <p>
+          URL pattern for this example:
+          <code
+            >(https://pawel-albert.github.io/utilities-for-testing-extension/data-testid-form.html|file:///.*data-testid-form.html)</code
+          >
+        </p>
 
         <div class="code-container">
           <pre id="json-config">
 {
-  "url": "(https://pawel-albert.github.io/utilities-for-testing-extension/data-testid-form.html|file:///.*data-testid-form.html)",
-  "formData": {
-    "registrationForm": {
-      "type": "form",
-      "timeout": 5000,
-      "fields": {
-        "email": {
-          "selector": "email-input",
-          "queryType": "testId",
-          "type": "input",
-          "data": "test.user@example.com",
-          "dataType": "static"
-        },
-        "password": {
-          "selector": "password-input",
-          "queryType": "testId",
-          "type": "input",
-          "data": "SecurePassword123!",
-          "dataType": "static"
-        },
-        "confirmPassword": {
-          "selector": "confirm-password-input",
-          "queryType": "testId",
-          "type": "input",
-          "data": "SecurePassword123!",
-          "dataType": "static"
-        },
-        "firstName": {
-          "selector": "first-name-input",
-          "queryType": "testId",
-          "type": "input",
-          "data": "John",
-          "dataType": "static"
-        },
-        "lastName": {
-          "selector": "last-name-input",
-          "queryType": "testId",
-          "type": "input",
-          "data": "Doe",
-          "dataType": "static"
-        },
-        "phoneNumber": {
-          "selector": "phone-input",
-          "queryType": "testId",
-          "type": "input",
-          "data": "+1 (555) 123-4567",
-          "dataType": "static"
-        },
-        "country": {
-          "selector": "country-select",
-          "queryType": "testId",
-          "type": "select",
-          "data": "us",
-          "dataType": "static"
-        },
-        "birthdate": {
-          "selector": "birthdate-input",
-          "queryType": "testId",
-          "type": "input",
-          "data": "1990-01-15",
-          "dataType": "static"
-        },
-        "newsletter": {
-          "selector": "newsletter-checkbox",
-          "queryType": "testId",
-          "type": "checkbox",
-          "data": true,
-          "dataType": "static"
-        },
-        "genderMale": {
-          "selector": "gender-male-radio",
-          "queryType": "testId",
-          "type": "radio",
-          "data": true,
-          "dataType": "static"
-        },
-        "comments": {
-          "selector": "comments-textarea",
-          "queryType": "testId",
-          "type": "textarea",
-          "data": "This is a test comment using data-testid selectors.",
-          "dataType": "static"
-        }
-      },
-      "submit": {
-        "selector": "submit-button",
+  "birthdate": {
+    "data": "1990-01-15",
+    "dataType": "static",
+    "queryType": "testId",
+    "selector": "birthdate-input",
+    "type": "input"
+  },
+  "comments": {
+    "data": "This is a test comment using data-testid selectors.",
+    "dataType": "static",
+    "queryType": "testId",
+    "selector": "comments-textarea",
+    "type": "input"
+  },
+  "confirmPassword": {
+    "data": "SecurePassword123!",
+    "dataType": "static",
+    "queryType": "testId",
+    "selector": "confirm-password-input",
+    "type": "input"
+  },
+  "country": {
+    "data": "pl",
+    "dataType": "static",
+    "queryType": "testId",
+    "selector": "country-select",
+    "type": "input"
+  },
+  "email": {
+    "data": "test.user@example.com",
+    "dataType": "static",
+    "queryType": "testId",
+    "selector": "email-input",
+    "type": "input"
+  },
+  "firstName": {
+    "data": "John",
+    "dataType": "static",
+    "queryType": "testId",
+    "selector": "first-name-input",
+    "type": "input"
+  },
+  "genderMale": {
+    "queryType": "testId",
+    "selector": "gender-other-radio",
+    "type": "simpleClick"
+  },
+  "lastName": {
+    "data": "Doe",
+    "dataType": "static",
+    "queryType": "testId",
+    "selector": "last-name-input",
+    "type": "input"
+  },
+  "newsletter": {
+    "queryType": "testId",
+    "selector": "newsletter-checkbox",
+    "type": "checkCheckbox"
+  },
+  "password": {
+    "data": "SecurePassword123!",
+    "dataType": "static",
+    "queryType": "testId",
+    "selector": "password-input",
+    "type": "input"
+  },
+  "phoneNumber": {
+    "data": "+1 (555) 123-4567",
+    "dataType": "static",
+    "queryType": "testId",
+    "selector": "phone-input",
+    "type": "input"
+  },
+  "submitAfterDelay": {
+    "steps": [
+      {
         "queryType": "testId",
-        "type": "click",
-        "data": null,
-        "dataType": null
+        "selector": "submit-button",
+        "type": "simpleClick"
       }
-    }
+    ],
+    "timeout": -500,
+    "type": "multiStep"
   }
+}
 }</pre
           >
           <button class="copy-button" data-target="json-config">Copy JSON</button>

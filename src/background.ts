@@ -135,6 +135,77 @@ const menuItems: MenuItems = [
     contexts: ['editable']
   },
 
+  // Dutch generators submenu
+  {
+    parentId: 'data-generators',
+    id: 'nl-generators',
+    title: 'Dutch Data Generators',
+    contexts: ['all'],
+    type: 'normal'
+  },
+  {
+    parentId: 'nl-generators',
+    title: 'Generate BSN',
+    id: 'bsn-menu',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'bsn-menu',
+    title: 'Male (18+)',
+    id: 'Generate BSN Male',
+    file: 'src/content_scripts/nl_bsn_male.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'bsn-menu',
+    title: 'Female (18+)',
+    id: 'Generate BSN Female',
+    file: 'src/content_scripts/nl_bsn_female.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'bsn-menu',
+    title: 'Custom...',
+    id: 'Generate BSN Custom',
+    file: 'src/content_scripts/nl_bsn_custom.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'nl-generators',
+    title: 'Generate Dutch IBAN',
+    id: 'Generate Dutch IBAN',
+    file: 'src/content_scripts/nl_iban.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'nl-generators',
+    title: 'Generate Dutch Phone',
+    id: 'Generate Dutch Phone',
+    file: 'src/content_scripts/nl_phone.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'nl-generators',
+    title: 'Generate Dutch Passport',
+    id: 'Generate Dutch Passport',
+    file: 'src/content_scripts/nl_passport.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'nl-generators',
+    title: 'Generate Dutch ID Card',
+    id: 'Generate Dutch ID Card',
+    file: 'src/content_scripts/nl_id.js',
+    contexts: ['editable']
+  },
+  {
+    parentId: 'nl-generators',
+    title: 'Generate Dutch Debtor Number',
+    id: 'Generate Dutch Debtor Number',
+    file: 'src/content_scripts/nl_debtor.js',
+    contexts: ['editable']
+  },
+
   {
     id: 'text-tools',
     title: 'Text Tools',
