@@ -172,100 +172,91 @@
         <div class="code-container">
           <pre id="json-config">
 {
-  "url": "(https://pawel-albert.github.io/utilities-for-testing-extension/complex-form.html|file:///.*complex-form.html)",
-  "formData": {
-    "registrationForm": {
-      "type": "form",
-      "timeout": 5000,
-      "fields": {
-        "email": {
-          "queryType": "role",
-          "selector": "textbox",
-          "queryOptions": { "name": "Email" },
-          "type": "input",
-          "data": "test.user@example.com",
-          "dataType": "static"
-        },
-        "password": {
-          "queryType": "testId",
-          "selector": "password-field",
-          "type": "input",
-          "data": "SecurePassword123!",
-          "dataType": "static"
-        },
-        "firstName": {
-          "queryType": "label",
-          "selector": "First Name",
-          "type": "input",
-          "data": "John",
-          "dataType": "static"
-        },
-        "lastName": {
-          "queryType": "label",
-          "selector": "Last Name",
-          "type": "input",
-          "data": "Doe",
-          "dataType": "static"
-        },
-        "businessPhone": {
-          "queryType": "label",
-          "selector": "Phone Number",
-          "queryOptions": { "index": 0 },
-          "type": "input",
-          "data": "+1 (555) 987-6543",
-          "dataType": "static"
-        },
-        "personalPhone": {
-          "queryType": "label",
-          "selector": "Phone Number",
-          "queryOptions": { "index": 1 },
-          "type": "input",
-          "data": "+1 (555) 123-4567",
-          "dataType": "static"
-        },
-        "country": {
-          "queryType": "shadowDOM",
-          "selector": "custom-select select",
-          "type": "select",
-          "data": "us",
-          "dataType": "static"
-        },
-        "accountType": {
-          "queryType": "text",
-          "selector": "Individual",
-          "type": "click",
-          "data": null,
-          "dataType": null
-        },
-        "communicationFrequency": {
-          "queryType": "nestedSelector",
-          "selector": "preferences-section",
-          "selectorType": "testId",
-          "childSelector": {
-            "queryType": "label",
-            "selector": "Daily",
-            "type": "click",
-            "data": null,
-            "dataType": null
-          }
-        },
-        "terms": {
-          "queryType": "id",
-          "selector": "terms",
-          "type": "checkbox",
-          "data": true,
-          "dataType": "static"
-        }
-      },
-      "submit": {
-        "queryType": "role",
-        "selector": "button",
-        "queryOptions": { "name": "Create Account" },
-        "type": "click",
-        "data": null,
-        "dataType": null
-      }
+  "email": {
+    "queryType": "role",
+    "selector": "textbox",
+    "queryOptions": { "name": "Email" },
+    "type": "input",
+    "data": "test.user@example.com",
+    "dataType": "static"
+  },
+  "password": {
+    "queryType": "testId",
+    "selector": "password-field",
+    "type": "input",
+    "data": "SecurePassword123!",
+    "dataType": "static"
+  },
+  "firstName": {
+    "queryType": "label",
+    "selector": "First Name",
+    "type": "input",
+    "data": "John",
+    "dataType": "static"
+  },
+  "lastName": {
+    "queryType": "label",
+    "selector": "Last Name",
+    "type": "input",
+    "data": "Doe",
+    "dataType": "static"
+  },
+  "businessPhone": {
+    "queryType": "label",
+    "selector": "Phone Number",
+    "queryOptions": { "index": 0 },
+    "type": "input",
+    "data": "+1 (555) 987-6543",
+    "dataType": "static"
+  },
+  "personalPhone": {
+    "queryType": "label",
+    "selector": "Phone Number",
+    "queryOptions": { "index": 1 },
+    "type": "input",
+    "data": "+1 (555) 123-4567",
+    "dataType": "static"
+  },
+  "country": {
+    "queryType": "shadowDOM",
+    "selector": "custom-select select",
+    "type": "select",
+    "data": "us",
+    "dataType": "static"
+  },
+  "accountType": {
+    "queryType": "text",
+    "selector": "Individual",
+    "type": "click",
+    "data": null,
+    "dataType": null
+  },
+  "communicationFrequency": {
+    "queryType": "nestedSelector",
+    "selector": "preferences-section",
+    "selectorType": "testId",
+    "childSelector": {
+      "queryType": "label",
+      "selector": "Daily",
+      "type": "click",
+      "data": null,
+      "dataType": null
     }
+  },
+  "terms": {
+    "queryType": "id",
+    "selector": "terms",
+    "type": "checkbox",
+    "data": true,
+    "dataType": "static"
+  },
+  "submit": {
+    "queryType": "role",
+    "selector": "button",
+    "queryOptions": { "name": "Create Account" },
+    "type": "click",
+    "data": null,
+    "dataType": null
   }
 }</pre
           >

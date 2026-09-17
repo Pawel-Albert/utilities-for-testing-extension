@@ -1504,6 +1504,14 @@ getByTestIdSelector("login-form-submit", "simpleClick")</pre
             <li>
               <strong>timeout</strong>: Time in milliseconds to wait between steps
               (default: 1000)
+              <ul>
+                <li>
+                  <strong>Negative timeout value</strong>: When timeout is negative (e.g.,
+                  -500), the delay occurs <strong>before the first step</strong> and also
+                  between subsequent steps. This is useful when you need to wait for
+                  elements to load before starting the interaction sequence.
+                </li>
+              </ul>
             </li>
             <li><strong>steps</strong>: Array of steps to execute in sequence</li>
           </ul>
