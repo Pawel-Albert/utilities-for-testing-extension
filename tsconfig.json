@@ -30,7 +30,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "allowJs": true,
-    "checkJs": true
+    "checkJs": true,
+    "types": ["chrome"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
