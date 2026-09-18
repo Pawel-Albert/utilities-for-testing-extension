@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>API Mock</title>
+    <style>
+      :root {
+        --primary: #2196f3;
+        --primary-dark: #1976d2;
+        --accent: #4caf50;
+        --text: #333333;
+        --text-light: #757575;
+        --border: #bdbdbd;
+        --background: #fafafa;
+        --section-bg: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        color: var(--text);
+        background: var(--background);
+        font-size: 12px;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(280px, 1fr) minmax(320px, 1fr);
+        height: 100%;
+        min-height: 0;
+      }
+
+      .pane {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        border-right: 1px solid var(--border);
+      }
+
+      .pane:last-child {
+        border-right: 0;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 10px 12px;
+        background: var(--section-bg);
+        border-bottom: 1px solid var(--border);
+      }
+
+      h2 {
+        margin: 0;
+        color: var(--primary);
+        font-size: 14px;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .toolbar button {
+        flex-shrink: 0;
+      }
+
+      .help {
+        padding: 6px 12px;
+        background: #cce5ff;
+        color: #004085;
+        border-bottom: 1px solid #b8daff;
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
+      .list {
+        overflow: auto;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 2px 8px;
+        padding: 6px 12px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+      }
+
+      .row:hover {
+        background: rgba(33, 150, 243, 0.06);
+      }
+
+      .row.active {
+        background: rgba(25, 118, 210, 0.12);
+        box-shadow: inset 3px 0 0 var(--primary-dark);
+      }
+
+      .method {
+        font-weight: 700;
+        color: var(--primary-dark);
+        font-size: 11px;
+        min-width: 48px;
+      }
+
+      .status {
+        font-weight: 600;
+        font-size: 11px;
+      }
+
+      .url {
+        flex: 1 1 100%;
+        color: var(--text-light);
+        word-break: break-all;
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      .details {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        flex: 1;
+        min-height: 0;
+        padding: 0;
+      }
+
+      .details-scroll {
+        overflow: auto;
+        flex: 1;
+        min-height: 0;
+        padding: 12px;
+      }
+
+      .block {
+        margin-bottom: 10px;
+      }
+
+      .block summary {
+        cursor: pointer;
+        font-weight: 700;
+        color: var(--primary-dark);
+        padding: 4px 0;
+        user-select: none;
+      }
+
+      .block summary:hover {
+        color: var(--primary);
+      }
+
+      .block pre {
+        margin: 8px 0 0;
+      }
+
+      .meta {
+        margin-bottom: 10px;
+        word-break: break-all;
+      }
+
+      .meta div {
+        margin-bottom: 4px;
+      }
+
+      pre {
+        background: #282c34;
+        color: #abb2bf;
+        border-radius: 6px;
+        padding: 10px;
+        overflow: auto;
+        max-height: 280px;
+        font-size: 12px;
+        white-space: pre-wrap;
+      }
+
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+
+      button:hover {
+        background: var(--primary-dark);
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+
+      button.secondary {
+        background: white;
+        color: var(--primary);
+        border: 1px solid var(--primary);
+      }
+
+      button.secondary:hover {
+        background: rgba(33, 150, 243, 0.1);
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .toolbar button:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+
+      .status-bar {
+        padding: 8px 12px;
+        border-top: 1px solid var(--border);
+        color: var(--text-light);
+        font-size: 12px;
+      }
+
+      .empty {
+        padding: 16px;
+        color: var(--text-light);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <section class="pane">
+        <div class="toolbar">
+          <h2>Network (fetch / XHR)</h2>
+          <button class="secondary" id="clearButton" type="button">Clear</button>
+        </div>
+        <div class="help">
+          Reload the inspected page (or trigger an API call) with this tab open. Click a
+          request, then Add as mock rule. You can keep the floating panel closed.
+        </div>
+        <div class="list" id="requestList">
+          <div class="empty">No requests yet. Reload the page with this tab open.</div>
+        </div>
+      </section>
+      <section class="pane">
+        <div class="toolbar">
+          <h2>Request details</h2>
+          <button id="addRuleButton" type="button" disabled>Add as mock rule</button>
+        </div>
+        <div class="details" id="details">
+          <div class="empty">Select a request from the list.</div>
+        </div>
+        <div class="status-bar" id="statusBar">Waiting for requests…</div>
+      </section>
+    </div>
+    <script src="apiMockDevtools.ts" type="module"></script>
+  </body>
+</html>

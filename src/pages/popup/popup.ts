@@ -19,6 +19,19 @@ if (openScriptsButton) {
   }
 }
 
+document.getElementById('openApiMock')?.addEventListener('click', async () => {
+  const [tab] = await chrome.tabs.query({active: true, currentWindow: true})
+  const response = await chrome.runtime.sendMessage({
+    type: 'API_MOCK_OPEN_PANEL',
+    tabId: tab?.id
+  })
+  if (response?.error) {
+    alert(response.error)
+    return
+  }
+  window.close()
+})
+
 document.getElementById('openSidePanel')?.addEventListener('click', async () => {
   try {
     const [tab] = await chrome.tabs.query({active: true, currentWindow: true})

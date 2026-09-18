@@ -1,3 +1,5 @@
+/// <reference types="chrome" />
+
 declare namespace chrome {
   namespace userScripts {
     interface UserScriptFilter {

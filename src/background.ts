@@ -1,4 +1,44 @@
 import {MenuItems} from './types/menu'
+import {
+  ensureInterceptorForSender,
+  openApiMockOnTab
+} from './services/apiMockInject'
+
+type DevtoolsBufferItem = {id: string; tabId?: number; method?: string}
+
+const MAX_DEVTOOLS_BUFFER = 80
+const devtoolsNetworkBuffer: DevtoolsBufferItem[] = []
+const devtoolsPorts: chrome.runtime.Port[] = []
+
+const rememberDevtoolsItem = (item: DevtoolsBufferItem) => {
+  if (['OPTIONS', 'HEAD', 'TRACE', 'CONNECT'].includes(String(item.method || '').toUpperCase())) {
+    return
+  }
+  const existing = devtoolsNetworkBuffer.findIndex(row => row.id === item.id)
+  if (existing >= 0) devtoolsNetworkBuffer.splice(existing, 1)
+  devtoolsNetworkBuffer.unshift(item)
+  if (devtoolsNetworkBuffer.length > MAX_DEVTOOLS_BUFFER) devtoolsNetworkBuffer.pop()
+}
+
+const broadcastDevtools = (message: unknown) => {
+  for (const port of [...devtoolsPorts]) {
+    try {
+      port.postMessage(message)
+    } catch {
+      // Port can disconnect between the copy and postMessage.
+    }
+  }
+}
+
+chrome.runtime.onConnect.addListener(port => {
+  if (port.name !== 'api-mock-devtools') return
+  devtoolsPorts.push(port)
+  port.postMessage({type: 'API_MOCK_DEVTOOLS_BUFFER', items: devtoolsNetworkBuffer})
+  port.onDisconnect.addListener(() => {
+    const index = devtoolsPorts.indexOf(port)
+    if (index >= 0) devtoolsPorts.splice(index, 1)
+  })
+})
 
 const menuItems: MenuItems = [
   {
@@ -360,6 +400,18 @@ const menuItems: MenuItems = [
     contexts: ['all']
   },
   {
+    id: 'api-tools',
+    title: 'API Tools',
+    contexts: ['all'],
+    type: 'normal'
+  },
+  {
+    parentId: 'api-tools',
+    title: 'Open API Mock panel',
+    id: 'Open API Mock',
+    contexts: ['all']
+  },
+  {
     type: 'separator',
     id: 'separator-1',
     contexts: ['all']
@@ -383,6 +435,15 @@ try {
 
   chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if (!tab?.id) return
+
+    if (info.menuItemId === 'Open API Mock') {
+      try {
+        await openApiMockOnTab(tab)
+      } catch (error) {
+        console.error('Failed to open API Mock panel:', error)
+      }
+      return
+    }
 
     const menuItem = menuItems.find(item => item.id === info.menuItemId)
     if (!menuItem?.file) return
@@ -435,6 +496,60 @@ try {
 } catch (error) {
   console.error('Failed to initialize commands:', error)
 }
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === 'API_MOCK_DEVTOOLS_REQUEST' && message.item) {
+    const item = {
+      ...(message.item as DevtoolsBufferItem),
+      tabId: (message.item as DevtoolsBufferItem).tabId ?? sender.tab?.id
+    }
+    rememberDevtoolsItem(item)
+    broadcastDevtools({type: 'API_MOCK_DEVTOOLS_REQUEST', item})
+    return
+  }
+
+  if (message?.type === 'API_MOCK_DEVTOOLS_GET_BUFFER') {
+    sendResponse({items: devtoolsNetworkBuffer})
+    return true
+  }
+
+  if (message?.type === 'API_MOCK_DEVTOOLS_CLEAR_BUFFER') {
+    devtoolsNetworkBuffer.splice(0, devtoolsNetworkBuffer.length)
+    sendResponse({ok: true})
+    return true
+  }
+
+  if (message?.type === 'API_MOCK_OPEN_PANEL') {
+    void (async () => {
+      try {
+        const tab = message.tabId
+          ? await chrome.tabs.get(message.tabId as number)
+          : sender.tab ||
+            (await chrome.tabs.query({active: true, currentWindow: true}))[0]
+        await openApiMockOnTab(tab)
+        sendResponse({ok: true})
+      } catch (error) {
+        sendResponse({
+          ok: false,
+          error: error instanceof Error ? error.message : String(error)
+        })
+      }
+    })()
+    return true
+  }
+
+  if (message?.type === 'API_MOCK_ENSURE_INTERCEPTOR') {
+    ensureInterceptorForSender(sender)
+      .then(() => sendResponse({ok: true}))
+      .catch(error =>
+        sendResponse({
+          ok: false,
+          error: error instanceof Error ? error.message : String(error)
+        })
+      )
+    return true
+  }
+})
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === 'unregisterScript') {
