@@ -5,10 +5,11 @@ import {
 } from './services/apiMockInject'
 
 type DevtoolsBufferItem = {id: string; tabId?: number; method?: string}
+type DevtoolsPortEntry = {port: chrome.runtime.Port; tabId?: number}
 
 const MAX_DEVTOOLS_BUFFER = 80
 const devtoolsNetworkBuffer: DevtoolsBufferItem[] = []
-const devtoolsPorts: chrome.runtime.Port[] = []
+const devtoolsPorts: DevtoolsPortEntry[] = []
 
 const rememberDevtoolsItem = (item: DevtoolsBufferItem) => {
   if (['OPTIONS', 'HEAD', 'TRACE', 'CONNECT'].includes(String(item.method || '').toUpperCase())) {
@@ -20,10 +21,18 @@ const rememberDevtoolsItem = (item: DevtoolsBufferItem) => {
   if (devtoolsNetworkBuffer.length > MAX_DEVTOOLS_BUFFER) devtoolsNetworkBuffer.pop()
 }
 
-const broadcastDevtools = (message: unknown) => {
-  for (const port of [...devtoolsPorts]) {
+const readDevtoolsTabId = (name: string): number | undefined => {
+  const match = /^api-mock-devtools:(\d+)$/.exec(name)
+  if (!match) return undefined
+  const value = Number(match[1])
+  return Number.isFinite(value) ? value : undefined
+}
+
+const broadcastDevtools = (item: DevtoolsBufferItem) => {
+  for (const entry of [...devtoolsPorts]) {
+    if (entry.tabId != null && item.tabId != null && entry.tabId !== item.tabId) continue
     try {
-      port.postMessage(message)
+      entry.port.postMessage({type: 'API_MOCK_DEVTOOLS_REQUEST', item})
     } catch {
       // Port can disconnect between the copy and postMessage.
     }
@@ -31,11 +40,18 @@ const broadcastDevtools = (message: unknown) => {
 }
 
 chrome.runtime.onConnect.addListener(port => {
-  if (port.name !== 'api-mock-devtools') return
-  devtoolsPorts.push(port)
-  port.postMessage({type: 'API_MOCK_DEVTOOLS_BUFFER', items: devtoolsNetworkBuffer})
+  if (!port.name.startsWith('api-mock-devtools')) return
+  const entry: DevtoolsPortEntry = {port, tabId: readDevtoolsTabId(port.name)}
+  devtoolsPorts.push(entry)
+  port.postMessage({
+    type: 'API_MOCK_DEVTOOLS_BUFFER',
+    items:
+      entry.tabId == null
+        ? devtoolsNetworkBuffer
+        : devtoolsNetworkBuffer.filter(item => item.tabId === entry.tabId)
+  })
   port.onDisconnect.addListener(() => {
-    const index = devtoolsPorts.indexOf(port)
+    const index = devtoolsPorts.indexOf(entry)
     if (index >= 0) devtoolsPorts.splice(index, 1)
   })
 })
@@ -504,17 +520,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       tabId: (message.item as DevtoolsBufferItem).tabId ?? sender.tab?.id
     }
     rememberDevtoolsItem(item)
-    broadcastDevtools({type: 'API_MOCK_DEVTOOLS_REQUEST', item})
+    broadcastDevtools(item)
     return
   }
 
   if (message?.type === 'API_MOCK_DEVTOOLS_GET_BUFFER') {
-    sendResponse({items: devtoolsNetworkBuffer})
+    const tabId = Number(message.tabId)
+    sendResponse({
+      items: Number.isFinite(tabId)
+        ? devtoolsNetworkBuffer.filter(item => item.tabId === tabId)
+        : devtoolsNetworkBuffer
+    })
     return true
   }
 
   if (message?.type === 'API_MOCK_DEVTOOLS_CLEAR_BUFFER') {
-    devtoolsNetworkBuffer.splice(0, devtoolsNetworkBuffer.length)
+    const tabId = Number(message.tabId)
+    if (Number.isFinite(tabId)) {
+      const kept = devtoolsNetworkBuffer.filter(item => item.tabId !== tabId)
+      devtoolsNetworkBuffer.splice(0, devtoolsNetworkBuffer.length, ...kept)
+    } else {
+      devtoolsNetworkBuffer.splice(0, devtoolsNetworkBuffer.length)
+    }
     sendResponse({ok: true})
     return true
   }

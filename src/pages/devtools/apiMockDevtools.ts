@@ -208,7 +208,7 @@ clearButton.addEventListener('click', () => {
   detailsEl.appendChild(empty)
   renderList()
   updateStatusBar('Waiting for requests…')
-  chrome.runtime.sendMessage({type: 'API_MOCK_DEVTOOLS_CLEAR_BUFFER'}, () => {
+  chrome.runtime.sendMessage({type: 'API_MOCK_DEVTOOLS_CLEAR_BUFFER', tabId: inspectedTabId}, () => {
     void chrome.runtime.lastError
   })
 })
@@ -247,7 +247,7 @@ chrome.runtime.onMessage.addListener(message => {
 })
 
 const connectDevtoolsPort = () => {
-  const port = chrome.runtime.connect({name: 'api-mock-devtools'})
+  const port = chrome.runtime.connect({name: `api-mock-devtools:${inspectedTabId}`})
   port.onMessage.addListener(message => {
     if (message?.type === 'API_MOCK_DEVTOOLS_REQUEST' && message.item) {
       upsert(message.item as CapturedNetworkRequest)
@@ -264,7 +264,7 @@ const connectDevtoolsPort = () => {
 
 connectDevtoolsPort()
 
-chrome.runtime.sendMessage({type: 'API_MOCK_DEVTOOLS_GET_BUFFER'}, response => {
+chrome.runtime.sendMessage({type: 'API_MOCK_DEVTOOLS_GET_BUFFER', tabId: inspectedTabId}, response => {
   void chrome.runtime.lastError
   ingestItems(response?.items as CapturedNetworkRequest[] | undefined)
   if (!requests.length) {

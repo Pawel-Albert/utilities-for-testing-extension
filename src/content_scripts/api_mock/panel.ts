@@ -3,6 +3,21 @@ import {API_MOCK_HOST_ID, API_MOCK_INTERCEPTOR_SOURCE, API_MOCK_STORAGE_KEY, cre
 import {apiMockPanelStyles} from './panelStyles'
 
 const METHODS: ApiMockMethod[] = ['*', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+const STATUS_OPTIONS = [
+  {value: 200, label: '200 OK'},
+  {value: 201, label: '201 Created'},
+  {value: 202, label: '202 Accepted'},
+  {value: 204, label: '204 No Content'},
+  {value: 400, label: '400 Bad Request'},
+  {value: 401, label: '401 Unauthorized'},
+  {value: 403, label: '403 Forbidden'},
+  {value: 404, label: '404 Not Found'},
+  {value: 409, label: '409 Conflict'},
+  {value: 422, label: '422 Unprocessable Entity'},
+  {value: 500, label: '500 Internal Server Error'},
+  {value: 502, label: '502 Bad Gateway'},
+  {value: 503, label: '503 Service Unavailable'}
+] as const
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max)
@@ -107,7 +122,7 @@ function startApiMockPanel() {
             </div>
             <div class="form-group">
               <label for="statusInput">Status</label>
-              <input id="statusInput" type="number" min="100" max="599" value="200" />
+              <select id="statusInput"></select>
             </div>
             <div class="form-group">
               <label for="delayInput">Delay (ms)</label>
@@ -156,7 +171,7 @@ function startApiMockPanel() {
   const labelInput = shadow.getElementById('labelInput') as HTMLInputElement
   const urlInput = shadow.getElementById('urlInput') as HTMLInputElement
   const methodInput = shadow.getElementById('methodInput') as HTMLSelectElement
-  const statusInput = shadow.getElementById('statusInput') as HTMLInputElement
+  const statusInput = shadow.getElementById('statusInput') as HTMLSelectElement
   const delayInput = shadow.getElementById('delayInput') as HTMLInputElement
   const bodyInput = shadow.getElementById('bodyInput') as HTMLTextAreaElement
   const saveButton = shadow.getElementById('saveButton') as HTMLButtonElement
@@ -175,6 +190,13 @@ function startApiMockPanel() {
     methodInput.appendChild(option)
   })
 
+  STATUS_OPTIONS.forEach(status => {
+    const option = document.createElement('option')
+    option.value = String(status.value)
+    option.textContent = status.label
+    statusInput.appendChild(option)
+  })
+
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     toast.textContent = message
     toast.className = `toast ${type} show`
@@ -185,7 +207,7 @@ function startApiMockPanel() {
   }
 
   const applyHostPosition = () => {
-    const width = panel.offsetWidth || 460
+    const width = panel.offsetWidth || 520
     const height = panel.classList.contains('minimized') ? 48 : panel.offsetHeight || 320
     const x = clamp(state.panel.x, 8, Math.max(8, window.innerWidth - width - 8))
     const y = clamp(state.panel.y, 8, Math.max(8, window.innerHeight - height - 8))
@@ -197,7 +219,7 @@ function startApiMockPanel() {
       z-index: 2147483646 !important;
       left: ${x}px !important;
       top: ${y}px !important;
-      width: 460px;
+      width: 520px;
       max-width: calc(100vw - 16px);
       display: block;
     `

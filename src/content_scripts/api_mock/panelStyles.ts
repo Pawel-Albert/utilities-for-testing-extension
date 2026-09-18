@@ -8,9 +8,9 @@ export const apiMockPanelStyles = `
   }
 
   .panel {
-    width: 460px;
+    width: 520px;
     max-width: calc(100vw - 24px);
-    max-height: calc(100vh - 24px);
+    max-height: calc(100vh - 16px);
     display: flex;
     flex-direction: column;
     font-family: 'Segoe UI', Arial, sans-serif;
@@ -152,6 +152,7 @@ export const apiMockPanelStyles = `
     gap: 8px;
     align-items: center;
     justify-content: space-between;
+    padding: 4px 8px 8px 0;
   }
 
   .row h3 {
@@ -159,8 +160,8 @@ export const apiMockPanelStyles = `
   }
 
   .add-button {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border: none;
     border-radius: 8px;
     background: #2196f3;
@@ -170,9 +171,15 @@ export const apiMockPanelStyles = `
     cursor: pointer;
     flex-shrink: 0;
     padding: 0;
+    margin-right: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .row > button.action,
+  .row > .add-button {
+    margin-top: 2px;
   }
 
   .add-button:hover {
@@ -183,7 +190,7 @@ export const apiMockPanelStyles = `
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-height: 180px;
+    max-height: 220px;
     overflow: auto;
   }
 
@@ -296,7 +303,7 @@ export const apiMockPanelStyles = `
     display: flex;
     flex-direction: column;
     gap: 6px;
-    max-height: 150px;
+    max-height: 180px;
     overflow: auto;
   }
 
