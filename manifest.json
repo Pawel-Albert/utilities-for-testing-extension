@@ -67,6 +67,7 @@
         "src/pages/execution-scripts-panel/executionScriptsPanel.ts",
         "src/content_scripts/api_mock/bridge.ts",
         "src/content_scripts/api_mock/interceptor.ts",
+        "src/content_scripts/api_mock/interceptor_runtime.ts",
         "src/content_scripts/api_mock/panel.ts",
         "src/pages/devtools/devtools.html",
         "src/pages/devtools/devtools.ts",
@@ -92,7 +93,7 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["src/content_scripts/api_mock/interceptor.ts"],
+      "js": ["src/content_scripts/api_mock/interceptor_runtime.ts"],
       "run_at": "document_start",
       "world": "MAIN"
     },

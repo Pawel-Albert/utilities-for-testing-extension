@@ -11,6 +11,8 @@ const detailsEl = document.getElementById('details') as HTMLElement
 const statusBar = document.getElementById('statusBar') as HTMLElement
 const clearButton = document.getElementById('clearButton') as HTMLButtonElement
 const addRuleButton = document.getElementById('addRuleButton') as HTMLButtonElement
+const filterInput = document.getElementById('filterInput') as HTMLInputElement
+let filterText = ''
 
 const belongsToInspectedTab = (item: CapturedNetworkRequest) =>
   item.tabId == null || item.tabId === inspectedTabId
@@ -30,6 +32,29 @@ const bodyLooksUseful = (body: string) => {
   } catch {
     return trimmed.length > 8
   }
+}
+
+const matchesFilter = (item: CapturedNetworkRequest) => {
+  const query = filterText.trim().toLowerCase()
+  if (!query) return true
+  return `${item.method} ${item.status} ${item.url}`.toLowerCase().includes(query)
+}
+
+const visibleRequests = () => requests.filter(matchesFilter)
+
+const updateStatusBar = (message?: string) => {
+  if (message) {
+    statusBar.textContent = message
+    return
+  }
+
+  const visible = visibleRequests().length
+  if (!filterText.trim()) {
+    statusBar.textContent = `${requests.length} request(s) captured`
+    return
+  }
+
+  statusBar.textContent = `${visible} of ${requests.length} request(s) shown`
 }
 
 const upsert = (item: CapturedNetworkRequest) => {
@@ -59,7 +84,7 @@ const upsert = (item: CapturedNetworkRequest) => {
       duplicate.resourceType = item.resourceType
     }
     renderList()
-    statusBar.textContent = `${requests.length} request(s) captured`
+    updateStatusBar()
     if (selectedId === duplicate.id) renderDetails(duplicate)
     return
   }
@@ -75,7 +100,7 @@ const upsert = (item: CapturedNetworkRequest) => {
   requests.unshift(item)
   if (requests.length > 80) requests.pop()
   renderList()
-  statusBar.textContent = `${requests.length} request(s) captured`
+  updateStatusBar()
   if (selectedId === item.id) renderDetails(item)
 }
 
@@ -97,7 +122,16 @@ const renderList = () => {
     return
   }
 
-  requests.forEach(item => {
+  const items = visibleRequests()
+  if (items.length === 0) {
+    const empty = document.createElement('div')
+    empty.className = 'empty'
+    empty.textContent = 'No matches for the current filter.'
+    listEl.appendChild(empty)
+    return
+  }
+
+  items.forEach(item => {
     const row = document.createElement('div')
     row.className = `row${item.id === selectedId ? ' active' : ''}`
 
@@ -173,10 +207,16 @@ clearButton.addEventListener('click', () => {
   empty.textContent = 'Select a request from the list.'
   detailsEl.appendChild(empty)
   renderList()
-  statusBar.textContent = 'Waiting for requests…'
+  updateStatusBar('Waiting for requests…')
   chrome.runtime.sendMessage({type: 'API_MOCK_DEVTOOLS_CLEAR_BUFFER'}, () => {
     void chrome.runtime.lastError
   })
+})
+
+filterInput.addEventListener('input', () => {
+  filterText = filterInput.value
+  renderList()
+  updateStatusBar()
 })
 
 addRuleButton.addEventListener('click', async () => {
@@ -190,9 +230,9 @@ addRuleButton.addEventListener('click', async () => {
       status: item.status,
       responseBody: item.body
     })
-    statusBar.textContent = `Rule added: ${rule.method} ${rule.urlPattern}`
+    updateStatusBar(`Rule added: ${rule.method} ${rule.urlPattern}`)
   } catch (error) {
-    statusBar.textContent = error instanceof Error ? error.message : String(error)
+    updateStatusBar(error instanceof Error ? error.message : String(error))
   } finally {
     addRuleButton.disabled = false
   }
@@ -228,6 +268,6 @@ chrome.runtime.sendMessage({type: 'API_MOCK_DEVTOOLS_GET_BUFFER'}, response => {
   void chrome.runtime.lastError
   ingestItems(response?.items as CapturedNetworkRequest[] | undefined)
   if (!requests.length) {
-    statusBar.textContent = 'Waiting for requests. Reload the page if the list stays empty.'
+    updateStatusBar('Waiting for requests. Reload the page if the list stays empty.')
   }
 })

@@ -80,6 +80,25 @@
         line-height: 1.4;
       }
 
+      .filter-bar {
+        padding: 8px 12px;
+        background: var(--section-bg);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .filter-input {
+        width: 100%;
+        padding: 7px 9px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font: inherit;
+      }
+
+      .filter-input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
       .list {
         overflow: auto;
         flex: 1;
@@ -244,6 +263,14 @@
         <div class="help">
           Reload the inspected page (or trigger an API call) with this tab open. Click a
           request, then Add as mock rule. You can keep the floating panel closed.
+        </div>
+        <div class="filter-bar">
+          <input
+            class="filter-input"
+            id="filterInput"
+            type="text"
+            placeholder="Filter by method, status or URL"
+          />
         </div>
         <div class="list" id="requestList">
           <div class="empty">No requests yet. Reload the page with this tab open.</div>

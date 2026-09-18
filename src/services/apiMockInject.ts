@@ -1,13 +1,14 @@
 import {getApiMockState, toRuntimeState} from './apiMockStorage'
 
+const PANEL_FILE = 'src/content_scripts/api_mock/panel.js'
+
 const canInjectIntoUrl = (url?: string): boolean => {
   if (!url) return false
   return /^(https?|file):/.test(url)
 }
 
-export async function injectApiMockInterceptor(tabId: number): Promise<void> {
+const injectState = async (tabId: number): Promise<void> => {
   const state = toRuntimeState(await getApiMockState())
-
   await chrome.scripting.executeScript({
     target: {tabId},
     world: 'MAIN',
@@ -18,20 +19,17 @@ export async function injectApiMockInterceptor(tabId: number): Promise<void> {
     },
     args: [state]
   })
+}
 
-  await chrome.scripting.executeScript({
-    target: {tabId},
-    world: 'MAIN',
-    injectImmediately: true,
-    files: ['src/content_scripts/api_mock/interceptor.js']
-  })
+export async function injectApiMockInterceptor(tabId: number): Promise<void> {
+  await injectState(tabId)
 }
 
 export async function injectApiMockPanel(tabId: number): Promise<void> {
   await injectApiMockInterceptor(tabId)
   await chrome.scripting.executeScript({
     target: {tabId},
-    files: ['src/content_scripts/api_mock/panel.js']
+    files: [PANEL_FILE]
   })
 }
 
