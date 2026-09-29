@@ -11,6 +11,10 @@ type HarContent = {
   encoding?: string
 }
 
+type HarPostData = {
+  text?: string
+}
+
 const SKIP_TYPES = new Set([
   'image',
   'stylesheet',
@@ -58,6 +62,15 @@ const bodyFromHar = (entry: NetworkEntry, fallback = ''): string => {
   return prettyJsonBody(raw)
 }
 
+const requestBodyFromHar = (entry: NetworkEntry): string => {
+  const raw = (
+    entry.request as chrome.devtools.network.Request['request'] & {
+      postData?: HarPostData
+    }
+  )?.postData?.text
+  return prettyJsonBody(raw || '')
+}
+
 const shouldKeep = (entry: NetworkEntry): boolean => {
   const url = entry.request?.url || ''
   const method = String(entry.request?.method || '').toUpperCase()
@@ -74,6 +87,7 @@ const toCaptured = (entry: NetworkEntry, body = ''): CapturedNetworkRequest => (
   url: entry.request?.url || '',
   status: entry.response?.status || 0,
   requestHeaders: formatHeaders(entry.request?.headers),
+  requestBody: requestBodyFromHar(entry),
   responseHeaders: formatHeaders(entry.response?.headers),
   body: prettyJsonBody(body || ''),
   resourceType: resourceTypeOf(entry) || 'unknown',

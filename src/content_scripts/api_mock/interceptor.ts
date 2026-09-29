@@ -4,9 +4,12 @@ type InterceptorRule = {
   label: string
   urlPattern: string
   method: string
+  action: 'mock-response' | 'rewrite-payload' | 'redirect-request'
   status: number
   delayMs: number
   responseBody: string
+  requestPayload: string
+  redirectUrl: string
 }
 
 type InterceptorState = {
@@ -20,6 +23,8 @@ type InterceptorHit = {
   method: string
   url: string
   status: number
+  action: InterceptorRule['action']
+  targetUrl?: string
   at: number
 }
 
@@ -116,13 +121,46 @@ type InterceptorWindow = Window & {
     return map[status] || ''
   }
 
-  const emitHit = (rule: InterceptorRule, url: string, method: string) => {
+  const canRequestHaveBody = (method: string): boolean =>
+    !['GET', 'HEAD'].includes(method.toUpperCase())
+
+  const looksLikeJson = (value: string): boolean => {
+    const trimmed = value.trim()
+    return trimmed.startsWith('{') || trimmed.startsWith('[')
+  }
+
+  const resolveRedirectUrl = (baseUrl: string, redirectUrl: string): string => {
+    const trimmed = redirectUrl.trim()
+    if (!trimmed) return baseUrl
+    try {
+      return new URL(trimmed, resolveAbsoluteUrl(baseUrl)).href
+    } catch {
+      return trimmed
+    }
+  }
+
+  const actionLabelFor = (rule: InterceptorRule, hit?: {targetUrl?: string}): string => {
+    if (rule.action === 'rewrite-payload') return 'payload rewritten'
+    if (rule.action === 'redirect-request') {
+      return hit?.targetUrl ? `redirected to ${hit.targetUrl}` : 'redirected'
+    }
+    return String(rule.status || 200)
+  }
+
+  const emitHit = (
+    rule: InterceptorRule,
+    url: string,
+    method: string,
+    extras?: {targetUrl?: string}
+  ) => {
     const hit: InterceptorHit = {
       ruleId: rule.id,
       label: rule.label,
       method,
       url,
-      status: rule.status || 200,
+      status: rule.action === 'mock-response' ? rule.status || 200 : 0,
+      action: rule.action || 'mock-response',
+      targetUrl: extras?.targetUrl,
       at: Date.now()
     }
     stats.total += 1
@@ -131,7 +169,7 @@ type InterceptorWindow = Window & {
     stats.log = stats.log.slice(0, 8)
 
     console.info(
-      `%c[API Mock]%c ${method} ${url} → ${hit.status}${
+      `%c[API Mock]%c ${method} ${url} → ${actionLabelFor(rule, extras)}${
         rule.label ? ` (${rule.label})` : ''
       }  #${stats.total}`,
       'background:#2196f3;color:#fff;padding:1px 6px;border-radius:3px;font-weight:700',
@@ -173,6 +211,8 @@ type InterceptorWindow = Window & {
     method: string
     url: string
     status: number
+    requestHeaders?: string
+    requestBody?: string
     body: string
     responseHeaders: string
     resourceType: string
@@ -188,7 +228,8 @@ type InterceptorWindow = Window & {
           method: item.method,
           url: resolveAbsoluteUrl(item.url),
           status: item.status,
-          requestHeaders: '',
+          requestHeaders: item.requestHeaders || '',
+          requestBody: (item.requestBody || '').slice(0, MAX_CAPTURE_BODY),
           responseHeaders: item.responseHeaders || '',
           body: (item.body || '').slice(0, MAX_CAPTURE_BODY),
           resourceType: item.resourceType
@@ -206,7 +247,49 @@ type InterceptorWindow = Window & {
     return lines.join('\n')
   }
 
-  const captureFetchResponse = (url: string, method: string, response: Response) => {
+  const headersToString = (headers: Headers): string => {
+    const lines: string[] = []
+    headers.forEach((value, name) => {
+      lines.push(`${name}: ${value}`)
+    })
+    return lines.join('\n')
+  }
+
+  const serializeXhrBody = (body?: Document | XMLHttpRequestBodyInit | null): string => {
+    if (body == null) return ''
+    if (typeof body === 'string') return body
+    if (typeof URLSearchParams !== 'undefined' && body instanceof URLSearchParams) {
+      return body.toString()
+    }
+    if (typeof FormData !== 'undefined' && body instanceof FormData) {
+      return Array.from(body.entries())
+        .map(([key, value]) => `${key}=${typeof value === 'string' ? value : value.name}`)
+        .join('&')
+    }
+    if (typeof Document !== 'undefined' && body instanceof Document) {
+      try {
+        return new XMLSerializer().serializeToString(body)
+      } catch {
+        return ''
+      }
+    }
+    return ''
+  }
+
+  const readRequestBody = async (request: Request): Promise<string> => {
+    try {
+      return await request.clone().text()
+    } catch {
+      return ''
+    }
+  }
+
+  const captureFetchResponse = (
+    url: string,
+    method: string,
+    response: Response,
+    requestDetails?: {requestHeaders?: string; requestBody?: string}
+  ) => {
     void (async () => {
       try {
         const clone = response.clone()
@@ -222,6 +305,8 @@ type InterceptorWindow = Window & {
           method,
           url,
           status: response.status,
+          requestHeaders: requestDetails?.requestHeaders || '',
+          requestBody: requestDetails?.requestBody || '',
           body,
           responseHeaders: headersFromResponse(clone),
           resourceType: 'fetch'
@@ -247,6 +332,50 @@ type InterceptorWindow = Window & {
       return input.method.toUpperCase()
     }
     return 'GET'
+  }
+
+  const buildFetchRequest = async (
+    input: RequestInfo | URL,
+    init: RequestInit | undefined,
+    rule: InterceptorRule
+  ): Promise<Request> => {
+    const baseRequest = new Request(input, init)
+    const method = baseRequest.method.toUpperCase()
+    const headers = new Headers(baseRequest.headers)
+    let nextUrl = baseRequest.url
+    let nextBody: BodyInit | undefined
+
+    if (canRequestHaveBody(method)) {
+      const rawBody = await baseRequest.clone().arrayBuffer()
+      nextBody = rawBody.byteLength > 0 ? rawBody : undefined
+    }
+
+    if (rule.action === 'redirect-request') {
+      nextUrl = resolveRedirectUrl(nextUrl, rule.redirectUrl)
+    }
+
+    if (rule.action === 'rewrite-payload') {
+      nextBody = rule.requestPayload
+      headers.delete('content-length')
+      if (!headers.has('content-type') && looksLikeJson(rule.requestPayload)) {
+        headers.set('content-type', 'application/json')
+      }
+    }
+
+    return new Request(nextUrl, {
+      method,
+      headers,
+      body: canRequestHaveBody(method) ? nextBody : undefined,
+      cache: baseRequest.cache,
+      credentials: baseRequest.credentials,
+      integrity: baseRequest.integrity,
+      keepalive: baseRequest.keepalive,
+      mode: baseRequest.mode,
+      redirect: baseRequest.redirect,
+      referrer: baseRequest.referrer,
+      referrerPolicy: baseRequest.referrerPolicy,
+      signal: baseRequest.signal
+    })
   }
 
   const applyBridgeState = (state: InterceptorState) => {
@@ -278,29 +407,49 @@ type InterceptorWindow = Window & {
     if (runtime.enabled) {
       const rule = findRule(url, method)
       if (rule) {
-        emitHit(rule, resolveAbsoluteUrl(url), method)
         if (rule.delayMs > 0) await sleep(rule.delayMs)
-        const body = rule.responseBody ?? ''
-        emitCapture({
-          method,
-          url,
-          status: rule.status || 200,
-          body,
-          responseHeaders: 'content-type: application/json',
-          resourceType: 'mock'
+        if (rule.action === 'mock-response') {
+          const mockRequest = new Request(input, init)
+          const requestBody = await readRequestBody(mockRequest)
+          emitHit(rule, resolveAbsoluteUrl(url), method)
+          const body = rule.responseBody ?? ''
+          emitCapture({
+            method,
+            url,
+            status: rule.status || 200,
+            requestHeaders: headersToString(mockRequest.headers),
+            requestBody,
+            body,
+            responseHeaders: 'content-type: application/json',
+            resourceType: 'mock'
+          })
+          return new Response(body, {
+            status: rule.status || 200,
+            statusText: statusTextFrom(rule.status || 200),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+        }
+
+        const transformedRequest = await buildFetchRequest(input, init, rule)
+        const requestBody = await readRequestBody(transformedRequest)
+        emitHit(rule, resolveAbsoluteUrl(url), method, {targetUrl: transformedRequest.url})
+        const response = await originalFetch(transformedRequest)
+        captureFetchResponse(transformedRequest.url, method, response, {
+          requestHeaders: headersToString(transformedRequest.headers),
+          requestBody
         })
-        return new Response(body, {
-          status: rule.status || 200,
-          statusText: statusTextFrom(rule.status || 200),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
+        return response
       }
     }
 
     const response = await originalFetch(input, init)
-    captureFetchResponse(url, method, response)
+    const originalRequest = new Request(input, init)
+    captureFetchResponse(url, method, response, {
+      requestHeaders: headersToString(originalRequest.headers),
+      requestBody: await readRequestBody(originalRequest)
+    })
     return response
   }
 
@@ -310,7 +459,14 @@ type InterceptorWindow = Window & {
   const originalSetRequestHeader = XMLHttpRequest.prototype.setRequestHeader
 
   type MockedXhr = XMLHttpRequest & {
-    __tuMock?: {method: string; url: string}
+    __tuMock?: {
+      method: string
+      url: string
+      activeUrl: string
+      rule?: InterceptorRule
+      requestHeaders: Record<string, string>
+      requestBody: string
+    }
     __tuTimer?: number
     __tuMocked?: boolean
   }
@@ -323,12 +479,23 @@ type InterceptorWindow = Window & {
     username?: string | null,
     password?: string | null
   ) {
+    const requestMethod = String(method).toUpperCase()
+    const requestUrl = String(url)
+    const rule = runtime.enabled ? findRule(requestUrl, requestMethod) : undefined
+    const activeUrl =
+      rule?.action === 'redirect-request'
+        ? resolveRedirectUrl(requestUrl, rule.redirectUrl)
+        : requestUrl
     this.__tuMock = {
-      method: String(method).toUpperCase(),
-      url: String(url)
+      method: requestMethod,
+      url: requestUrl,
+      activeUrl,
+      rule,
+      requestHeaders: {},
+      requestBody: ''
     }
     this.__tuMocked = false
-    return originalOpen.call(this, method, url, async ?? true, username, password)
+    return originalOpen.call(this, method, activeUrl, async ?? true, username, password)
   }
 
   XMLHttpRequest.prototype.setRequestHeader = function (
@@ -336,6 +503,9 @@ type InterceptorWindow = Window & {
     name: string,
     value: string
   ) {
+    if (this.__tuMock) {
+      this.__tuMock.requestHeaders[name.toLowerCase()] = value
+    }
     if (this.__tuMocked) return
     return originalSetRequestHeader.call(this, name, value)
   }
@@ -400,6 +570,41 @@ type InterceptorWindow = Window & {
     }
   }
 
+  const attachXhrCapture = (xhr: MockedXhr) => {
+    xhr.addEventListener(
+      'load',
+      () => {
+        if (xhr.__tuMocked || !xhr.__tuMock) return
+        let respBody = ''
+        try {
+          if (xhr.responseType === '' || xhr.responseType === 'text') {
+            respBody = xhr.responseText || ''
+          } else if (xhr.responseType === 'json') {
+            respBody =
+              typeof xhr.responseText === 'string'
+                ? xhr.responseText
+                : JSON.stringify(xhr.response ?? null)
+          }
+        } catch {
+          respBody = ''
+        }
+        emitCapture({
+          method: xhr.__tuMock.method,
+          url: xhr.responseURL || xhr.__tuMock.activeUrl || xhr.__tuMock.url,
+          status: xhr.status,
+          requestHeaders: Object.entries(xhr.__tuMock.requestHeaders)
+            .map(([name, value]) => `${name}: ${value}`)
+            .join('\n'),
+          requestBody: xhr.__tuMock.requestBody,
+          body: respBody,
+          responseHeaders: xhr.getAllResponseHeaders() || '',
+          resourceType: 'xhr'
+        })
+      },
+      {once: true}
+    )
+  }
+
   XMLHttpRequest.prototype.send = function (
     this: MockedXhr,
     body?: Document | XMLHttpRequestBodyInit | null
@@ -418,52 +623,66 @@ type InterceptorWindow = Window & {
       return originalSend.call(this, body)
     }
 
+    attachXhrCapture(this)
+    this.__tuMock.requestBody = serializeXhrBody(body)
+
     if (runtime.enabled) {
-      const rule = findRule(url, this.__tuMock.method)
+      const rule = this.__tuMock.rule
       if (rule) {
-        emitHit(rule, resolveAbsoluteUrl(url), this.__tuMock.method)
-        emitCapture({
-          method: this.__tuMock.method,
-          url,
-          status: rule.status || 200,
-          body: rule.responseBody ?? '',
-          responseHeaders: 'content-type: application/json',
-          resourceType: 'mock'
-        })
-        const respond = () => applyMockedXhr(this, rule)
-        if (rule.delayMs > 0) {
-          this.__tuTimer = window.setTimeout(respond, rule.delayMs)
+        const liveRequest = () => {
+          const payload =
+            rule.action === 'rewrite-payload' && canRequestHaveBody(this.__tuMock?.method || 'GET')
+              ? rule.requestPayload
+              : body ?? undefined
+          this.__tuMock!.requestBody =
+            rule.action === 'rewrite-payload' ? rule.requestPayload : serializeXhrBody(body)
+          if (
+            rule.action === 'rewrite-payload' &&
+            !this.__tuMock?.requestHeaders['content-type'] &&
+            looksLikeJson(rule.requestPayload)
+          ) {
+            originalSetRequestHeader.call(this, 'content-type', 'application/json')
+          }
+          emitHit(rule, resolveAbsoluteUrl(url), this.__tuMock?.method || 'GET', {
+            targetUrl: resolveAbsoluteUrl(this.__tuMock?.activeUrl || url)
+          })
+          return originalSend.call(this, payload)
+        }
+
+        if (rule.action === 'mock-response') {
+          emitHit(rule, resolveAbsoluteUrl(url), this.__tuMock.method)
+          emitCapture({
+            method: this.__tuMock.method,
+            url,
+            status: rule.status || 200,
+            requestHeaders: Object.entries(this.__tuMock.requestHeaders)
+              .map(([name, value]) => `${name}: ${value}`)
+              .join('\n'),
+            requestBody: this.__tuMock.requestBody,
+            body: rule.responseBody ?? '',
+            responseHeaders: 'content-type: application/json',
+            resourceType: 'mock'
+          })
+          const respond = () => applyMockedXhr(this, rule)
+          if (rule.delayMs > 0) {
+            this.__tuTimer = window.setTimeout(respond, rule.delayMs)
+            return
+          }
+          respond()
           return
         }
-        respond()
-        return
+
+        if (rule.delayMs > 0) {
+          this.__tuTimer = window.setTimeout(() => {
+            this.__tuTimer = undefined
+            liveRequest()
+          }, rule.delayMs)
+          return
+        }
+
+        return liveRequest()
       }
     }
-
-    this.addEventListener('load', () => {
-      if (this.__tuMocked || !this.__tuMock) return
-      let respBody = ''
-      try {
-        if (this.responseType === '' || this.responseType === 'text') {
-          respBody = this.responseText || ''
-        } else if (this.responseType === 'json') {
-          respBody =
-            typeof this.responseText === 'string'
-              ? this.responseText
-              : JSON.stringify(this.response ?? null)
-        }
-      } catch {
-        respBody = ''
-      }
-      emitCapture({
-        method: this.__tuMock.method,
-        url: this.__tuMock.url,
-        status: this.status,
-        body: respBody,
-        responseHeaders: this.getAllResponseHeaders() || '',
-        resourceType: 'xhr'
-      })
-    })
 
     return originalSend.call(this, body)
   }

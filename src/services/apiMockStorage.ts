@@ -4,6 +4,7 @@ import {
   defaultApiMockState,
   type ApiMockMethod,
   type ApiMockRule,
+  type ApiMockRuleAction,
   type ApiMockState
 } from '../types/apiMock'
 
@@ -26,9 +27,16 @@ export const normalizeApiMockState = (value: unknown): ApiMockState => {
         label: String(rule.label || ''),
         urlPattern: String(rule.urlPattern || ''),
         method: (rule.method as ApiMockState['rules'][number]['method']) || '*',
+        action: (
+          rule.action === 'rewrite-payload' || rule.action === 'redirect-request'
+            ? rule.action
+            : 'mock-response'
+        ) as ApiMockRuleAction,
         status: Number(rule.status) || 200,
         delayMs: Math.max(0, Number(rule.delayMs) || 0),
-        responseBody: String(rule.responseBody ?? '')
+        responseBody: String(rule.responseBody ?? ''),
+        requestPayload: String(rule.requestPayload ?? ''),
+        redirectUrl: String(rule.redirectUrl ?? '')
       }))
       .filter(rule => rule.id),
     panel: {
@@ -100,6 +108,7 @@ export async function addCapturedApiMockRule(capture: {
   method: string
   status: number
   responseBody: string
+  requestBody?: string
 }): Promise<ApiMockRule> {
   const state = await getApiMockState()
   const rule = createEmptyApiMockRule()
@@ -115,7 +124,9 @@ export async function addCapturedApiMockRule(capture: {
   rule.label = lastSegment
   rule.urlPattern = urlPattern
   rule.method = toApiMockMethod(capture.method)
+  rule.action = 'mock-response'
   rule.status = capture.status || 200
+  rule.requestPayload = prettyJsonBody(capture.requestBody || '')
   rule.responseBody = prettyJsonBody(capture.responseBody || '')
   rule.enabled = true
   state.rules.unshift(rule)

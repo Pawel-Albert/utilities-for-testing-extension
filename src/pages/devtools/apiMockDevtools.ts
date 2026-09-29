@@ -61,6 +61,7 @@ const upsert = (item: CapturedNetworkRequest) => {
   if (!belongsToInspectedTab(item)) return
   if (isNoiseMethod(item.method)) return
 
+  item.requestBody = prettyJsonBody(item.requestBody || '')
   item.body = prettyJsonBody(item.body || '')
 
   const duplicate = requests.find(
@@ -70,8 +71,14 @@ const upsert = (item: CapturedNetworkRequest) => {
     if (!duplicate.requestHeaders && item.requestHeaders) {
       duplicate.requestHeaders = item.requestHeaders
     }
+    if (!duplicate.requestBody && item.requestBody) {
+      duplicate.requestBody = item.requestBody
+    }
     if (item.requestHeaders.length > duplicate.requestHeaders.length) {
       duplicate.requestHeaders = item.requestHeaders
+    }
+    if (bodyLooksUseful(item.requestBody) && item.requestBody.length >= duplicate.requestBody.length) {
+      duplicate.requestBody = item.requestBody
     }
     if (item.responseHeaders.length > duplicate.responseHeaders.length) {
       duplicate.responseHeaders = item.responseHeaders
@@ -92,6 +99,9 @@ const upsert = (item: CapturedNetworkRequest) => {
   const index = requests.findIndex(row => row.id === item.id)
   if (index >= 0) {
     const current = requests[index]
+    if (bodyLooksUseful(current.requestBody) && !bodyLooksUseful(item.requestBody)) {
+      item.requestBody = current.requestBody
+    }
     if (bodyLooksUseful(current.body) && !bodyLooksUseful(item.body)) {
       item.body = current.body
     }
@@ -228,7 +238,8 @@ addRuleButton.addEventListener('click', async () => {
       url: item.url,
       method: item.method,
       status: item.status,
-      responseBody: item.body
+      responseBody: item.body,
+      requestBody: item.requestBody
     })
     updateStatusBar(`Rule added: ${rule.method} ${rule.urlPattern}`)
   } catch (error) {

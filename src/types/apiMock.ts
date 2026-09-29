@@ -1,14 +1,19 @@
 export type ApiMockMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | '*'
 
+export type ApiMockRuleAction = 'mock-response' | 'rewrite-payload' | 'redirect-request'
+
 export type ApiMockRule = {
   id: string
   enabled: boolean
   label: string
   urlPattern: string
   method: ApiMockMethod
+  action: ApiMockRuleAction
   status: number
   delayMs: number
   responseBody: string
+  requestPayload: string
+  redirectUrl: string
 }
 
 export type ApiMockPanelPosition = {
@@ -34,6 +39,8 @@ export type ApiMockHit = {
   method: string
   url: string
   status: number
+  action: ApiMockRuleAction
+  targetUrl?: string
   at: number
 }
 
@@ -43,6 +50,7 @@ export type CapturedNetworkRequest = {
   url: string
   status: number
   requestHeaders: string
+  requestBody: string
   responseHeaders: string
   body: string
   resourceType: string
@@ -72,7 +80,10 @@ export const createEmptyApiMockRule = (): ApiMockRule => ({
   label: '',
   urlPattern: '',
   method: '*',
+  action: 'mock-response',
   status: 200,
   delayMs: 0,
-  responseBody: '{\n  \n}'
+  responseBody: '{\n  \n}',
+  requestPayload: '',
+  redirectUrl: ''
 })

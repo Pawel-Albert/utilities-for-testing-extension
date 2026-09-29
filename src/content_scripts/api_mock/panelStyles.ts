@@ -324,6 +324,33 @@ export const apiMockPanelStyles = `
     margin-bottom: 10px;
   }
 
+  .form-group.is-hidden {
+    display: none;
+  }
+
+  .payload-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .payload-tab {
+    border: 1px solid #bdbdbd;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #616161;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .payload-tab.active {
+    border-color: #2196f3;
+    background: rgba(33, 150, 243, 0.12);
+    color: #1565c0;
+  }
+
   label {
     display: block;
     margin-bottom: 5px;

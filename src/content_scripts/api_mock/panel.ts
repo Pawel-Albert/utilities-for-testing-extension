@@ -1,8 +1,13 @@
 import {getApiMockState, saveApiMockState, normalizeApiMockState} from '../../services/apiMockStorage'
-import {API_MOCK_HOST_ID, API_MOCK_INTERCEPTOR_SOURCE, API_MOCK_STORAGE_KEY, createEmptyApiMockRule, type ApiMockHit, type ApiMockMethod, type ApiMockRule, type ApiMockState} from '../../types/apiMock'
+import {API_MOCK_HOST_ID, API_MOCK_INTERCEPTOR_SOURCE, API_MOCK_STORAGE_KEY, createEmptyApiMockRule, type ApiMockHit, type ApiMockMethod, type ApiMockRule, type ApiMockRuleAction, type ApiMockState} from '../../types/apiMock'
 import {apiMockPanelStyles} from './panelStyles'
 
 const METHODS: ApiMockMethod[] = ['*', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+const ACTIONS: Array<{value: ApiMockRuleAction; label: string}> = [
+  {value: 'mock-response', label: 'Mock response'},
+  {value: 'rewrite-payload', label: 'Rewrite request payload'},
+  {value: 'redirect-request', label: 'Redirect request URL'}
+]
 const STATUS_OPTIONS = [
   {value: 200, label: '200 OK'},
   {value: 201, label: '201 Created'},
@@ -22,10 +27,33 @@ const STATUS_OPTIONS = [
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max)
 
+const isMockResponseRule = (rule: Pick<ApiMockRule, 'action'>) => rule.action === 'mock-response'
+
+const actionLabel = (action: ApiMockRuleAction): string =>
+  ACTIONS.find(item => item.value === action)?.label || action
+
+const ruleSummary = (rule: ApiMockRule): string => {
+  if (rule.action === 'rewrite-payload') {
+    return 'Pass-through request with replaced body'
+  }
+  if (rule.action === 'redirect-request') {
+    return rule.redirectUrl.trim()
+      ? `Pass-through request redirected to ${rule.redirectUrl.trim()}`
+      : 'Pass-through request redirected to another URL'
+  }
+  return `Local mock response ${rule.status}`
+}
+
 function formatHit(hit: ApiMockHit): string {
   const time = new Date(hit.at).toLocaleTimeString()
   const labelSuffix = hit.label ? ` · ${hit.label}` : ''
-  return `${time}  ${hit.method}  ${hit.url}  → ${hit.status}${labelSuffix}`
+  const result =
+    hit.action === 'rewrite-payload'
+      ? 'payload rewritten'
+      : hit.action === 'redirect-request'
+        ? `redirected${hit.targetUrl ? ` → ${hit.targetUrl}` : ''}`
+        : String(hit.status)
+  return `${time}  ${hit.method}  ${hit.url}  → ${result}${labelSuffix}`
 }
 
 function displayRuleTitle(rule: ApiMockRule): string {
@@ -67,6 +95,7 @@ function startApiMockPanel() {
   let state: ApiMockState
   let selectedRuleId: string | null = null
   let formMode: 'edit' | 'new' = 'new'
+  let payloadTab: 'request' | 'response' = 'response'
   let toastTimer = 0
   let hitsPulseTimer = 0
 
@@ -90,8 +119,9 @@ function startApiMockPanel() {
       </div>
       <div class="body">
         <div class="preview-notice">
-          Preview: mocks <code>fetch</code> and <code>XHR</code> on this page. Navigation,
-          images and other browser requests are not intercepted.
+          Intercepts page-level <code>fetch</code> and <code>XHR</code> only. You can mock a
+          response, rewrite request payload, or redirect the request to another URL. Top-level
+          navigation, new tabs, images and other browser requests are not intercepted.
         </div>
         <p class="help-text">
           Drag the blue header to move the panel. Closing it does not disable active mocks.
@@ -121,15 +151,39 @@ function startApiMockPanel() {
               <select id="methodInput"></select>
             </div>
             <div class="form-group">
-              <label for="statusInput">Status</label>
-              <select id="statusInput"></select>
+              <label for="actionInput">Action</label>
+              <select id="actionInput"></select>
             </div>
             <div class="form-group">
               <label for="delayInput">Delay (ms)</label>
               <input id="delayInput" type="number" min="0" step="50" value="0" />
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="statusGroup">
+            <label for="statusInput">Status</label>
+            <select id="statusInput"></select>
+          </div>
+          <div class="form-group" id="redirectUrlGroup">
+            <label for="redirectUrlInput">Redirect to URL</label>
+            <input
+              id="redirectUrlInput"
+              type="text"
+              placeholder="https://example.com/i18n/pl.json or /i18n/pl.json"
+            />
+          </div>
+          <div class="payload-tabs" id="payloadTabs">
+            <button type="button" class="payload-tab" id="requestPayloadTab">
+              Request payload
+            </button>
+            <button type="button" class="payload-tab" id="responsePayloadTab">
+              Response payload
+            </button>
+          </div>
+          <div class="form-group" id="requestPayloadGroup">
+            <label for="requestPayloadInput">Request payload override</label>
+            <textarea id="requestPayloadInput" placeholder='{ "lang": "pl" }'></textarea>
+          </div>
+          <div class="form-group" id="responseBodyGroup">
             <label for="bodyInput">Response payload</label>
             <textarea id="bodyInput" placeholder='{ "isAuth": true }'></textarea>
           </div>
@@ -171,8 +225,18 @@ function startApiMockPanel() {
   const labelInput = shadow.getElementById('labelInput') as HTMLInputElement
   const urlInput = shadow.getElementById('urlInput') as HTMLInputElement
   const methodInput = shadow.getElementById('methodInput') as HTMLSelectElement
+  const actionInput = shadow.getElementById('actionInput') as HTMLSelectElement
   const statusInput = shadow.getElementById('statusInput') as HTMLSelectElement
   const delayInput = shadow.getElementById('delayInput') as HTMLInputElement
+  const statusGroup = shadow.getElementById('statusGroup') as HTMLElement
+  const redirectUrlGroup = shadow.getElementById('redirectUrlGroup') as HTMLElement
+  const redirectUrlInput = shadow.getElementById('redirectUrlInput') as HTMLInputElement
+  const payloadTabs = shadow.getElementById('payloadTabs') as HTMLElement
+  const requestPayloadTab = shadow.getElementById('requestPayloadTab') as HTMLButtonElement
+  const responsePayloadTab = shadow.getElementById('responsePayloadTab') as HTMLButtonElement
+  const requestPayloadGroup = shadow.getElementById('requestPayloadGroup') as HTMLElement
+  const requestPayloadInput = shadow.getElementById('requestPayloadInput') as HTMLTextAreaElement
+  const responseBodyGroup = shadow.getElementById('responseBodyGroup') as HTMLElement
   const bodyInput = shadow.getElementById('bodyInput') as HTMLTextAreaElement
   const saveButton = shadow.getElementById('saveButton') as HTMLButtonElement
   const duplicateButton = shadow.getElementById('duplicateButton') as HTMLButtonElement
@@ -188,6 +252,13 @@ function startApiMockPanel() {
     option.value = method
     option.textContent = method === '*' ? 'Any' : method
     methodInput.appendChild(option)
+  })
+
+  ACTIONS.forEach(action => {
+    const option = document.createElement('option')
+    option.value = action.value
+    option.textContent = action.label
+    actionInput.appendChild(option)
   })
 
   STATUS_OPTIONS.forEach(status => {
@@ -278,19 +349,54 @@ function startApiMockPanel() {
   const isExistingRule = (id: string | null) =>
     Boolean(id && state.rules.some(rule => rule.id === id))
 
+  const setPayloadTab = (next: 'request' | 'response') => {
+    payloadTab = next
+    requestPayloadTab.classList.toggle('active', next === 'request')
+    responsePayloadTab.classList.toggle('active', next === 'response')
+    requestPayloadGroup.classList.toggle('is-hidden', next !== 'request')
+    responseBodyGroup.classList.toggle('is-hidden', next !== 'response')
+  }
+
+  const updateActionFields = () => {
+    const action = (actionInput.value as ApiMockRuleAction) || 'mock-response'
+    const showMockFields = action === 'mock-response'
+    const showRedirectField = action === 'redirect-request'
+
+    statusGroup.classList.toggle('is-hidden', !showMockFields)
+    redirectUrlGroup.classList.toggle('is-hidden', !showRedirectField)
+    payloadTabs.classList.toggle('is-hidden', false)
+
+    if (action === 'rewrite-payload') {
+      setPayloadTab('request')
+      return
+    }
+    if (action === 'mock-response') {
+      setPayloadTab('response')
+      return
+    }
+    setPayloadTab(payloadTab)
+  }
+
+  const activeJsonField = () => (payloadTab === 'request' ? requestPayloadInput : bodyInput)
+
   const fillForm = (rule: ApiMockRule, mode: 'edit' | 'new') => {
     formMode = mode
     selectedRuleId = rule.id
     labelInput.value = rule.label
     urlInput.value = rule.urlPattern
     methodInput.value = rule.method
+    actionInput.value = rule.action
     statusInput.value = String(rule.status)
     delayInput.value = String(rule.delayMs)
+    redirectUrlInput.value = rule.redirectUrl
+    requestPayloadInput.value = rule.requestPayload
     bodyInput.value = rule.responseBody
+    payloadTab = rule.action === 'rewrite-payload' ? 'request' : 'response'
     formTitle.textContent = mode === 'edit' ? 'Edit rule' : 'New rule'
     saveButton.textContent = mode === 'edit' ? 'Save changes' : 'Add rule'
     deleteButton.style.display = mode === 'edit' ? '' : 'none'
     duplicateButton.style.display = mode === 'edit' ? '' : 'none'
+    updateActionFields()
   }
 
   const openNewRuleForm = () => {
@@ -324,7 +430,7 @@ function startApiMockPanel() {
       title.textContent = displayRuleTitle(rule)
       const meta = document.createElement('div')
       meta.className = 'rule-meta'
-      meta.textContent = rule.urlPattern || 'No URL pattern'
+      meta.textContent = `${rule.urlPattern || 'No URL pattern'} · ${ruleSummary(rule)}`
       info.append(title, meta)
 
       const hits = stats.byRuleId[rule.id] || 0
@@ -335,7 +441,9 @@ function startApiMockPanel() {
 
       const badge = document.createElement('span')
       badge.className = 'badge'
-      badge.textContent = `${rule.method} ${rule.status}`
+      badge.textContent = isMockResponseRule(rule)
+        ? `${rule.method} ${rule.status}`
+        : `${rule.method} ${actionLabel(rule.action)}`
 
       const actions = document.createElement('div')
       actions.className = 'rule-actions'
@@ -376,9 +484,12 @@ function startApiMockPanel() {
     label: labelInput.value.trim(),
     urlPattern: urlInput.value.trim(),
     method: (methodInput.value as ApiMockMethod) || '*',
+    action: (actionInput.value as ApiMockRuleAction) || 'mock-response',
     status: Number(statusInput.value) || 200,
     delayMs: Math.max(0, Number(delayInput.value) || 0),
-    responseBody: bodyInput.value
+    responseBody: bodyInput.value,
+    requestPayload: requestPayloadInput.value,
+    redirectUrl: redirectUrlInput.value.trim()
   })
 
   const bindEvents = () => {
@@ -407,10 +518,26 @@ function startApiMockPanel() {
       renderRules()
     })
 
+    actionInput.addEventListener('change', () => {
+      updateActionFields()
+    })
+
+    requestPayloadTab.addEventListener('click', () => {
+      setPayloadTab('request')
+    })
+
+    responsePayloadTab.addEventListener('click', () => {
+      setPayloadTab('response')
+    })
+
     saveButton.addEventListener('click', async () => {
       const rule = readForm()
       if (!rule.urlPattern) {
         showToast('URL pattern is required', 'error')
+        return
+      }
+      if (rule.action === 'redirect-request' && !rule.redirectUrl) {
+        showToast('Redirect target URL is required', 'error')
         return
       }
 
@@ -429,10 +556,11 @@ function startApiMockPanel() {
 
     formatButton.addEventListener('click', () => {
       try {
-        bodyInput.value = JSON.stringify(JSON.parse(bodyInput.value), null, 2)
+        const field = activeJsonField()
+        field.value = JSON.stringify(JSON.parse(field.value), null, 2)
         showToast('JSON formatted')
       } catch {
-        showToast('Response is not valid JSON', 'error')
+        showToast('Visible payload is not valid JSON', 'error')
       }
     })
 
